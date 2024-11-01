@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
+import { Iconify } from 'src/components/iconify';
 
 import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -14,6 +16,8 @@ import { CartIcon } from '../product-cart-widget';
 import { ProductFilters } from '../product-filters';
 
 import type { FiltersProps } from '../product-filters';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -86,11 +90,21 @@ export function ProductsView() {
 
   return (
     <DashboardContent>
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Products
-      </Typography>
 
-      <CartIcon totalItems={8} />
+      <Box display="flex" alignItems="center" mb={5}>
+        <Typography variant="h4" flexGrow={1}>
+        Market Place
+        </Typography>
+        <Button
+          variant="contained"
+          color="inherit"
+          startIcon={<Iconify icon="mingcute:add-line" />}
+        >
+          Add Item
+        </Button>
+      </Box>
+
+      {/* <CartIcon totalItems={8} /> */}
 
       <Box
         display="flex"

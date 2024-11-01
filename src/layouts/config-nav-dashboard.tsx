@@ -14,33 +14,39 @@ export const navData = [
     icon: icon('ic-analytics'),
   },
   {
-    title: 'User',
-    path: '/user',
+    title: 'Bookings',
+    path: '/bookings',
     icon: icon('ic-user'),
   },
   {
-    title: 'Product',
-    path: '/products',
+    title: 'Market Place',
+    path: '/market-place',
     icon: icon('ic-cart'),
-    info: (
-      <Label color="error" variant="inverted">
-        +3
-      </Label>
-    ),
+    // info: (
+    //   <Label color="error" variant="inverted">
+    //     +3
+    //   </Label>
+    // ),
   },
   {
-    title: 'Blog',
-    path: '/blog',
+    title: 'Users',
+    path: '/users',
+    icon: icon('ic-user'),
+  },
+  {
+    title: 'Interests',
+    path: '/interests',
     icon: icon('ic-blog'),
   },
   {
-    title: 'Sign in',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
+    title: 'Support',
+    path: '/support',
+    icon: icon('ic-help'),
   },
   {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic-disabled'),
+    title: 'Content Management',
+    path: '/cms',
+    icon: icon('ic-lock'),
   },
+
 ];

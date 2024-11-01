@@ -10,6 +10,8 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Label } from 'src/components/label';
 import { ColorPreview } from 'src/components/color-utils';
+import { CardActionArea } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,8 @@ export type ProductItemProps = {
 };
 
 export function ProductItem({ product }: { product: ProductItemProps }) {
+  const navigate = useNavigate();
+
   const renderStatus = (
     <Label
       variant="inverted"
@@ -73,7 +77,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
   );
 
   return (
-    <Card>
+    <Card component={CardActionArea}  onClick={() => navigate(`/market-place/product/${product?.id}`, { state: { product } })} >
       <Box sx={{ pt: '100%', position: 'relative' }}>
         {product.status && renderStatus}
 

@@ -7,14 +7,18 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
+import Bookings from 'src/pages/bookings';
+import ProductDetail from 'src/pages/marketplace/product_detail';
+import CustomerSupport from 'src/pages/support';
+import CMS from 'src/pages/cms';
 
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const UserPage = lazy(() => import('src/pages/users/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
+export const ProductsPage = lazy(() => import('src/pages/marketplace'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -44,9 +48,13 @@ export function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'bookings', element: <Bookings /> },
+        { path: 'users', element: <UserPage /> },
+        { path: 'market-place', element: <ProductsPage /> },
+        { path: 'market-place/product/:id', element: <ProductDetail /> },
+        { path: 'cms', element: <CMS /> },
+        { path: 'support', element: <CustomerSupport /> },
+        { path: 'interests', element: <BlogPage /> },
       ],
     },
     {
