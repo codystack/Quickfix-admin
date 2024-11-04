@@ -1,16 +1,17 @@
 import { lazy, Suspense } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
+import CMS from 'src/pages/cms';
+import Bookings from 'src/pages/bookings';
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
-import { DashboardLayout } from 'src/layouts/dashboard';
-import Bookings from 'src/pages/bookings';
-import ProductDetail from 'src/pages/marketplace/product_detail';
 import CustomerSupport from 'src/pages/support';
-import CMS from 'src/pages/cms';
+import { DashboardLayout } from 'src/layouts/dashboard';
+import ProductDetail from 'src/pages/marketplace/product_detail';
 
 // ----------------------------------------------------------------------
 
@@ -37,15 +38,26 @@ const renderFallback = (
 );
 
 export function Router() {
+  const { isAuth } = useSelector((state: any) => state.auth)
+
   return useRoutes([
     {
-      element: (
+      path: '',
+      element: isAuth ? <Navigate to="/dashboard" replace /> : (
+        <AuthLayout>
+          <SignInPage />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: "dashboard",
+      element: isAuth ? (
         <DashboardLayout>
           <Suspense fallback={renderFallback}>
             <Outlet />
           </Suspense>
         </DashboardLayout>
-      ),
+      ) : <Navigate to="/" replace />,
       children: [
         { element: <HomePage />, index: true },
         { path: 'bookings', element: <Bookings /> },
@@ -56,14 +68,6 @@ export function Router() {
         { path: 'support', element: <CustomerSupport /> },
         { path: 'interests', element: <BlogPage /> },
       ],
-    },
-    {
-      path: 'sign-in',
-      element: (
-        <AuthLayout>
-          <SignInPage />
-        </AuthLayout>
-      ),
     },
     {
       path: '404',
