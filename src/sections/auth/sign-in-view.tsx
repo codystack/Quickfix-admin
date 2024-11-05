@@ -1,6 +1,10 @@
-import * as Yup from "yup";
+import type { RootState } from 'src/redux/store';
+
+import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -12,56 +16,96 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import APIService from 'src/service/api.service';
+import { setLoading } from 'src/redux/reducers/loader';
+
 import { Iconify } from 'src/components/iconify';
+import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
 // ----------------------------------------------------------------------
 
 export function SignInView() {
   const router = useRouter();
 
-  const [isLoading, setLoading] = useState(false);
+  // const [isLoading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { isLoading } = useSelector((state: RootState) => state.loader);
+  const dispatch = useDispatch();
 
   const handleSignIn = useCallback(() => {
     router.push('/');
   }, [router]);
 
   const validationSchema = Yup.object().shape({
-    email_address: Yup.string().email("Enter a valid email address").required("Email address is required"),
-    password: Yup.string().min(8, "Minimum of 8 characters required").required("Password is required")
-  })
+    email_address: Yup.string()
+      .email('Enter a valid email address')
+      .required('Email address is required'),
+    password: Yup.string()
+      .min(8, 'Minimum of 8 characters required')
+      .required('Password is required'),
+  });
 
   const formik = useFormik({
     initialValues: {
-      email_address: "",
-      password: ""
+      email_address: '',
+      password: '',
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
         const payload = {
           email_address: values.email_address,
           password: values.password,
-        }
+        };
 
-        const respo = await 
-
+        const respo = APIService.login(payload);
+        console.log("RESPONSE ON LOGIN :: ", respo);
+        
+        toast.promise(respo, {
+          pending: {
+            render() {
+              return 'Loading. Please wait...';
+            },
+            icon: false,
+          },
+          success: {
+            render({ data }) {
+              console.log("SUCCESS :: ", data);
+              dispatch(setLoading(false));
+              localStorage.setItem("accessToken", data?.data?.accessToken)
+              dispatch(setAuth(true));
+              dispatch(setProfile(data?.data?.user));
+              const resp = data?.data?.message || "Logged in successfully"
+              router.push('/dashboard');
+              return `${resp}`;
+            },
+          },
+          error: {
+            render({ data }: any) {
+              dispatch(setLoading(false));
+              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
+              const errorMsg =  data?.response?.data?.message || data?.message || ""
+              // When the promise reject, data will contains the error
+              return `${errorMsg ?? 'An error occurred!'}`;
+            },
+          },
+        });
       } catch (error) {
-        console.log("ERROR :: ", error);
-        setLoading(false);
+        console.log('ERROR :: ', error);
+        dispatch(setLoading(false));
       }
-    }
-  })
+    },
+  });
 
-  const { errors, touched, getFieldProps, handleSubmit } = formik
+  const { errors, touched, getFieldProps, handleSubmit } = formik;
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
         label="Email address"
-        defaultValue="hello@domain.com"
         {...getFieldProps('email_address')}
         error={Boolean(touched.email_address && errors.email_address)}
         helperText={errors.email_address}
@@ -76,7 +120,6 @@ export function SignInView() {
       <TextField
         fullWidth
         label="Password"
-        defaultValue=""
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -109,8 +152,8 @@ export function SignInView() {
   );
 
   return (
-    <>
-      <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
+    <div >
+      <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }} justifyContent="center" height="100%" >
         <Typography variant="h5">Sign in</Typography>
         <Typography variant="body2" color="text.secondary">
           Don’t have an account?
@@ -142,6 +185,6 @@ export function SignInView() {
           <Iconify icon="ri:twitter-x-fill" />
         </IconButton>
       </Box> */}
-    </>
+    </div>
   );
 }

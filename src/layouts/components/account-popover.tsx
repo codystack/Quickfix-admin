@@ -14,6 +14,8 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 import { useRouter, usePathname } from 'src/routes/hooks';
 
 import { _myAccount } from 'src/_mock';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -28,8 +30,8 @@ export type AccountPopoverProps = IconButtonProps & {
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
-
   const pathname = usePathname();
+  const { profile } = useSelector((state: RootState) => state.auth);
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
@@ -51,88 +53,96 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
 
   return (
     <>
-      <IconButton
-        onClick={handleOpenPopover}
-        sx={{
-          p: '2px',
-          width: 40,
-          height: 40,
-          background: (theme) =>
-            `conic-gradient(${theme.vars.palette.primary.light}, ${theme.vars.palette.warning.light}, ${theme.vars.palette.primary.light})`,
-          ...sx,
-        }}
-        {...other}
-      >
-        <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 1, height: 1 }}>
-          {_myAccount.displayName.charAt(0).toUpperCase()}
-        </Avatar>
-      </IconButton>
-
-      <Popover
-        open={!!openPopover}
-        anchorEl={openPopover}
-        onClose={handleClosePopover}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        slotProps={{
-          paper: {
-            sx: { width: 200 },
-          },
-        }}
-      >
-        <Box sx={{ p: 2, pb: 1.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuList
-          disablePadding
+      {profile && (
+        <IconButton
+          onClick={handleOpenPopover}
           sx={{
-            p: 1,
-            gap: 0.5,
-            display: 'flex',
-            flexDirection: 'column',
-            [`& .${menuItemClasses.root}`]: {
-              px: 1,
-              gap: 2,
-              borderRadius: 0.75,
-              color: 'text.secondary',
-              '&:hover': { color: 'text.primary' },
-              [`&.${menuItemClasses.selected}`]: {
-                color: 'text.primary',
-                bgcolor: 'action.selected',
-                fontWeight: 'fontWeightSemiBold',
-              },
+            p: '2px',
+            width: 40,
+            height: 40,
+            background: (theme) =>
+              `conic-gradient(${theme.vars.palette.primary.light}, ${theme.vars.palette.warning.light}, ${theme.vars.palette.primary.light})`,
+            ...sx,
+          }}
+          {...other}
+        >
+          <Avatar
+            src={profile?.photo ?? _myAccount.photoURL}
+            alt={_myAccount.displayName}
+            sx={{ width: 1, height: 1 }}
+          >
+            {(profile?.first_name ?? _myAccount.displayName).charAt(0).toUpperCase()}
+          </Avatar>
+        </IconButton>
+      )}
+
+      {profile && (
+        <Popover
+          open={!!openPopover}
+          anchorEl={openPopover}
+          onClose={handleClosePopover}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          slotProps={{
+            paper: {
+              sx: { width: 200 },
             },
           }}
         >
-          {data.map((option) => (
-            <MenuItem
-              key={option.label}
-              selected={option.href === pathname}
-              onClick={() => handleClickItem(option.href)}
-            >
-              {option.icon}
-              {option.label}
-            </MenuItem>
-          ))}
-        </MenuList>
+          <Box sx={{ p: 2, pb: 1.5 }}>
+            <Typography variant="subtitle2" noWrap>
+              {`${profile?.first_name} ${profile?.last_name}`}
+            </Typography>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+            <Typography fontSize={11} sx={{ color: 'text.secondary' }} noWrap>
+              {`Last login ${new Date(profile?.last_login).toLocaleString('en-US')}`}
+            </Typography>
+          </Box>
 
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth color="error" size="medium" variant="text">
-            Logout
-          </Button>
-        </Box>
-      </Popover>
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <MenuList
+            disablePadding
+            sx={{
+              p: 1,
+              gap: 0.5,
+              display: 'flex',
+              flexDirection: 'column',
+              [`& .${menuItemClasses.root}`]: {
+                px: 1,
+                gap: 2,
+                borderRadius: 0.75,
+                color: 'text.secondary',
+                '&:hover': { color: 'text.primary' },
+                [`&.${menuItemClasses.selected}`]: {
+                  color: 'text.primary',
+                  bgcolor: 'action.selected',
+                  fontWeight: 'fontWeightSemiBold',
+                },
+              },
+            }}
+          >
+            {data.map((option) => (
+              <MenuItem
+                key={option.label}
+                selected={option.href === pathname}
+                onClick={() => handleClickItem(option.href)}
+              >
+                {option.icon}
+                {option.label}
+              </MenuItem>
+            ))}
+          </MenuList>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <Box sx={{ p: 1 }}>
+            <Button fullWidth color="error" size="medium" variant="text">
+              Logout
+            </Button>
+          </Box>
+        </Popover>
+      )}
     </>
   );
 }

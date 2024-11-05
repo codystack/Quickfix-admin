@@ -12,6 +12,7 @@ import { AuthLayout } from 'src/layouts/auth';
 import CustomerSupport from 'src/pages/support';
 import { DashboardLayout } from 'src/layouts/dashboard';
 import ProductDetail from 'src/pages/marketplace/product_detail';
+import AddNewProduct from 'src/sections/product/view/add_new';
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ export function Router() {
         { path: 'cms', element: <CMS /> },
         { path: 'support', element: <CustomerSupport /> },
         { path: 'interests', element: <BlogPage /> },
+        { path: 'product/new', element: <AddNewProduct /> },
       ],
     },
     {

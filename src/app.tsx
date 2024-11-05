@@ -1,7 +1,11 @@
 import 'src/global.css';
-import React from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 
-import Fab from '@mui/material/Fab';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+
+import { Backdrop, CircularProgress } from '@mui/material';
 
 import { Router } from 'src/routes/sections';
 
@@ -9,37 +13,23 @@ import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
 import { ThemeProvider } from 'src/theme/theme-provider';
 
-import { Iconify } from 'src/components/iconify';
+import type { RootState } from './redux/store';
+
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
+  const { isLoading } = useSelector((state: RootState) => state.loader);
 
-  const githubButton = (
-    <Fab
-      size="medium"
-      aria-label="Github"
-      href="https://github.com/minimal-ui-kit/material-kit-react"
-      sx={{
-        zIndex: 9,
-        right: 20,
-        bottom: 20,
-        width: 44,
-        height: 44,
-        position: 'fixed',
-        bgcolor: 'grey.800',
-        color: 'common.white',
-      }}
-    >
-      <Iconify width={24} icon="eva:github-fill" />
-    </Fab>
-  );
 
   return (
     <ThemeProvider>
+      <Backdrop open={isLoading}  sx={{zIndex: 100}} >
+        <CircularProgress size={48} />
+      </Backdrop>
+      <ToastContainer  position='top-right' />
       <Router />
-      {/* {githubButton} */}
     </ThemeProvider>
   );
 }

@@ -1,3 +1,4 @@
+import { SWRConfig } from 'swr';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import { Suspense, StrictMode } from 'react';
@@ -6,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import App from './app';
 import store from './redux/store';
+import APIService from './service/api.service';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +19,14 @@ root.render(
       <BrowserRouter>
         <Suspense>
           <Provider store={store}>
-            <App />
+            <SWRConfig
+              value={{
+                // refreshInterval: 3000,
+                fetcher: (url) => APIService.fetcher(url),
+              }}
+            >
+              <App />
+            </SWRConfig>
           </Provider>
         </Suspense>
       </BrowserRouter>

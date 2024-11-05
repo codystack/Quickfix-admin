@@ -1,18 +1,19 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
 
 import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
+import { Iconify } from 'src/components/iconify';
+
 import { ProductItem } from '../product-item';
 import { ProductSort } from '../product-sort';
-import { CartIcon } from '../product-cart-widget';
 import { ProductFilters } from '../product-filters';
 
 import type { FiltersProps } from '../product-filters';
@@ -62,10 +63,9 @@ const defaultFilters = {
 };
 
 export function ProductsView() {
+  const navigate = useNavigate();
   const [sortBy, setSortBy] = useState('featured');
-
   const [openFilter, setOpenFilter] = useState(false);
-
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
 
   const handleOpenFilter = useCallback(() => {
@@ -98,6 +98,7 @@ export function ProductsView() {
         <Button
           variant="contained"
           color="inherit"
+          onClick={() => navigate('/dashboard/product/new')}
           startIcon={<Iconify icon="mingcute:add-line" />}
         >
           Add Item

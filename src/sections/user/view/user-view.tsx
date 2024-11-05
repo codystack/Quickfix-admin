@@ -1,3 +1,6 @@
+import type { RootState } from 'src/redux/store';
+
+import { useSelector } from 'react-redux';
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
@@ -22,7 +25,6 @@ import { TableEmptyRows } from '../table-empty-rows';
 import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import type { UserProps } from '../user-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -30,9 +32,10 @@ export function UserView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const { users } = useSelector((state: RootState) => state.user)
 
-  const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
+  const dataFiltered: any[] = applyFilter({
+    inputData: users?.data,
     comparator: getComparator(table.order, table.orderBy),
     filterName,
   });
@@ -81,10 +84,11 @@ export function UserView() {
                 }
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
+                  { id: 'email_address', label: 'Email Address' },
+                  { id: 'phone_number', label: 'Phone Number' },
+                  { id: 'dob', label: 'DOB' },
                   { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'isKYC', label: 'KYC Status', align: 'center' },
                   { id: '' },
                 ]}
               />
@@ -117,7 +121,7 @@ export function UserView() {
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={users?.totalItems}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}
