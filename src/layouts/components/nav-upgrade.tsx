@@ -6,10 +6,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { textGradient } from 'src/theme/styles';
+import { useDispatch } from 'react-redux';
+import { setLoading } from 'src/redux/reducers/loader';
+import { logout } from 'src/redux/reducers/auth';
 
 // ----------------------------------------------------------------------
 
 export function NavUpgrade({ sx, ...other }: StackProps) {
+  const dispatch = useDispatch();
+
   return (
     <Box
       display="flex"
@@ -44,10 +49,15 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       /> */}
 
       <Button
-        href="https://material-ui.com/store/items/minimal-dashboard/"
-        target="_blank"
         variant="contained"
         color="inherit"
+        onClick={() => {
+          dispatch(setLoading(true));
+          setTimeout(() => {
+            dispatch(logout(false));
+            dispatch(setLoading(false));
+          }, 3000);
+        }}
       >
         Logout
       </Button>

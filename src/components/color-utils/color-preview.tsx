@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/display-name */
 import type { BoxProps } from '@mui/material/Box';
 
@@ -13,9 +14,9 @@ import type { ColorPreviewProps } from './types';
 
 export const ColorPreview = forwardRef<HTMLDivElement, BoxProps & ColorPreviewProps>(
   ({ colors, limit = 3, sx, ...other }, ref) => {
-    const colorsRange = colors.slice(0, limit);
+    const colorsRange = colors?.slice(0, limit);
 
-    const restColors = colors.length - limit;
+    const restColors = colors?.length - limit;
 
     return (
       <Box
@@ -29,7 +30,7 @@ export const ColorPreview = forwardRef<HTMLDivElement, BoxProps & ColorPreviewPr
         }}
         {...other}
       >
-        {colorsRange.map((color, index) => (
+        {colorsRange?.map((color, index) => (
           <Box
             key={color + index}
             sx={{
@@ -45,7 +46,7 @@ export const ColorPreview = forwardRef<HTMLDivElement, BoxProps & ColorPreviewPr
           />
         ))}
 
-        {colors.length > limit && (
+        {colors?.length > limit && (
           <Box component="span" sx={{ typography: 'subtitle2' }}>{`+${restColors}`}</Box>
         )}
       </Box>

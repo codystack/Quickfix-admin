@@ -51,7 +51,7 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
+            <Avatar alt={row.name} src={row.photoUrl} />
             {`${row.first_name} ${row.last_name}`}
           </Box>
         </TableCell>

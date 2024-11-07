@@ -10,14 +10,17 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
 import useUsers from 'src/hooks/use-users';
+import useProfile from 'src/hooks/use-profile';
 import useBookings from 'src/hooks/use-bookings';
 import useProducts from 'src/hooks/use-products';
 import useInterests from 'src/hooks/use-interests';
+import useBookingsCategory from 'src/hooks/use-bookings-category';
 
 import { layoutClasses } from 'src/layouts/classes';
 import { setUsers } from 'src/redux/reducers/users';
-import { setBookings } from 'src/redux/reducers/bookings';
+import { setProfile } from 'src/redux/reducers/auth';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
+import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
 
 // ----------------------------------------------------------------------
 
@@ -59,11 +62,12 @@ export function DashboardContent({
 
   // Now fetch and store data into state
   const {  data: usersData, } = useUsers();
+  const {  data: profileData, } = useProfile();
   const {  data: bookingsData, } = useBookings(1);
   const {  data: productsData, } = useProducts(1);
   const {  data: interestsData, } = useInterests(1);
-
-  console.log("BOOKINGS NOW :: ", bookingsData);
+  const {  data: sessionBookingsData, } = useBookingsCategory(1, 'book-session');
+  const {  data: fastTrackBookingsData, } = useBookingsCategory(1, 'fast-track');
   
 
   React.useEffect(() => {
@@ -71,8 +75,15 @@ export function DashboardContent({
       dispatch(setUsers(usersData));
     }
 
+    if (profileData) {
+      dispatch(setProfile(profileData));
+    }
+
     if (bookingsData) {
       dispatch(setBookings(bookingsData));
+      dispatch(setSessionBooking(sessionBookingsData));
+      dispatch(setFastTrackBookings(fastTrackBookingsData));
+      
     }
 
     if (productsData) {
@@ -82,7 +93,7 @@ export function DashboardContent({
     if (interestsData) {
       dispatch(setInterests(interestsData));
     }
-  }, [bookingsData, dispatch, interestsData, productsData, usersData])
+  }, [bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, usersData])
 
 
   return (

@@ -23,10 +23,10 @@ import { ColorPicker } from 'src/components/color-utils';
 
 export type FiltersProps = {
   price: string;
-  rating: string;
-  gender: string[];
-  colors: string[];
-  category: string;
+  // rating: string;
+  // gender: string[];
+  // colors: string[];
+  // category: string;
 };
 
 type ProductFiltersProps = {
@@ -38,10 +38,6 @@ type ProductFiltersProps = {
   onResetFilter: () => void;
   onSetFilters: (updateState: Partial<FiltersProps>) => void;
   options: {
-    colors: string[];
-    ratings: string[];
-    categories: { value: string; label: string }[];
-    genders: { value: string; label: string }[];
     price: { value: string; label: string }[];
   };
 };
@@ -58,7 +54,7 @@ export function ProductFilters({
 }: ProductFiltersProps) {
   const renderGender = (
     <Stack spacing={1}>
-      <Typography variant="subtitle2">Gender</Typography>
+      {/* <Typography variant="subtitle2">Gender</Typography>
       <FormGroup>
         {options.genders.map((option) => (
           <FormControlLabel
@@ -78,13 +74,13 @@ export function ProductFilters({
             label={option.label}
           />
         ))}
-      </FormGroup>
+      </FormGroup> */}
     </Stack>
   );
 
   const renderCategory = (
     <Stack spacing={1}>
-      <Typography variant="subtitle2">Category</Typography>
+      {/* <Typography variant="subtitle2">Category</Typography>
       <RadioGroup>
         {options.categories.map((option) => (
           <FormControlLabel
@@ -99,19 +95,19 @@ export function ProductFilters({
             label={option.label}
           />
         ))}
-      </RadioGroup>
+      </RadioGroup> */}
     </Stack>
   );
 
   const renderColors = (
     <Stack spacing={1}>
-      <Typography variant="subtitle2">Colors</Typography>
+      {/* <Typography variant="subtitle2">Colors</Typography>
       <ColorPicker
         selected={filters.colors}
         onSelectColor={(colors) => onSetFilters({ colors: colors as string[] })}
         colors={options.colors}
         limit={6}
-      />
+      /> */}
     </Stack>
   );
 
@@ -138,7 +134,7 @@ export function ProductFilters({
 
   const renderRating = (
     <Stack spacing={1}>
-      <Typography variant="subtitle2" sx={{ mb: 2 }}>
+      {/* <Typography variant="subtitle2" sx={{ mb: 2 }}>
         Rating
       </Typography>
 
@@ -164,7 +160,7 @@ export function ProductFilters({
         >
           <Rating readOnly value={4 - index} /> & Up
         </Box>
-      ))}
+      ))} */}
     </Stack>
   );
 
@@ -211,11 +207,7 @@ export function ProductFilters({
 
         <Scrollbar>
           <Stack spacing={3} sx={{ p: 3 }}>
-            {renderGender}
-            {renderCategory}
-            {renderColors}
             {renderPrice}
-            {renderRating}
           </Stack>
         </Scrollbar>
       </Drawer>

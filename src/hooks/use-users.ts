@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useUsers() {
   const { data, mutate, error } = useSWR('/users/all');
 
-  console.log('users response', data);
   const loading = !data && !error;
   const loggedOut =
     (error && error?.message === 'No token provided.') ||

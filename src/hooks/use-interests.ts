@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
 export default function useInterests(page: number) {
-  const { data, mutate, error } = useSWR(`/banners/all?page=${page}`);
+  const { data, mutate, error } = useSWR(`/interests/all?page=${page}`);
 
   // console.log('response', error);
   const loading = !data && !error;

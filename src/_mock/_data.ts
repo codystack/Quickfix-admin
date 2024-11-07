@@ -21,7 +21,7 @@ export const _myAccount = {
 
 // ----------------------------------------------------------------------
 
-export const _users = [...Array(24)].map((_, index) => ({
+export const _users = [...Array(3)].map((_, index) => ({
   id: _id(index),
   name: _fullName(index),
   company: _company(index),
@@ -45,7 +45,7 @@ export const _users = [...Array(24)].map((_, index) => ({
 
 // ----------------------------------------------------------------------
 
-export const _posts = [...Array(23)].map((_, index) => ({
+export const _posts = [...Array(3)].map((_, index) => ({
   id: _id(index),
   title: _postTitles(index),
   description: _description(index),

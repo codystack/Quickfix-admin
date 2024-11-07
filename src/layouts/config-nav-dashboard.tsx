@@ -15,7 +15,7 @@ export const navData = [
   {
     title: 'Bookings',
     path: '/dashboard/bookings',
-    icon: icon('ic-user'),
+    icon: icon('ic-blog'),
   },
   {
     title: 'Market Place',
@@ -35,12 +35,12 @@ export const navData = [
   {
     title: 'Interests',
     path: '/dashboard/interests',
-    icon: icon('ic-blog'),
+    icon: icon('ic-glass-bag'),
   },
   {
     title: 'Support',
     path: '/dashboard/support',
-    icon: icon('ic-help'),
+    icon: icon('ic-glass-message'),
   },
   {
     title: 'Content Management',

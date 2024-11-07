@@ -1,3 +1,6 @@
+import type { RootState } from 'src/redux/store';
+
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useCallback } from 'react';
 
@@ -7,7 +10,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 
-import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
@@ -43,27 +45,28 @@ const PRICE_OPTIONS = [
   { value: 'above', label: 'Above $75' },
 ];
 
-const COLOR_OPTIONS = [
-  '#00AB55',
-  '#000000',
-  '#FFFFFF',
-  '#FFC0CB',
-  '#FF4842',
-  '#1890FF',
-  '#94D82D',
-  '#FFC107',
-];
+// const COLOR_OPTIONS = [
+//   '#00AB55',
+//   '#000000',
+//   '#FFFFFF',
+//   '#FFC0CB',
+//   '#FF4842',
+//   '#1890FF',
+//   '#94D82D',
+//   '#FFC107',
+// ];
 
 const defaultFilters = {
   price: '',
-  gender: [GENDER_OPTIONS[0].value],
-  colors: [COLOR_OPTIONS[4]],
-  rating: RATING_OPTIONS[0],
-  category: CATEGORY_OPTIONS[0].value,
+  // gender: [GENDER_OPTIONS[0].value],
+  // colors: [COLOR_OPTIONS[4]],
+  // rating: RATING_OPTIONS[0],
+  // category: CATEGORY_OPTIONS[0].value,
 };
 
 export function ProductsView() {
   const navigate = useNavigate();
+  const { products } = useSelector((state: RootState) => state.product)
   const [sortBy, setSortBy] = useState('featured');
   const [openFilter, setOpenFilter] = useState(false);
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
@@ -124,11 +127,7 @@ export function ProductsView() {
             onCloseFilter={handleCloseFilter}
             onResetFilter={() => setFilters(defaultFilters)}
             options={{
-              genders: GENDER_OPTIONS,
-              categories: CATEGORY_OPTIONS,
-              ratings: RATING_OPTIONS,
               price: PRICE_OPTIONS,
-              colors: COLOR_OPTIONS,
             }}
           />
 
@@ -146,8 +145,8 @@ export function ProductsView() {
       </Box>
 
       <Grid container spacing={3}>
-        {_products.map((product) => (
-          <Grid key={product.id} xs={12} sm={6} md={3}>
+        {products?.data.map((product: any) => (
+          <Grid key={product._id} xs={12} sm={6} md={3}>
             <ProductItem product={product} />
           </Grid>
         ))}

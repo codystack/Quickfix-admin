@@ -18,15 +18,17 @@ import { Iconify } from 'src/components/iconify';
 export type UserProps = {
   id: string;
   name: string;
-  role: string;
+  amount: number;
   status: string;
-  company: string;
+  reason: string;
+  location: string;
+  category: string;
   avatarUrl: string;
   isVerified: boolean;
 };
 
 type UserTableRowProps = {
-  row: UserProps;
+  row: any;
   selected: boolean;
   onSelectRow: () => void;
 };
@@ -51,25 +53,22 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
-            {row.name}
+            <Avatar alt={row.user?.first_name} src={row.user?.photoUrl} />
+            {`${row.user?.first_name} ${row?.user?.last_name}`}
           </Box>
         </TableCell>
 
-        <TableCell>{row.company}</TableCell>
+        <TableCell>{row.amount}</TableCell>
 
-        <TableCell>{row.role}</TableCell>
+        <TableCell>{row.category}</TableCell>
 
-        <TableCell align="center">
-          {row.isVerified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            '-'
-          )}
-        </TableCell>
+        <TableCell>{row.reason}</TableCell>
+
+        <TableCell>{row.location}</TableCell>
+
 
         <TableCell>
-          <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label>
+          <Label color={(row.status === 'pending' && 'error') || 'success'}>{row.status}</Label>
         </TableCell>
 
         <TableCell align="right">
@@ -104,12 +103,17 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
         >
           <MenuItem onClick={handleClosePopover}>
             <Iconify icon="solar:pen-bold" />
-            Edit
+            Approve
+          </MenuItem>
+
+          <MenuItem onClick={handleClosePopover}>
+            <Iconify icon="solar:pen-bold" />
+            Decline
           </MenuItem>
 
           <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
-            Delete
+            Cancel
           </MenuItem>
         </MenuList>
       </Popover>

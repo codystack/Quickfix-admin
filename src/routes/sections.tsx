@@ -13,11 +13,14 @@ import CustomerSupport from 'src/pages/support';
 import { DashboardLayout } from 'src/layouts/dashboard';
 import ProductDetail from 'src/pages/marketplace/product_detail';
 import AddNewProduct from 'src/sections/product/view/add_new';
+import { SocialView } from 'src/sections/cms/view/social-view';
 
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
+export const InterestPage = lazy(() => import('src/pages/interests/interest'));
+export const SupportPage = lazy(() => import('src/pages/support'));
 export const UserPage = lazy(() => import('src/pages/users/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/marketplace'));
@@ -66,9 +69,11 @@ export function Router() {
         { path: 'market-place', element: <ProductsPage /> },
         { path: 'market-place/product/:id', element: <ProductDetail /> },
         { path: 'cms', element: <CMS /> },
-        { path: 'support', element: <CustomerSupport /> },
-        { path: 'interests', element: <BlogPage /> },
+        { path: 'cms/social', element: <SocialView /> },
+        { path: 'support', element: <SupportPage /> },
+        { path: 'interests', element: <InterestPage /> },
         { path: 'product/new', element: <AddNewProduct /> },
+        // { path: 'product/:id/detail', element: <ProductDetail /> },
       ],
     },
     {

@@ -21,9 +21,14 @@ const authSlice = createSlice({
     setProfile(state, action: PayloadAction<any>) {
       state.profile = action.payload;
     },
+    logout(state, action: PayloadAction<any>) {
+      localStorage.removeItem('accessToken');
+      state.profile = null;
+      state.profile = action.payload;;
+    },
   },
 });
 
-export const { setAuth, setProfile } = authSlice.actions
+export const { setAuth, setProfile, logout } = authSlice.actions
 
 export default authSlice.reducer;

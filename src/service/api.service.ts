@@ -20,13 +20,22 @@ class APIService {
 
   static verifyOTP = (payload: any) => axiosInstance.post("/auth/admin/verify", payload).then((res: any) => res);
 
-  static getBookings = (page: number) => axiosInstance.get("/auth/admin/verify").then((res: any) => res);
+  static getProfile = () => axiosInstance.get("/admins/current/profile").then((res: any) => res);
 
-  static getBanners = (page: number) => axiosInstance.get("/admin/auth/verify").then((res: any) => res);
+  static getBookings = (page: number) => axiosInstance.get("/admins/bookings/all").then((res: any) => res);
 
-  static getProducts = (page: number) => axiosInstance.get("/admin/auth/verify").then((res: any) => res);
+  static getBanners = (page: number) => axiosInstance.get("/admin/banners/all").then((res: any) => res);
+
+  static getProducts = (page: number) => axiosInstance.get("/marketplace/all").then((res: any) => res);
 
   static getInterests = (page: number) => axiosInstance.get("/admin/auth/verify").then((res: any) => res);
+
+  static productImagesUpload = (payload: any) => axiosInstance.post("/marketplace/upload/images", payload).then((res: any) => res);
+
+  static addProduct = (payload: any) => axiosInstance.post("/marketplace/add", payload).then((res: any) => res);
+
+
+
 
 }
 

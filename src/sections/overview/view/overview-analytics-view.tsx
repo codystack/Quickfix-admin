@@ -16,7 +16,9 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 
 export function OverviewAnalyticsView() {
   const {users} = useSelector((state: RootState) => state.user);
-  console.log("USERS ::: ", users);
+  const { products, interests } = useSelector((state: RootState) => state.product);
+  const { bookings, fastTrackBookings, sessionBookings, workingClassBookings } = useSelector((state: RootState) => state.booking);
+  console.log("FASTC ::: ", sessionBookings);
   
   return (
     <DashboardContent maxWidth="xl">
@@ -41,9 +43,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Purchase orders"
+            title="Products"
             percent={2.8}
-            total={1723315}
+            total={products?.totalItems}
             color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
             chart={{
@@ -55,9 +57,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Weekly sales"
+            title="Interests"
             percent={2.6}
-            total={714000}
+            total={interests?.totalItems}
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
@@ -68,9 +70,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Messages"
+            title="Appointments"
             percent={3.6}
-            total={234}
+            total={bookings?.totalItems}
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
             chart={{
@@ -82,13 +84,12 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AnalyticsCurrentVisits
-            title="Current visits"
+            title="Appointment Bookings"
             chart={{
               series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
+                { label: 'Fast Track', value: fastTrackBookings?.totalItems ?? 0 },
+                { label: 'Session Booking', value: sessionBookings?.totalItems ?? 0 },
+                { label: 'Working Class', value: workingClassBookings?.totalItems ?? 0 },
               ],
             }}
           />

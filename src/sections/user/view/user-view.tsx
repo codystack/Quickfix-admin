@@ -48,13 +48,13 @@ export function UserView() {
         <Typography variant="h4" flexGrow={1}>
           Users
         </Typography>
-        <Button
+        {/* <Button
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
         >
           New user
-        </Button>
+        </Button> */}
       </Box>
 
       <Card>

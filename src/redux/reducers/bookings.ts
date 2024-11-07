@@ -4,10 +4,16 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface BookingI {
   bookings: any;
+  sessionBookings: any;
+  fastTrackBookings: any;
+  workingClassBookings: any;
 }
 
 const initVal: BookingI = {
   bookings: null,
+  sessionBookings: null,
+  fastTrackBookings: null,
+  workingClassBookings: null,
 };
 
 const bookingSlice = createSlice({
@@ -17,10 +23,19 @@ const bookingSlice = createSlice({
     setBookings(state, action: PayloadAction<any>) {
       state.bookings = action.payload;
     },
+    setFastTrackBookings(state, action: PayloadAction<any>) {
+      state.fastTrackBookings = action.payload;
+    },
+    setWorkingClassBooking(state, action: PayloadAction<any>) {
+      state.workingClassBookings = action.payload;
+    },
+    setSessionBooking(state, action: PayloadAction<any>) {
+      state.sessionBookings = action.payload;
+    },
   },
 });
 
-export const { setBookings } = bookingSlice.actions
+export const { setBookings, setFastTrackBookings, setWorkingClassBooking, setSessionBooking } = bookingSlice.actions
 
 
 export default bookingSlice.reducer;
