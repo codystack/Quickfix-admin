@@ -5,8 +5,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import * as Yup from 'yup';
+import { mutate } from 'swr';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ImagePicker } from '@abak/react-image-picker';
 
@@ -24,12 +26,10 @@ import {
 import convertBase64 from 'src/utils/image-converter';
 
 import APIService from 'src/service/api.service';
+import { setLoading } from 'src/redux/reducers/loader';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
-import { useDispatch } from 'react-redux';
-import { setLoading } from 'src/redux/reducers/loader';
-import { mutate } from 'swr';
 
 const AddNewProduct = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const AddNewProduct = () => {
       const payload = {
         images: imgs,
       };
-      const response = await APIService.productImagesUpload(payload);
+      const response = await APIService.multiImagesUpload(payload);
       return response
     } catch (error) {
       dispatch(setLoading(false));

@@ -9,9 +9,10 @@ import CMS from 'src/pages/cms';
 import Bookings from 'src/pages/bookings';
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
-import CustomerSupport from 'src/pages/support';
 import { DashboardLayout } from 'src/layouts/dashboard';
 import ProductDetail from 'src/pages/marketplace/product_detail';
+
+import UserDetail from 'src/sections/user/view/user-detail';
 import AddNewProduct from 'src/sections/product/view/add_new';
 import { SocialView } from 'src/sections/cms/view/social-view';
 
@@ -66,6 +67,7 @@ export function Router() {
         { element: <HomePage />, index: true },
         { path: 'bookings', element: <Bookings /> },
         { path: 'users', element: <UserPage /> },
+        { path: 'users/:id', element: <UserDetail /> },
         { path: 'market-place', element: <ProductsPage /> },
         { path: 'market-place/product/:id', element: <ProductDetail /> },
         { path: 'cms', element: <CMS /> },

@@ -109,7 +109,7 @@ export function InterestTableRow({ row, selected, onSelectRow }: UserTableRowPro
             View
           </MenuItem>
 
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+          {/* <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
             Suspend
           </MenuItem>
@@ -117,7 +117,7 @@ export function InterestTableRow({ row, selected, onSelectRow }: UserTableRowPro
           <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:chat-bold" />
             Message
-          </MenuItem>
+          </MenuItem> */}
         </MenuList>
       </Popover>
     </>

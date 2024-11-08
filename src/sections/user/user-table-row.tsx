@@ -12,6 +12,7 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +33,8 @@ type UserTableRowProps = {
 };
 
 export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false);
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -111,7 +114,9 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem onClick={() => {
+            navigate(`/dashboard/users/${row?.id}`, { state: { data: row} })
+          }}>
             <Iconify icon="solar:eye-bold" />
             View
           </MenuItem>
@@ -121,8 +126,8 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
             Suspend
           </MenuItem>
 
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
-            <Iconify icon="solar:chat-bold" />
+          <MenuItem onClick={handleClosePopover} sx={{ color: 'info.main' }}>
+            <Iconify icon="tabler:message" />
             Message
           </MenuItem>
         </MenuList>

@@ -21,6 +21,8 @@ import { setUsers } from 'src/redux/reducers/users';
 import { setProfile } from 'src/redux/reducers/auth';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
 import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
+import useSocials from 'src/hooks/use-socials';
+import { setSocials } from 'src/redux/reducers/banners';
 
 // ----------------------------------------------------------------------
 
@@ -58,17 +60,17 @@ export function DashboardContent({
   const theme = useTheme();
 
   const layoutQuery: Breakpoint = 'lg';
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Now fetch and store data into state
-  const {  data: usersData, } = useUsers();
-  const {  data: profileData, } = useProfile();
-  const {  data: bookingsData, } = useBookings(1);
-  const {  data: productsData, } = useProducts(1);
-  const {  data: interestsData, } = useInterests(1);
-  const {  data: sessionBookingsData, } = useBookingsCategory(1, 'book-session');
-  const {  data: fastTrackBookingsData, } = useBookingsCategory(1, 'fast-track');
-  
+  const { data: usersData } = useUsers();
+  const { data: profileData } = useProfile();
+  const { data: socialsData } = useSocials();
+  const { data: bookingsData } = useBookings(1);
+  const { data: productsData } = useProducts(1);
+  const { data: interestsData } = useInterests(1);
+  const { data: sessionBookingsData } = useBookingsCategory(1, 'book-session');
+  const { data: fastTrackBookingsData } = useBookingsCategory(1, 'fast-track');
 
   React.useEffect(() => {
     if (usersData) {
@@ -83,7 +85,6 @@ export function DashboardContent({
       dispatch(setBookings(bookingsData));
       dispatch(setSessionBooking(sessionBookingsData));
       dispatch(setFastTrackBookings(fastTrackBookingsData));
-      
     }
 
     if (productsData) {
@@ -93,8 +94,21 @@ export function DashboardContent({
     if (interestsData) {
       dispatch(setInterests(interestsData));
     }
-  }, [bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, usersData])
 
+    if (socialsData) {
+      dispatch(setSocials(socialsData));
+    }
+  }, [
+    bookingsData,
+    dispatch,
+    fastTrackBookingsData,
+    interestsData,
+    productsData,
+    profileData,
+    sessionBookingsData,
+    socialsData,
+    usersData,
+  ]);
 
   return (
     <Container

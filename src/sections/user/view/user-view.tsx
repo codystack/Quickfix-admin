@@ -135,6 +135,7 @@ export function UserView() {
 // ----------------------------------------------------------------------
 
 export function useTable() {
+  
   const [page, setPage] = useState(0);
   const [orderBy, setOrderBy] = useState('name');
   const [rowsPerPage, setRowsPerPage] = useState(5);

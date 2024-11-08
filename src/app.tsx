@@ -36,7 +36,6 @@ export default function App() {
       dispatch(setAuth(true));
       try {
         APIService.getProfile().then((resp) => {
-          console.log("CURR ADMIN PROF ::: ", resp.data);
           const obj = resp.data;
           dispatch(setProfile(obj))
         }).catch((err) => console.log("PROFILE ERR:: ", err)

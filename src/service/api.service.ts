@@ -30,11 +30,19 @@ class APIService {
 
   static getInterests = (page: number) => axiosInstance.get("/admin/auth/verify").then((res: any) => res);
 
-  static productImagesUpload = (payload: any) => axiosInstance.post("/marketplace/upload/images", payload).then((res: any) => res);
+  static multiImagesUpload = (payload: any) => axiosInstance.put("/images/upload", payload).then((res: any) => res);
+
+  static singleImageUpload = (payload: any) => axiosInstance.put("/image/upload", payload).then((res: any) => res);
 
   static addProduct = (payload: any) => axiosInstance.post("/marketplace/add", payload).then((res: any) => res);
 
+  static approveBooking = (id: any) => axiosInstance.put(`/admins/bookings/${id}/approve`, {}).then((res: any) => res);
 
+  static declineBooking = (id: string) => axiosInstance.put(`/admins/bookings/${id}/decline`, {}).then((res: any) => res);
+
+  static addSocial = (payload: any) => axiosInstance.post("/admins/socials/add", payload).then((res: any) => res);
+
+  static addBanner = (payload: any) => axiosInstance.post("/admins/banners/add", payload).then((res: any) => res);
 
 
 }
