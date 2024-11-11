@@ -25,6 +25,7 @@ export function CMSView() {
         <Grid xs={12} sm={7} md={8}>
           <CardItem
             title="Banner Slides"
+            routeTo="/dashboard/cms/banners"
             description="Manage banner adverts here"
             bgImage="/assets/images/cover/cover-1.webp"
           />

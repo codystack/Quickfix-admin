@@ -73,7 +73,6 @@ export function InterestTableRow({ row, selected, onSelectRow }: UserTableRowPro
         </TableCell>
 
 
-
         <TableCell align="right">
           <IconButton onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />

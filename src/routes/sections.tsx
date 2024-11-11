@@ -15,6 +15,7 @@ import ProductDetail from 'src/pages/marketplace/product_detail';
 import UserDetail from 'src/sections/user/view/user-detail';
 import AddNewProduct from 'src/sections/product/view/add_new';
 import { SocialView } from 'src/sections/cms/view/social-view';
+import { BannerView } from 'src/sections/cms/view/banner-view';
 
 // ----------------------------------------------------------------------
 
@@ -72,6 +73,7 @@ export function Router() {
         { path: 'market-place/product/:id', element: <ProductDetail /> },
         { path: 'cms', element: <CMS /> },
         { path: 'cms/social', element: <SocialView /> },
+        { path: 'cms/banners', element: <BannerView /> },
         { path: 'support', element: <SupportPage /> },
         { path: 'interests', element: <InterestPage /> },
         { path: 'product/new', element: <AddNewProduct /> },

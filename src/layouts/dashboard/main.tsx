@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 
 import useUsers from 'src/hooks/use-users';
 import useProfile from 'src/hooks/use-profile';
+import useSocials from 'src/hooks/use-socials';
 import useBookings from 'src/hooks/use-bookings';
 import useProducts from 'src/hooks/use-products';
 import useInterests from 'src/hooks/use-interests';
@@ -19,10 +20,10 @@ import useBookingsCategory from 'src/hooks/use-bookings-category';
 import { layoutClasses } from 'src/layouts/classes';
 import { setUsers } from 'src/redux/reducers/users';
 import { setProfile } from 'src/redux/reducers/auth';
+import { setBanners, setSocials } from 'src/redux/reducers/banners';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
 import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
-import useSocials from 'src/hooks/use-socials';
-import { setSocials } from 'src/redux/reducers/banners';
+import useBanners from 'src/hooks/use-banners';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ export function DashboardContent({
   // Now fetch and store data into state
   const { data: usersData } = useUsers();
   const { data: profileData } = useProfile();
+  const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
   const { data: bookingsData } = useBookings(1);
   const { data: productsData } = useProducts(1);
@@ -98,17 +100,11 @@ export function DashboardContent({
     if (socialsData) {
       dispatch(setSocials(socialsData));
     }
-  }, [
-    bookingsData,
-    dispatch,
-    fastTrackBookingsData,
-    interestsData,
-    productsData,
-    profileData,
-    sessionBookingsData,
-    socialsData,
-    usersData,
-  ]);
+
+    if (bannersData) {
+      dispatch(setBanners(bannersData))
+    }
+  }, [bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, socialsData, usersData]);
 
   return (
     <Container
