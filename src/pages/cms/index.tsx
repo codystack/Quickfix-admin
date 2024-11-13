@@ -10,7 +10,7 @@ const CMS = () => {
     return (
       <>
         <Helmet>
-          <title> {`Blog - ${CONFIG.appName}`}</title>
+          <title> {`CMS - ${CONFIG.appName}`}</title>
         </Helmet>
   
         <CMSView />

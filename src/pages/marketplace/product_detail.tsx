@@ -81,8 +81,8 @@ const ProductDetail = () => {
             </Typography>
           </Box>
           <Box>
-            <Tooltip title="Edit Product">
-              <IconButton>
+            <Tooltip title="Edit Product"  >
+              <IconButton onClick={() => navigate(`/dashboard/product/${data?._id}/update`, { state: { product: data } })} >
                 <Iconify icon="basil:edit-outline" fontSize={48} />
               </IconButton>
             </Tooltip>

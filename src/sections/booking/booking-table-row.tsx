@@ -194,7 +194,8 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
               },
             }}
           >
-            <MenuItem
+            {row.status !== 'booked' && row.status !== 'completed' &&
+              <MenuItem
               onClick={() => {
                 setConfirmationTitle('Approve Appointment');
                 handleClosePopover();
@@ -204,6 +205,7 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
               <Iconify icon="hugeicons:inbox-check" fontSize={28} />
               Approve
             </MenuItem>
+            }
 
             <MenuItem
               onClick={() => {

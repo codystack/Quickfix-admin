@@ -13,9 +13,13 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 import ProductDetail from 'src/pages/marketplace/product_detail';
 
 import UserDetail from 'src/sections/user/view/user-detail';
-import AddNewProduct from 'src/sections/product/view/add_new';
+import AddNewProduct from 'src/sections/product/view/add_product';
 import { SocialView } from 'src/sections/cms/view/social-view';
 import { BannerView } from 'src/sections/cms/view/banner-view';
+import UpdateProduct from 'src/sections/product/view/update_product';
+import InterestDetail from 'src/sections/interest/view/interest-detail';
+import { AdminsView } from 'src/sections/admins/view';
+import AdminDetail from 'src/sections/admins/view/admin-detail';
 
 // ----------------------------------------------------------------------
 
@@ -74,10 +78,14 @@ export function Router() {
         { path: 'cms', element: <CMS /> },
         { path: 'cms/social', element: <SocialView /> },
         { path: 'cms/banners', element: <BannerView /> },
+        { path: 'cms/admins', element: <AdminsView /> },
+        { path: 'cms/admins/:id', element: <AdminDetail /> },
         { path: 'support', element: <SupportPage /> },
         { path: 'interests', element: <InterestPage /> },
+        { path: 'interests/:id', element: <InterestDetail /> },
         { path: 'product/new', element: <AddNewProduct /> },
-        // { path: 'product/:id/detail', element: <ProductDetail /> },
+        { path: 'product/:id/update', element: <UpdateProduct /> },
+        
       ],
     },
     {

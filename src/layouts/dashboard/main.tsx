@@ -10,20 +10,21 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
 import useUsers from 'src/hooks/use-users';
+import useAdmins from 'src/hooks/use-admins';
 import useProfile from 'src/hooks/use-profile';
 import useSocials from 'src/hooks/use-socials';
+import useBanners from 'src/hooks/use-banners';
 import useBookings from 'src/hooks/use-bookings';
 import useProducts from 'src/hooks/use-products';
 import useInterests from 'src/hooks/use-interests';
 import useBookingsCategory from 'src/hooks/use-bookings-category';
 
 import { layoutClasses } from 'src/layouts/classes';
-import { setUsers } from 'src/redux/reducers/users';
 import { setProfile } from 'src/redux/reducers/auth';
+import { setUsers, setAdmins } from 'src/redux/reducers/users';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
 import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
-import useBanners from 'src/hooks/use-banners';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ export function DashboardContent({
 
   // Now fetch and store data into state
   const { data: usersData } = useUsers();
+  const { data: adminsData } = useAdmins();
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
@@ -77,6 +79,10 @@ export function DashboardContent({
   React.useEffect(() => {
     if (usersData) {
       dispatch(setUsers(usersData));
+    }
+
+    if (adminsData) {
+      dispatch(setAdmins(adminsData));
     }
 
     if (profileData) {
@@ -104,7 +110,7 @@ export function DashboardContent({
     if (bannersData) {
       dispatch(setBanners(bannersData))
     }
-  }, [bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, socialsData, usersData]);
+  }, [adminsData, bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, socialsData, usersData]);
 
   return (
     <Container

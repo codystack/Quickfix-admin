@@ -32,7 +32,7 @@ export function CMSView() {
         </Grid>
 
         <Grid xs={12} sm={5} md={4}>
-          <CardItem title="Admin Management" bgImage="/assets/images/cover/cover-3.webp" />
+          <CardItem title="Admin Management" bgImage="/assets/images/cover/cover-3.webp" routeTo="/dashboard/cms/admins" />
         </Grid>
       </Grid>
       <Box p={2} />

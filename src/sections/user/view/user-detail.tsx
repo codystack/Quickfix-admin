@@ -5,7 +5,6 @@ import {
   Box,
   Avatar,
   Toolbar,
-  Tooltip,
   IconButton,
   Grid,
   Typography,
@@ -19,7 +18,6 @@ import { Iconify } from 'src/components/iconify';
 const UserDetail = () => {
   const locaton = useLocation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [initials, setInitials] = useState('');
 
   const { data } = locaton.state;
@@ -50,19 +48,6 @@ const UserDetail = () => {
           <IconButton onClick={() => navigate(-1)}>
             <Iconify icon="eva:arrow-back-fill" />
           </IconButton>
-        </Box>
-        <Box>
-          {/* <Tooltip title="Edit Product">
-              <IconButton>
-                <Iconify icon="basil:edit-outline" fontSize={48} />
-              </IconButton>
-            </Tooltip> */}
-
-          {/* <Tooltip title="Delete Product">
-            <IconButton onClick={() => setOpen(true)}>
-              <Iconify icon="weui:delete-on-filled" fontSize={48} />
-            </IconButton>
-          </Tooltip> */}
         </Box>
       </Box>
 

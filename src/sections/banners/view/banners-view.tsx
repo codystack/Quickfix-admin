@@ -3,24 +3,22 @@ import type { RootState } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import React, { useState, useCallback } from 'react';
 
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { _users } from 'src/_mock';
-import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Scrollbar } from 'src/components/scrollbar';
 
 import { TableNoData } from '../table-no-data';
 import { TableEmptyRows } from '../table-empty-rows';
-import { InterestTableRow } from '../banners-table-row';
-import { InterestTableHead } from '../banners-table-head';
-import { InterestTableToolbar } from '../banners-table-toolbar';
+import { BannerTableRow } from '../banners-table-row';
+// import { BannerTableRow } from '../banners-table-row';
+import { BannerTableHead } from '../banners-table-head';
+import { BannerTableToolbar } from '../banners-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 
@@ -32,7 +30,7 @@ export function BannerCardView() {
   const [filterName, setFilterName] = useState('');
   const { banners } = useSelector((state: RootState) => state.banner)
 
-  console.log('INTERESTS ::: ', banners);
+  console.log('BANNERS ::: ', banners);
   
 
   const dataFiltered: any[] = applyFilter({
@@ -45,7 +43,7 @@ export function BannerCardView() {
 
   return (
     <Card>
-        <InterestTableToolbar
+        <BannerTableToolbar
           numSelected={table.selected.length}
           filterName={filterName}
           onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +55,7 @@ export function BannerCardView() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <InterestTableHead
+              <BannerTableHead
                 order={table.order}
                 orderBy={table.orderBy}
                 rowCount={_users.length}
@@ -75,6 +73,7 @@ export function BannerCardView() {
                   { id: 'amount', label: 'Amount' },
                   { id: 'type', label: 'Type' },
                   { id: 'url', label: 'Route To' },
+                  { id: 'status', label: 'Status' },
                   { id: 'createdAt', label: 'Created On' },
                   { id: '' },
                 ]}
@@ -86,7 +85,7 @@ export function BannerCardView() {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <InterestTableRow
+                    <BannerTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}

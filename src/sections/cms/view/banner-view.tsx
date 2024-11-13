@@ -3,6 +3,7 @@
 import type { RootState } from 'src/redux/store';
 
 import * as Yup from 'yup';
+// import { BannerCardView } from 'src/sections/banners/view';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
@@ -11,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Button , Toolbar, useTheme, TextField, InputLabel, IconButton, FormControl, NativeSelect, FormHelperText, OutlinedInput, useMediaQuery } from '@mui/material';
+import { Button , Toolbar, useTheme, TextField, InputLabel, IconButton, FormControl, NativeSelect, OutlinedInput, useMediaQuery, FormHelperText } from '@mui/material';
 
 import convertBase64 from 'src/utils/image-converter';
 
@@ -21,6 +22,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
 import CustomizedDialog from 'src/components/dialog';
+
 import { BannerCardView } from 'src/sections/banners/view';
 
 // ----------------------------------------------------------------------
@@ -33,7 +35,7 @@ const bannerTypes = [
 export function BannerView() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+  
 
   return (
     <DashboardContent>
@@ -43,6 +45,7 @@ export function BannerView() {
         title="Add New Banner"
         body={<AddBanner setOpen={setOpen} />}
       />
+
       <Box
         display="flex"
         flexDirection="row"
@@ -273,3 +276,4 @@ const AddBanner = ({ setOpen }: any) => {
     </Box>
   );
 };
+

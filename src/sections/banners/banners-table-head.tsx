@@ -21,7 +21,7 @@ type BannerTableHeadProps = {
   onSelectAllRows: (checked: boolean) => void;
 };
 
-export function InterestTableHead({
+export function BannerTableHead({
   order,
   onSort,
   orderBy,

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
@@ -10,7 +11,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
-import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -32,6 +32,7 @@ type UserTableRowProps = {
 };
 
 export function InterestTableRow({ row, selected, onSelectRow }: UserTableRowProps) {
+  const navigate = useNavigate();
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,20 +104,13 @@ export function InterestTableRow({ row, selected, onSelectRow }: UserTableRowPro
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem  onClick={() => {
+              navigate(`/dashboard/interests/${row?._id}`, { state: { data: row } });
+            }}>
             <Iconify icon="solar:eye-bold" />
             View
           </MenuItem>
 
-          {/* <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
-            <Iconify icon="solar:trash-bin-trash-bold" />
-            Suspend
-          </MenuItem>
-
-          <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
-            <Iconify icon="solar:chat-bold" />
-            Message
-          </MenuItem> */}
         </MenuList>
       </Popover>
     </>

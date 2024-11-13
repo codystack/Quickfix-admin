@@ -89,6 +89,7 @@ export function UserView() {
                   { id: 'dob', label: 'DOB' },
                   { id: 'isVerified', label: 'Verified', align: 'center' },
                   { id: 'isKYC', label: 'KYC Status', align: 'center' },
+                  { id: 'status', label: 'Status', align: 'center' },
                   { id: '' },
                 ]}
               />

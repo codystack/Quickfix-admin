@@ -17,7 +17,7 @@ type BannerTableToolbarProps = {
   onFilterName: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function InterestTableToolbar({ numSelected, filterName, onFilterName }: BannerTableToolbarProps) {
+export function BannerTableToolbar({ numSelected, filterName, onFilterName }: BannerTableToolbarProps) {
   return (
     <Toolbar
       sx={{
@@ -40,7 +40,7 @@ export function InterestTableToolbar({ numSelected, filterName, onFilterName }: 
           fullWidth
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Search banner..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
@@ -50,7 +50,7 @@ export function InterestTableToolbar({ numSelected, filterName, onFilterName }: 
         />
       )}
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
             <Iconify icon="solar:trash-bin-trash-bold" />
@@ -62,7 +62,7 @@ export function InterestTableToolbar({ numSelected, filterName, onFilterName }: 
             <Iconify icon="ic:round-filter-list" />
           </IconButton>
         </Tooltip>
-      )}
+      )} */}
     </Toolbar>
   );
 }

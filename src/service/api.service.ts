@@ -22,9 +22,10 @@ class APIService {
 
   static getProfile = () => axiosInstance.get("/admins/current/profile").then((res: any) => res);
 
+  static updateUser = (payload: any) => axiosInstance.put("/users/info/update", payload).then((res: any) => res);
+
   static getBookings = (page: number) => axiosInstance.get("/admins/bookings/all").then((res: any) => res);
 
-  static getBanners = (page: number) => axiosInstance.get("/admin/banners/all").then((res: any) => res);
 
   static getProducts = (page: number) => axiosInstance.get("/marketplace/all").then((res: any) => res);
 
@@ -43,6 +44,14 @@ class APIService {
   static addSocial = (payload: any) => axiosInstance.post("/admins/socials/add", payload).then((res: any) => res);
 
   static addBanner = (payload: any) => axiosInstance.post("/admins/banners/add", payload).then((res: any) => res);
+
+  static getBanners = (page: number) => axiosInstance.get("/admin/banners/all").then((res: any) => res);
+
+  static updateBanner = (payload: any, id: string) => axiosInstance.put(`/admins/banners/${id}/update`, payload).then((res: any) => res);
+
+  static removeBanner = (id: string) => axiosInstance.put(`/admins/banners/${id}/delete`, {}).then((res: any) => res);
+
+  static addAdmin = (payload: any) => axiosInstance.post("/admins/admin/create", payload).then((res: any) => res);
 
 
 }
