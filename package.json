@@ -2,7 +2,7 @@
   "name": "@minimal/material-kit-react",
   "author": "minimals.cc",
   "licence": "MIT",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -20,9 +20,8 @@
     "dev:host": "vite --host"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   },
-  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@abak/react-image-picker": "^1.1.4",
     "@cloudinary/react": "^1.13.1",
