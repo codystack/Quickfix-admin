@@ -40,7 +40,7 @@ export function ActivitiesView() {
     filterName,
   });
 
-  const notFound = !dataFiltered.length && !!filterName;
+  const notFound = !dataFiltered?.length && !!filterName;
 
   return (
     <DashboardContent>
@@ -66,7 +66,7 @@ export function ActivitiesView() {
               <ActivitiesTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={activities.totalItems}
+                rowCount={activities?.totalItems}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
@@ -100,7 +100,7 @@ export function ActivitiesView() {
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, activities.totalItems)}
+                  emptyRows={emptyRows(table?.page, table?.rowsPerPage, activities?.totalItems)}
                 />
 
                 {notFound && <TableNoData searchQuery={filterName} />}
