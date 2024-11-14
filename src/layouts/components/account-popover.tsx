@@ -1,5 +1,8 @@
+import type { RootState } from 'src/redux/store';
 import type { IconButtonProps } from '@mui/material/IconButton';
+
 import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,13 +12,13 @@ import Divider from '@mui/material/Divider';
 import MenuList from '@mui/material/MenuList';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+import { menuItemClasses } from '@mui/material/MenuItem';
 
-import { useRouter, usePathname } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { _myAccount } from 'src/_mock';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { setLoading } from 'src/redux/reducers/loader';
+import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +33,8 @@ export type AccountPopoverProps = IconButtonProps & {
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
-  const pathname = usePathname();
+  const dispatch = useDispatch();
+  // const pathname = usePathname();
   const { profile } = useSelector((state: RootState) => state.auth);
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
@@ -43,13 +47,13 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
     setOpenPopover(null);
   }, []);
 
-  const handleClickItem = useCallback(
-    (path: string) => {
-      handleClosePopover();
-      router.push(path);
-    },
-    [handleClosePopover, router]
-  );
+  // const handleClickItem = useCallback(
+  //   (path: string) => {
+  //     handleClosePopover();
+  //     router.push(path);
+  //   },
+  //   [handleClosePopover, router]
+  // );
 
   return (
     <>
@@ -122,7 +126,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
               },
             }}
           >
-            {data.map((option) => (
+            {/* {data.map((option) => (
               <MenuItem
                 key={option.label}
                 selected={option.href === pathname}
@@ -131,13 +135,21 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
                 {option.icon}
                 {option.label}
               </MenuItem>
-            ))}
+            ))} */}
           </MenuList>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Box sx={{ p: 1 }}>
-            <Button fullWidth color="error" size="medium" variant="text">
+            <Button fullWidth color="error" size="medium" variant="text" onClick={() => {
+               dispatch(setLoading(true));
+               setTimeout(() => {
+                 localStorage.removeItem('accessToken');
+                 dispatch(setProfile(null));
+                 dispatch(setAuth(false))
+                 dispatch(setLoading(false));
+               }, 3000);
+            }} >
               Logout
             </Button>
           </Box>

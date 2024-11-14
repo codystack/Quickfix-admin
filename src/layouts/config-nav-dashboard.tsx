@@ -37,11 +37,11 @@ export const navData = [
     path: '/dashboard/interests',
     icon: icon('ic-glass-bag'),
   },
-  // {
-  //   title: 'Support',
-  //   path: '/dashboard/support',
-  //   icon: icon('ic-glass-message'),
-  // },
+  {
+    title: 'Activities',
+    path: '/dashboard/activities',
+    icon: icon('ic-glass-message'),
+  },
   {
     title: 'Content Management',
     path: '/dashboard/cms',

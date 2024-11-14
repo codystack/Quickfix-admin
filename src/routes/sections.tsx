@@ -1,3 +1,5 @@
+import type { RootState } from 'src/redux/store';
+
 import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
@@ -12,14 +14,16 @@ import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
 import ProductDetail from 'src/pages/marketplace/product_detail';
 
+import { AdminsView } from 'src/sections/admins/view';
 import UserDetail from 'src/sections/user/view/user-detail';
-import AddNewProduct from 'src/sections/product/view/add_product';
+import { ActivitiesView } from 'src/sections/activities/view';
 import { SocialView } from 'src/sections/cms/view/social-view';
 import { BannerView } from 'src/sections/cms/view/banner-view';
+import AdminDetail from 'src/sections/admins/view/admin-detail';
+import AddNewProduct from 'src/sections/product/view/add_product';
+import { SettingsView } from 'src/sections/cms/view/settings-view';
 import UpdateProduct from 'src/sections/product/view/update_product';
 import InterestDetail from 'src/sections/interest/view/interest-detail';
-import { AdminsView } from 'src/sections/admins/view';
-import AdminDetail from 'src/sections/admins/view/admin-detail';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +33,9 @@ export const InterestPage = lazy(() => import('src/pages/interests/interest'));
 export const SupportPage = lazy(() => import('src/pages/support'));
 export const UserPage = lazy(() => import('src/pages/users/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
+export const ForgotPasswordPage = lazy(() => import('src/pages/forgot-password'));
+export const VerifyOTPPage = lazy(() => import('src/pages/verify-otp'));
+export const ResetPasswordPage = lazy(() => import('src/pages/reset-password'));
 export const ProductsPage = lazy(() => import('src/pages/marketplace'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
@@ -48,7 +55,8 @@ const renderFallback = (
 );
 
 export function Router() {
-  const { isAuth } = useSelector((state: any) => state.auth)
+  const { isAuth } = useSelector((state: RootState) => state.auth)
+  const { settings } = useSelector((state: RootState) => state.loader)
 
   return useRoutes([
     {
@@ -56,6 +64,30 @@ export function Router() {
       element: isAuth ? <Navigate to="/dashboard" replace /> : (
         <AuthLayout>
           <SignInPage />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: 'forgot-password',
+      element: isAuth ? <Navigate to="/dashboard" replace /> : (
+        <AuthLayout>
+          <ForgotPasswordPage />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: 'verify-otp',
+      element: isAuth ? <Navigate to="/dashboard" replace /> : (
+        <AuthLayout>
+          <VerifyOTPPage />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: 'reset-password',
+      element: isAuth ? <Navigate to="/dashboard" replace /> : (
+        <AuthLayout>
+          <ResetPasswordPage />
         </AuthLayout>
       ),
     },
@@ -80,7 +112,8 @@ export function Router() {
         { path: 'cms/banners', element: <BannerView /> },
         { path: 'cms/admins', element: <AdminsView /> },
         { path: 'cms/admins/:id', element: <AdminDetail /> },
-        { path: 'support', element: <SupportPage /> },
+        { path: 'cms/contact', element: settings && <SettingsView data={settings[0]}  /> },
+        { path: 'activities', element: <ActivitiesView /> },
         { path: 'interests', element: <InterestPage /> },
         { path: 'interests/:id', element: <InterestDetail /> },
         { path: 'product/new', element: <AddNewProduct /> },

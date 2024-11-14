@@ -4,10 +4,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface LoaderI {
   isLoading: boolean;
+  settings: any;
 }
 
 const initVal: LoaderI = {
   isLoading: false,
+  settings: null
 };
 
 const loaderSlice = createSlice({
@@ -17,10 +19,13 @@ const loaderSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
+    setSettings(state, action: PayloadAction<any>) {
+      state.settings = action.payload;
+    },
   },
 });
 
-export const { setLoading } = loaderSlice.actions
+export const { setLoading, setSettings } = loaderSlice.actions
 
 
 export default loaderSlice.reducer;

@@ -5,15 +5,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface UserI {
   users: any;
   admins: any;
-  maleUsers: any;
-  femaleUsers: any;
+  activities: any;
 }
 
 const initVal: UserI = {
   users: null,
   admins: null,
-  maleUsers: null,
-  femaleUsers: null
+  activities: null,
 };
 
 const userSlice = createSlice({
@@ -26,16 +24,13 @@ const userSlice = createSlice({
     setAdmins(state, action: PayloadAction<any>) {
       state.admins = action.payload;
     },
-    setMaleUsers(state, action: PayloadAction<any>) {
-      state.maleUsers = action.payload;
-    },
-    setFemaleUsers(state, action: PayloadAction<any>) {
-      state.femaleUsers = action.payload;
+    setActivities(state, action: PayloadAction<any>) {
+      state.activities = action.payload;
     },
   },
 });
 
-export const { setUsers, setAdmins } = userSlice.actions
+export const { setUsers, setAdmins, setActivities } = userSlice.actions
 
 
 export default userSlice.reducer;

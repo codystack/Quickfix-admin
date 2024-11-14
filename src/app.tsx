@@ -50,7 +50,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <Backdrop open={isLoading}  sx={{zIndex: 100}} >
+      <Backdrop open={isLoading}  sx={{zIndex: 1000}} >
         <CircularProgress size={48} />
       </Backdrop>
       <ToastContainer  position='top-right' />

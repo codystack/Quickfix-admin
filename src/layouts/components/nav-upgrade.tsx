@@ -1,14 +1,15 @@
 import type { StackProps } from '@mui/material/Stack';
+
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { textGradient } from 'src/theme/styles';
-import { useDispatch } from 'react-redux';
 import { setLoading } from 'src/redux/reducers/loader';
-import { logout } from 'src/redux/reducers/auth';
+import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +55,9 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
         onClick={() => {
           dispatch(setLoading(true));
           setTimeout(() => {
-            dispatch(logout(false));
+            localStorage.removeItem('accessToken');
+            dispatch(setProfile(null));
+            dispatch(setAuth(false))
             dispatch(setLoading(false));
           }, 3000);
         }}

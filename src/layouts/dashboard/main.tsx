@@ -21,10 +21,13 @@ import useBookingsCategory from 'src/hooks/use-bookings-category';
 
 import { layoutClasses } from 'src/layouts/classes';
 import { setProfile } from 'src/redux/reducers/auth';
-import { setUsers, setAdmins } from 'src/redux/reducers/users';
+import { setUsers, setAdmins, setActivities } from 'src/redux/reducers/users';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
 import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
+import useSettings from 'src/hooks/use-settings';
+import { setSettings } from 'src/redux/reducers/loader';
+import useActivities from 'src/hooks/use-activities';
 
 // ----------------------------------------------------------------------
 
@@ -70,9 +73,11 @@ export function DashboardContent({
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
+  const { data: settingsData } = useSettings();
   const { data: bookingsData } = useBookings(1);
   const { data: productsData } = useProducts(1);
   const { data: interestsData } = useInterests(1);
+  const { data: activitiesData } = useActivities(1);
   const { data: sessionBookingsData } = useBookingsCategory(1, 'book-session');
   const { data: fastTrackBookingsData } = useBookingsCategory(1, 'fast-track');
 
@@ -110,7 +115,15 @@ export function DashboardContent({
     if (bannersData) {
       dispatch(setBanners(bannersData))
     }
-  }, [adminsData, bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, socialsData, usersData]);
+
+    if (settingsData) {
+      dispatch(setSettings(settingsData))
+    }
+
+    if (activitiesData) {
+      dispatch(setActivities(activitiesData))
+    }
+  }, [activitiesData, adminsData, bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, settingsData, socialsData, usersData]);
 
   return (
     <Container

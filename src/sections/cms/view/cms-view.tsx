@@ -51,6 +51,7 @@ export function CMSView() {
             title="Contact Management"
             bgImage="/assets/images/cover/cover-12.webp"
             description="Manage your contact information at ease"
+            routeTo="/dashboard/cms/contact"
           />
         </Grid>
       </Grid>

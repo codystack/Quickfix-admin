@@ -3,11 +3,11 @@ import type { RootState } from 'src/redux/store';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import { Button, Link } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -18,9 +18,9 @@ import { useRouter } from 'src/routes/hooks';
 
 import APIService from 'src/service/api.service';
 import { setLoading } from 'src/redux/reducers/loader';
+import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
 import { Iconify } from 'src/components/iconify';
-import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
 // ----------------------------------------------------------------------
 
@@ -33,9 +33,9 @@ export function SignInView() {
   const { isLoading } = useSelector((state: RootState) => state.loader);
   const dispatch = useDispatch();
 
-  const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+  // const handleSignIn = useCallback(() => {
+  //   router.push('/');
+  // }, [router]);
 
   const validationSchema = Yup.object().shape({
     email_address: Yup.string()
@@ -61,8 +61,8 @@ export function SignInView() {
         };
 
         const respo = APIService.login(payload);
-        console.log("RESPONSE ON LOGIN :: ", respo);
-        
+        console.log('RESPONSE ON LOGIN :: ', respo);
+
         toast.promise(respo, {
           pending: {
             render() {
@@ -72,12 +72,12 @@ export function SignInView() {
           },
           success: {
             render({ data }) {
-              console.log("SUCCESS :: ", data);
+              console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
-              localStorage.setItem("accessToken", data?.data?.accessToken)
+              localStorage.setItem('accessToken', data?.data?.accessToken);
               dispatch(setAuth(true));
               dispatch(setProfile(data?.data?.user));
-              const resp = data?.data?.message || "Logged in successfully"
+              const resp = data?.data?.message || 'Logged in successfully';
               router.push('/dashboard');
               return `${resp}`;
             },
@@ -86,7 +86,7 @@ export function SignInView() {
             render({ data }: any) {
               dispatch(setLoading(false));
               console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
-              const errorMsg =  data?.response?.data?.message || data?.message || ""
+              const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
             },
@@ -113,9 +113,14 @@ export function SignInView() {
         sx={{ mb: 3 }}
       />
 
-      <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
+      <Button
+        variant="text"
+        color="inherit"
+        style={{ marginBottom: 6 }}
+        onClick={() => router.push('/forgot-password')}
+      >
         Forgot password?
-      </Link>
+      </Button>
 
       <TextField
         fullWidth
@@ -152,8 +157,16 @@ export function SignInView() {
   );
 
   return (
-    <div >
-      <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }} justifyContent="center" height="100%" >
+    <div>
+      <Box
+        gap={1.5}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        sx={{ mb: 5 }}
+        justifyContent="center"
+        height="100%"
+      >
         <Typography variant="h5">Sign in</Typography>
         <Typography variant="body2" color="text.secondary">
           Don’t have an account?

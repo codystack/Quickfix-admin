@@ -51,7 +51,13 @@ class APIService {
 
   static removeBanner = (id: string) => axiosInstance.put(`/admins/banners/${id}/delete`, {}).then((res: any) => res);
 
+  static updateSocial = (payload: any, id: string) => axiosInstance.put(`/admins/socials/${id}/update`, payload).then((res: any) => res);
+
+  static removeSocial = (id: string) => axiosInstance.put(`/admins/socials/${id}/delete`, {}).then((res: any) => res);
+  
   static addAdmin = (payload: any) => axiosInstance.post("/admins/admin/create", payload).then((res: any) => res);
+
+  static manageContact = (payload: any) => axiosInstance.post("/admins/settings/manage", payload).then((res: any) => res);
 
 
 }
