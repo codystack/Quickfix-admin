@@ -1,8 +1,4 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable import/no-extraneous-dependencies */
+
 import React from 'react';
 import * as Yup from 'yup';
 import { mutate } from 'swr';
@@ -10,7 +6,7 @@ import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ImagePicker } from '@abak/react-image-picker';
+// import { ImagePicker } from '@abak/react-image-picker';
 
 import {
   Box,
@@ -46,13 +42,14 @@ const AddNewProduct = () => {
     description: Yup.string().required('Product description is required'),
   });
 
+  // eslint-disable-next-line consistent-return
   async function uploadMultipleImages(imgs: any) {
     try {
       const payload = {
         images: imgs,
       };
       const response = await APIService.multiImagesUpload(payload);
-      return response
+      return response;
     } catch (error) {
       dispatch(setLoading(false));
       console.log(error);
@@ -81,7 +78,7 @@ const AddNewProduct = () => {
         // const base64Images = selectedFiles.map((file) => URL.createObjectURL(file));
         const base64s = [];
         for (let i = 0; i < selectedFiles.length; i += 1) {
-          const base: any = await convertBase64(selectedFiles[i]);
+          const base: any = convertBase64(selectedFiles[i]);
           // const base64Data = base.split(',')[1];
           base64s.push(base);
         }
@@ -194,7 +191,7 @@ const AddNewProduct = () => {
 
       <Toolbar />
       <Typography>Upload Featured Images (100KB max) </Typography>
-      <ImagePicker
+      {/* <ImagePicker
         dragabble
         files={selectedFiles}
         onFilesChange={setSelectedFiles}
@@ -204,7 +201,7 @@ const AddNewProduct = () => {
         limit={5}
         onChange={(e) => {}}
         // onRemoveImage={onRemoveImageHandler}
-      />
+      /> */}
       <Box p={2} />
       <Button
         variant="contained"
