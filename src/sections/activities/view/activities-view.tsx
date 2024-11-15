@@ -1,7 +1,7 @@
 import type { RootState } from 'src/redux/store';
 
-import { useSelector } from 'react-redux';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,7 +11,9 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import APIService from 'src/service/api.service';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { setActivities } from 'src/redux/reducers/users';
 
 import { Scrollbar } from 'src/components/scrollbar';
 
@@ -22,25 +24,22 @@ import { ActivitiesTableHead } from '../activities-table-head';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import { ActivitiesTableToolbar } from '../activities-table-toolbar';
 
-
 // ----------------------------------------------------------------------
 
 export function ActivitiesView() {
-  const table = useTable();
-
+  const { activities } = useSelector((state: RootState) => state.user);
   const [filterName, setFilterName] = useState('');
-  const { activities } = useSelector((state: RootState) => state.user)
+  const [da, setDa] = useState(activities?.data ?? []);
+  // let dataFiltered: any[] = applyFilter({
+  //   inputData: da,
+  //   comparator: getComparator(table.order, table.orderBy),
+  //   filterName,
+  // });
 
-  console.log('ACTIVITIES ::: ', activities);
-  
+  const table = useTable(activities, setDa, filterName);
 
-  const dataFiltered: any[] = applyFilter({
-    inputData: activities?.data ?? [],
-    comparator: getComparator(table.order, table.orderBy),
-    filterName,
-  });
 
-  const notFound = !dataFiltered?.length && !!filterName;
+  const notFound = !table.dataFiltered.current?.length && !!filterName;
 
   return (
     <DashboardContent>
@@ -84,12 +83,8 @@ export function ActivitiesView() {
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
+                {table.dataFiltered.current
+                  .map((row: any) => (
                     <ActivitiesTableRow
                       key={row.id}
                       row={row}
@@ -113,10 +108,10 @@ export function ActivitiesView() {
           component="div"
           page={table.page}
           count={activities?.totalItems}
-          rowsPerPage={table.rowsPerPage}
+          rowsPerPage={activities?.perPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
+          rowsPerPageOptions={[25]}
+          
         />
       </Card>
     </DashboardContent>
@@ -125,12 +120,30 @@ export function ActivitiesView() {
 
 // ----------------------------------------------------------------------
 
-export function useTable() {
+export function useTable(activities: any, setData: any, filterName: string) {
   const [page, setPage] = useState(0);
   const [orderBy, setOrderBy] = useState('name');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(activities?.perPage);
   const [selected, setSelected] = useState<string[]>([]);
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  const dispatch = useDispatch();
+  const dataFiltered = useRef<any[]>([]);
+
+  // const dataFiltered: any[] = useRef(applyFilter({
+  //   inputData: activities.data ?? [],
+  //   comparator: getComparator(order, orderBy),
+  //   filterName,
+  // }));
+
+  useEffect(() => {
+    // Update the ref with the filtered data
+    dataFiltered.current = applyFilter({
+      inputData: activities.data ?? [],
+      comparator: getComparator(order, orderBy),
+      filterName,
+    });
+  }, [activities, order, orderBy, filterName]);
+
 
   const onSort = useCallback(
     (id: string) => {
@@ -164,17 +177,28 @@ export function useTable() {
     setPage(0);
   }, []);
 
-  const onChangePage = useCallback((event: unknown, newPage: number) => {
+  const onChangePage = useCallback(async (event: unknown, newPage: number) => {
     setPage(newPage);
-  }, []);
+    // now fetch new page here
+    console.log('NPAGE ', newPage);
 
-  const onChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      onResetPage();
-    },
-    [onResetPage]
-  );
+    try {
+      const pg = newPage + 1;
+      const resp = await APIService.getActivities(pg);
+      console.log('SDSD :: ', resp.data);
+      // setData(resp.data?.data);
+      dispatch(setActivities(resp.data))
+
+      dataFiltered.current = applyFilter({
+        inputData: resp.data.data ?? [],
+        comparator: getComparator(order, orderBy),
+        filterName,
+      });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, filterName, order, orderBy]);
 
   return {
     page,
@@ -187,6 +211,6 @@ export function useTable() {
     onResetPage,
     onChangePage,
     onSelectAllRows,
-    onChangeRowsPerPage,
+    dataFiltered,
   };
 }

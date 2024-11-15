@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "https://quick-pocket-api.vercel.app" // "http://192.168.0.102:6000" //
+export const baseURL = "https://quick-pocket-api.vercel.app" // "http://192.168.232.247:5000" //
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api/v1`,

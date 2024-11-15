@@ -2,7 +2,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import 'react-alice-carousel/lib/alice-carousel.css';
 
+import { mutate } from 'swr';
+import { toast } from 'react-toastify';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import AliceCarousel from 'react-alice-carousel';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,6 +13,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Toolbar, Tooltip, IconButton, Typography } from '@mui/material';
 
 import { CONFIG } from 'src/config-global';
+import APIService from 'src/service/api.service';
+import { setLoading } from 'src/redux/reducers/loader';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
@@ -20,6 +25,7 @@ import { RenderConfirmation } from 'src/sections/booking/booking-table-row';
 const ProductDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data } = location.state;
 
   const [open, setOpen] = useState(false);
@@ -42,7 +48,37 @@ const ProductDetail = () => {
     // <img src={item} onDragStart={handleDragStart} role="presentation" style={{maxHeight: 550}} width='75%' />
   ));
 
-  const deleteProduct = async () => {};
+  const deleteProduct = async () => {
+    dispatch(setLoading(true));
+    const deleteResponse = APIService.deleteProduct(data?._id);
+    toast.promise(deleteResponse, {
+      pending: {
+        render() {
+          return 'Loading. Please wait...';
+        },
+        icon: false,
+      },
+      success: {
+        render({ dt }: any) {
+          console.log('SUCCESS :: ', dt);
+          setOpen(false)
+          dispatch(setLoading(false));
+          mutate('/marketplace/all');
+          const resp = dt?.data?.message || 'Product deleted successfully';
+          return `${resp}`;
+        },
+      },
+      error: {
+        render({ dt }: any) {
+          dispatch(setLoading(false));
+          console.log('ERRO ON TOAST HERE :: ', dt?.response?.data?.message);
+          const errorMsg = dt?.response?.data?.message || dt?.message || '';
+          // When the promise reject, data will contains the error
+          return `${errorMsg ?? 'An error occurred!'}`;
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -81,14 +117,18 @@ const ProductDetail = () => {
             </Typography>
           </Box>
           <Box>
-            <Tooltip title="Edit Product"  >
-              <IconButton onClick={() => navigate(`/dashboard/product/${data?._id}/update`, { state: { product: data } })} >
+            <Tooltip title="Edit Product">
+              <IconButton
+                onClick={() =>
+                  navigate(`/dashboard/product/${data?._id}/update`, { state: { product: data } })
+                }
+              >
                 <Iconify icon="basil:edit-outline" fontSize={48} />
               </IconButton>
             </Tooltip>
 
             <Tooltip title="Delete Product">
-              <IconButton onClick={() => setOpen(true)} >
+              <IconButton onClick={() => setOpen(true)}>
                 <Iconify icon="weui:delete-on-filled" fontSize={48} />
               </IconButton>
             </Tooltip>

@@ -1,6 +1,9 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-await-in-loop */
 import type { RootState } from 'src/redux/store';
 
 import * as Yup from 'yup';
+import { mutate } from 'swr';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
@@ -12,7 +15,6 @@ import convertBase64 from 'src/utils/image-converter';
 
 import APIService from 'src/service/api.service';
 import { setLoading } from 'src/redux/reducers/loader';
-import { mutate } from 'swr';
 
 const UpdateSocial = ({ setOpen, social }: any) => {
   const theme = useTheme();
@@ -25,7 +27,7 @@ const UpdateSocial = ({ setOpen, social }: any) => {
     url: Yup.string().url('Enter a valid URL').required('Url is required'),
   });
 
-  console.log('SOCIALITY ::: ', social);
+  // console.log('SOCIALITY ::: ', social);
 
   const handleFileChange = (event: any) => {
     const selectedFile = event.target.files[0];
@@ -34,6 +36,19 @@ const UpdateSocial = ({ setOpen, social }: any) => {
       setPreview(URL.createObjectURL(selectedFile));
     }
   };
+
+  async function uploadMultipleImages(imgs: any) {
+    try {
+      const payload = {
+        images: imgs,
+      };
+      const response = await APIService.multiImagesUpload(payload);
+      return response;
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log(error);
+    }
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -45,19 +60,16 @@ const UpdateSocial = ({ setOpen, social }: any) => {
       //   try {
       dispatch(setLoading(true));
       if (file) {
-        // Upload image to cloudinary first
-        const base64: any = await convertBase64(file);
-
-        const resp = await APIService.singleImageUpload({
-          image: base64,
-        });
-        console.log('RESPONSE AFTER THE UPLOAD ::: ', resp);
+        const base64s = [];
+        const base: any = await convertBase64(file);
+        base64s.push(base);
+        const resp = await uploadMultipleImages(base64s);
 
         // Now make a trip to create a new product here
         const payload = {
           name: values.name,
           url: values.url,
-          logo: resp?.data,
+          logo: resp?.data[0],
         };
 
         const response = APIService.updateSocial(payload, social?._id);
@@ -71,7 +83,7 @@ const UpdateSocial = ({ setOpen, social }: any) => {
           success: {
             render({ data }) {
               dispatch(setLoading(false));
-              mutate('/admins/socials/all')
+              mutate('/admins/socials/all');
               const res = data?.data?.message || 'Social platform updated successfully';
               setOpen(false);
               return `${res}`;
@@ -129,7 +141,7 @@ const UpdateSocial = ({ setOpen, social }: any) => {
     },
   });
 
-  const {  touched, errors, getFieldProps, handleSubmit } = formik;
+  const { touched, errors, getFieldProps, handleSubmit } = formik;
   return (
     <>
       {social && (

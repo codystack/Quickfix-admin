@@ -1,14 +1,17 @@
+import type { RootState } from 'src/redux/store';
+
+import { mutate } from 'swr';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
+import { Box, Chip, Avatar, IconButton } from '@mui/material';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-import { Box, Chip, Avatar, Checkbox, IconButton } from '@mui/material';
 
 import APIService from 'src/service/api.service';
 import { setLoading } from 'src/redux/reducers/loader';
@@ -39,10 +42,13 @@ type AdminTableRowProps = {
 export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { profile } = useSelector((state: RootState) => state.auth);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
+
+  console.log('POLIOI', profile);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -52,13 +58,9 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
     setOpenPopover(null);
   }, []);
 
-  const suspendUser = () => {
-    const payload = {
-      ...row,
-      status: 'suspended',
-    };
+  const suspendAdmin = () => {
 
-    const prom = APIService.updateUser(payload);
+    const prom = APIService.suspendAdmin(row?.id ?? row?._id);
 
     toast.promise(prom, {
       pending: {
@@ -70,8 +72,8 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
       success: {
         render({ data }) {
           dispatch(setLoading(false));
-          // mutate('/admins/bookings/all')
-          const res = data?.data?.message || 'User account suspended successfully';
+          mutate('/admins/all')
+          const res = data?.data?.message || 'Admin account suspended successfully';
           setOpen(false);
           return `${res}`;
         },
@@ -88,13 +90,9 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
     });
   };
 
-  const pardonUser = () => {
-    const payload = {
-      ...row,
-      status: 'active',
-    };
+  const pardonAdmin = () => {
 
-    const prom = APIService.updateUser(payload);
+    const prom = APIService.pardonAdmin(row?.id ?? row?._id);
 
     toast.promise(prom, {
       pending: {
@@ -106,8 +104,8 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
       success: {
         render({ data }) {
           dispatch(setLoading(false));
-          // mutate('/admins/bookings/all')
-          const res = data?.data?.message || 'User account suspended successfully';
+          mutate('/admins/all')
+          const res = data?.data?.message || 'Admin account pardoned successfully';
           setOpen(false);
           return `${res}`;
         },
@@ -124,13 +122,9 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
     });
   };
 
-  const deleteUser = () => {
-    const payload = {
-      ...row,
-      status: 'deleted',
-    };
+  const deleteAdmin = () => {
 
-    const prom = APIService.updateUser(payload);
+    const prom = APIService.deleteAdmin(row?.id ?? row?._id);
 
     toast.promise(prom, {
       pending: {
@@ -142,8 +136,8 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
       success: {
         render({ data }) {
           dispatch(setLoading(false));
-          // mutate('/admins/bookings/all')
-          const res = data?.data?.message || 'User account suspended successfully';
+          mutate('/admins/all')
+          const res = data?.data?.message || 'Admin account deleted successfully';
           setOpen(false);
           return `${res}`;
         },
@@ -172,11 +166,11 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
             message={message}
             action={() =>
               title.toLowerCase().startsWith('suspend')
-                ? suspendUser()
+                ? suspendAdmin()
                 : title.toLowerCase().startsWith('pardon')
-                  ? pardonUser()
+                  ? pardonAdmin()
                   : title.toLowerCase().startsWith('delete')
-                    ? deleteUser()
+                    ? deleteAdmin()
                     : {}
             }
           />
@@ -199,17 +193,11 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
 
         <TableCell>{row.phone_number}</TableCell>
 
-        <TableCell>
-          {row.type}
-        </TableCell>
+        <TableCell>{row.type}</TableCell>
 
-        <TableCell>
-          {row.access}
-        </TableCell>
+        <TableCell>{row.access}</TableCell>
 
-        <TableCell>
-          {row.role}
-        </TableCell>
+        <TableCell>{row.role}</TableCell>
 
         <TableCell>
           <Chip
@@ -218,11 +206,13 @@ export function AdminTableRow({ row, selected, onSelectRow }: AdminTableRowProps
           />
         </TableCell>
 
-        <TableCell align="right">
-          <IconButton onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
+        {profile?._id !== row?.id && (
+          <TableCell align="right">
+            <IconButton onClick={handleOpenPopover}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          </TableCell>
+        )}
       </TableRow>
 
       <Popover

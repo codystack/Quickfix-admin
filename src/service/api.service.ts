@@ -24,7 +24,9 @@ class APIService {
 
   static updateUser = (payload: any) => axiosInstance.put("/users/info/update", payload).then((res: any) => res);
 
-  static getBookings = (page: number) => axiosInstance.get("/admins/bookings/all").then((res: any) => res);
+  static getBookings = (page: number) => axiosInstance.get(`/admins/bookings/all?page=${page}`).then((res: any) => res);
+
+  static getActivities = (page: number) => axiosInstance.get(`/admins/activities/all?page=${page}`).then((res: any) => res);
 
 
   static getProducts = (page: number) => axiosInstance.get("/marketplace/all").then((res: any) => res);
@@ -36,6 +38,10 @@ class APIService {
   static singleImageUpload = (payload: any) => axiosInstance.put("/image/upload", payload).then((res: any) => res);
 
   static addProduct = (payload: any) => axiosInstance.post("/marketplace/add", payload).then((res: any) => res);
+
+  static updateProduct = (payload: any, id: string) => axiosInstance.post(`/marketplace/${id}/update`, payload).then((res: any) => res);
+
+  static deleteProduct = (id: string) => axiosInstance.post(`/marketplace/${id}/delete`,{}).then((res: any) => res);
 
   static approveBooking = (id: any) => axiosInstance.put(`/admins/bookings/${id}/approve`, {}).then((res: any) => res);
 
@@ -56,6 +62,13 @@ class APIService {
   static removeSocial = (id: string) => axiosInstance.put(`/admins/socials/${id}/delete`, {}).then((res: any) => res);
   
   static addAdmin = (payload: any) => axiosInstance.post("/admins/admin/create", payload).then((res: any) => res);
+
+  static suspendAdmin = (id: any) => axiosInstance.post(`/admins/admin/${id}/suspend`, {}).then((res: any) => res);
+
+  static pardonAdmin = (id: any) => axiosInstance.post(`/admins/admin/${id}/pardon`, {}).then((res: any) => res);
+
+  static deleteAdmin = (id: any) => axiosInstance.post(`/admins/admin/${id}/delete`, {}).then((res: any) => res);
+
 
   static manageContact = (payload: any) => axiosInstance.post("/admins/settings/manage", payload).then((res: any) => res);
 

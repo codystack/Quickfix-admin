@@ -1,4 +1,5 @@
-
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-await-in-loop */
 import React from 'react';
 import * as Yup from 'yup';
 import { mutate } from 'swr';
@@ -7,6 +8,8 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // import { ImagePicker } from '@abak/react-image-picker';
+
+import imageCompression from 'browser-image-compression';
 
 import {
   Box,
@@ -32,7 +35,9 @@ const AddNewProduct = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = React.useState<any>([]);
+
+  // dispatch(setLoading(false))
 
   const validateSchema = Yup.object().shape({
     name: Yup.string().required('Product name is required'),
@@ -56,6 +61,20 @@ const AddNewProduct = () => {
     }
   }
 
+  const handleFileChange = (event: any) => {
+    const selectedFile: any = event.target.files[0];
+    console.log('FILE INFO  ::: ', selectedFile);
+
+    if (selectedFile) {
+      try {
+        setSelectedFiles([...selectedFiles, selectedFile]);
+        setImages([...images, URL.createObjectURL(selectedFile)]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -64,9 +83,11 @@ const AddNewProduct = () => {
     },
     validationSchema: validateSchema,
     onSubmit: async (values) => {
-      console.log(values);
-
       dispatch(setLoading(true));
+      const options = {
+        maxSizeMB: 0.05859375, // Target size in MB
+        maxWidthOrHeight: 400, // Maximum dimension (width/height) in pixels
+      };
 
       // First check for file sizes and filter out here
       const filteredFiles = selectedFiles.filter((file) => file.size <= 1024 * 1024);
@@ -77,9 +98,14 @@ const AddNewProduct = () => {
         // Now convert images to base64
         // const base64Images = selectedFiles.map((file) => URL.createObjectURL(file));
         const base64s = [];
+        const compresseds = [];
         for (let i = 0; i < selectedFiles.length; i += 1) {
-          const base: any = convertBase64(selectedFiles[i]);
-          // const base64Data = base.split(',')[1];
+          // First compress files
+          const compressedFile = await imageCompression(selectedFiles[i], options);
+
+          const base: any = await convertBase64(compressedFile);
+          console.log('FILE ITEMITER ::: ', base);
+
           base64s.push(base);
         }
         console.log('BASE 64 EQUIV :: ', base64s);
@@ -87,13 +113,17 @@ const AddNewProduct = () => {
         const response = await uploadMultipleImages(base64s);
         console.log('RESPONSE AFTER THE UPLOAD ::: ', response);
 
+        const imageUrls = response.data.map((res: any) => res);
+
+        console.log('RETRIEVED IMAGEURLS ::: ', imageUrls);
+
         // Now make a trip to create a new product here
         const payload = {
           title: values.name,
           amount: values.amount,
           detail: values.description,
-          images: response?.data
-        }
+          images: imageUrls,
+        };
 
         const addResponse = APIService.addProduct(payload);
         toast.promise(addResponse, {
@@ -105,10 +135,10 @@ const AddNewProduct = () => {
           },
           success: {
             render({ data }) {
-              console.log("SUCCESS :: ", data);
+              console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
-              mutate('/marketplace/all')
-              const resp = data?.data?.message || "New product added successfully"
+              mutate('/marketplace/all');
+              const resp = data?.data?.message || 'New product added successfully';
               return `${resp}`;
             },
           },
@@ -116,12 +146,12 @@ const AddNewProduct = () => {
             render({ data }: any) {
               dispatch(setLoading(false));
               console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
-              const errorMsg =  data?.response?.data?.message || data?.message || ""
+              const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
             },
           },
-        })
+        });
       } else {
         toast.error('Add at least one featured image');
         dispatch(setLoading(false));
@@ -130,15 +160,6 @@ const AddNewProduct = () => {
   });
 
   const { getFieldProps, touched, errors, handleSubmit } = formik;
-
-  React.useEffect(() => {
-      // Now check the ones with bigger sizes and remove accordingly
-      // const filteredFiles = selectedFiles.filter((file) => file.size <= 1024 * 100);
-      // console.log("FiLTERED HERE ::: ", filteredFiles);
-
-      // setSelectedFiles(filteredFiles);
-
-  }, [selectedFiles])
 
   return (
     <DashboardContent>
@@ -190,19 +211,66 @@ const AddNewProduct = () => {
       />
 
       <Toolbar />
-      <Typography>Upload Featured Images (100KB max) </Typography>
-      {/* <ImagePicker
-        dragabble
-        files={selectedFiles}
-        onFilesChange={setSelectedFiles}
-        images={images}
-        showPreview
-        multiple
-        limit={5}
-        onChange={(e) => {}}
-        // onRemoveImage={onRemoveImageHandler}
-      /> */}
+      <Box
+        p={2}
+        border="1px solid"
+        borderRadius={2}
+        minHeight={256}
+        display="flex"
+        flexDirection="row"
+        justifyContent="start"
+        alignItems="center"
+      >
+        <Box>
+          {selectedFiles.length < 1 ? (
+            <Typography>No images added</Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {images.map((it: any, key: number) => (
+                <Grid key={key} item xs={12} sm={6} md={4} lg={3}>
+                  <Box
+                    position="relative"
+                    width="100%"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="start"
+                    alignItems="stretch"
+                  >
+                    <IconButton
+                      sx={{ alignSelf: 'flex-end', mb: -2 }}
+                      onClick={() => {
+                        const filtered = images.filter((itm: any) => itm !== it);
+                        setImages(filtered);
+                        const newFiles = [
+                          ...selectedFiles.slice(0, key),
+                          ...selectedFiles.slice(key + 1),
+                        ];
+                        setSelectedFiles(newFiles);
+                      }}
+                    >
+                      <Iconify icon="mynaui:delete-solid" />
+                    </IconButton>
+                    <img src={it} alt="" width={150} />
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Box>
+        <Button
+          variant="contained"
+          sx={{ px: 2, mx: 1 }}
+          onClick={() => {
+            document.getElementById('htns')?.click();
+          }}
+        >
+          Add More
+        </Button>
+      </Box>
+      {/* <Typography>Upload Featured Images (100KB max) </Typography> */}
+
       <Box p={2} />
+      <input type="file" size={1024} hidden id="htns" onChange={handleFileChange} />
       <Button
         variant="contained"
         sx={{ bgcolor: theme.palette.secondary.main, py: 1 }}

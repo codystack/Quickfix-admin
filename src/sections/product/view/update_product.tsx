@@ -9,7 +9,7 @@ import { mutate } from 'swr';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { ImagePicker } from '@abak/react-image-picker';
+// import { ImagePicker } from '@abak/react-image-picker';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -64,6 +64,20 @@ const UpdateProduct = () => {
     }
   }
 
+  const handleFileChange = (event: any) => {
+    const selectedFile: any = event.target.files[0];
+    console.log('FILE INFO  ::: ', selectedFile);
+
+    if (selectedFile) {
+      try {
+        setSelectedFiles([...selectedFiles, selectedFile]);
+        setImages([...images, URL.createObjectURL(selectedFile)]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       name: product?.title ?? '',
@@ -78,9 +92,9 @@ const UpdateProduct = () => {
         dispatch(setLoading(true));
 
         // First check for file sizes and filter out here
-        const filteredFiles = selectedFiles.filter((file) => file.size <= 1024 * 1024);
-        console.log('FiLTERED HERE ::: ', filteredFiles);
-        setSelectedFiles(filteredFiles);
+        // const filteredFiles = selectedFiles.filter((file) => file.size <= 1024 * 1024);
+        // console.log('FiLTERED HERE ::: ', filteredFiles);
+        // setSelectedFiles(filteredFiles);
 
         if (selectedFiles.length > 0) {
           // Now convert images to base64
@@ -104,7 +118,7 @@ const UpdateProduct = () => {
             images: response?.data,
           };
 
-          const addResponse = APIService.addProduct(payload);
+          const addResponse = APIService.updateProduct(payload, product?._id);
           toast.promise(addResponse, {
             pending: {
               render() {
@@ -117,7 +131,7 @@ const UpdateProduct = () => {
                 console.log('SUCCESS :: ', data);
                 dispatch(setLoading(false));
                 mutate('/marketplace/all');
-                const resp = data?.data?.message || 'New product added successfully';
+                const resp = data?.data?.message || 'Product updated successfully';
                 return `${resp}`;
               },
             },
@@ -142,7 +156,7 @@ const UpdateProduct = () => {
           detail: values.description,
         };
 
-        const addResponse = APIService.addProduct(payload);
+        const addResponse = APIService.updateProduct(payload, product?._id);
         toast.promise(addResponse, {
           pending: {
             render() {
@@ -155,7 +169,7 @@ const UpdateProduct = () => {
               console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
               mutate('/marketplace/all');
-              const resp = data?.data?.message || 'New product added successfully';
+              const resp = data?.data?.message || 'Product updated successfully';
               return `${resp}`;
             },
           },
@@ -234,53 +248,110 @@ const UpdateProduct = () => {
       <Typography>Upload Featured Images (100KB max) </Typography>
       {!imgChange ? (
         <Box
-            height={256}
-            width="100%"
-            border="1px solid"
-            p={2}
-            borderRadius={2}
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid container spacing={2}>
-              {product?.images?.map((elem: any) => (
-                <Grid key={elem} height={200} item xs={12} sm={6} md={4} xl={3}>
-                  <Box position="relative" width="100%">
-                    <IconButton
-                      sx={{ mb: -2, mr: -1 }}
-                      onClick={() => {
-                        const removed = product?.images?.filter((itm: any) => itm !== elem);
-                        setImages(removed);
-                        if (removed?.length === 0) {
-                          setImgChange(true);
-                        }
-                      }}
-                    >
-                      <Iconify icon="f7:delete-left-fill" />
-                    </IconButton>
-                    <img src={elem} alt="" width={128} />
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-            <Button variant='contained' onClick={() => setImgChange(true)} >
+          height={256}
+          width="100%"
+          border="1px solid"
+          p={2}
+          borderRadius={2}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid container spacing={2}>
+            {product?.images?.map((elem: any) => (
+              <Grid key={elem} height={200} item xs={12} sm={6} md={4} xl={3}>
+                <Box position="relative" width="100%">
+                  <IconButton
+                    sx={{ mb: -2, mr: -1 }}
+                    onClick={() => {
+                      const removed = product?.images?.filter((itm: any) => itm !== elem);
+                      setImages(removed);
+                      if (removed?.length === 0) {
+                        setImgChange(true);
+                      }
+                    }}
+                  >
+                    <Iconify icon="f7:delete-left-fill" />
+                  </IconButton>
+                  <img src={elem} alt="" width={144} />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+          <Button variant="contained" onClick={() => setImgChange(true)}>
             Add More
           </Button>
-          </Box>
+        </Box>
       ) : (
-        <ImagePicker
-          dragabble
-          files={selectedFiles}
-          onFilesChange={setSelectedFiles}
-          images={images}
-          showPreview
-          multiple
-          limit={5}
-          onChange={(e) => {}}
-          // onRemoveImage={onRemoveImageHandler}
-        />
+        <Box
+          p={2}
+          border="1px solid"
+          borderRadius={2}
+          minHeight={256}
+          display="flex"
+          flexDirection="row"
+          justifyContent="start"
+          alignItems="center"
+        >
+          <Box>
+            {images.length < 1 ? (
+              <Typography>No images added</Typography>
+            ) : (
+              <Grid container spacing={2}>
+                {images.map((it: any, key: number) => (
+                  <Grid key={key} item xs={12} sm={6} md={4} lg={3}>
+                    <Box
+                      position="relative"
+                      width="100%"
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="start"
+                      alignItems="stretch"
+                    >
+                      <IconButton
+                        sx={{ alignSelf: 'flex-end', mb: -2 }}
+                        onClick={() => {
+                          const filtered = images.filter((itm: any) => itm !== it);
+                          setImages(filtered);
+                          const newFiles = [
+                            ...selectedFiles.slice(0, key),
+                            ...selectedFiles.slice(key + 1),
+                          ];
+                          setSelectedFiles(newFiles);
+                        }}
+                      >
+                        <Iconify icon="mynaui:delete-solid" />
+                      </IconButton>
+                      <img src={it} alt="" width={150} />
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </Box>
+          <input type="file" size={1024} hidden id="htns" onChange={handleFileChange} />
+          <Button
+            variant="contained"
+            sx={{ px: 2, mx: 1 }}
+            onClick={() => {
+              document.getElementById('htns')?.click();
+            }}
+          >
+            Add More
+          </Button>
+        </Box>
+        // <ImagePicker
+        //   dragabble
+        //   files={selectedFiles}
+        //   onFilesChange={setSelectedFiles}
+        //   images={images}
+        //   showPreview
+        //   multiple
+        //   limit={5}
+        //   onChange={(e) => {}}
+        //   // onRemoveImage={onRemoveImageHandler}
+        // />
       )}
 
       <Box p={2} />

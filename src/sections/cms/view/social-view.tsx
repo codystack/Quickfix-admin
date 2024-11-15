@@ -221,7 +221,7 @@ const AddSocial = ({ setOpen }: any) => {
             success: {
               render({ data }) {
                 dispatch(setLoading(false));
-                // mutate('/admins/bookings/all')
+                mutate('/admins/socials/all')
                 const res = data?.data?.message || 'Social platform added successfully';
                 setOpen(false);
                 return `${res}`;
