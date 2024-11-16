@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit"
 
 import authReducer from "./reducers/auth"
+import miscReducer from "./reducers/misc"
 import userReducer from "./reducers/users"
 import loaderReducer from "./reducers/loader"
 import bannerReducer from "./reducers/banners"
@@ -15,6 +16,7 @@ const store = configureStore({
         banner: bannerReducer,
         booking: bookingReducer,
         product: productReducer,
+        misc: miscReducer,
     }
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

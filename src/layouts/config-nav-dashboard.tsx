@@ -43,6 +43,16 @@ export const navData = [
     icon: icon('ic-glass-message'),
   },
   {
+    title: 'Locations',
+    path: '/dashboard/locations',
+    icon: icon('ic-glass-message'),
+  },
+  {
+    title: 'Reasons',
+    path: '/dashboard/reasons',
+    icon: icon('ic-glass-message'),
+  },
+  {
     title: 'Content Management',
     path: '/dashboard/cms',
     icon: icon('ic-lock'),

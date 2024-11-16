@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import type { RootState } from 'src/redux/store';
 
 import * as Yup from 'yup';
@@ -61,6 +62,19 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
     }
   };
 
+  async function uploadMultipleImages(imgs: any) {
+    try {
+      const payload = {
+        images: imgs,
+      };
+      const response = await APIService.multiImagesUpload(payload);
+      return response;
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log(error);
+    }
+  }
+
   const formik = useFormik({
     initialValues: {
       amount: banner?.amount ?? 0,
@@ -74,19 +88,15 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
         if (file) {
           dispatch(setLoading(true));
 
-          // Upload image to cloudinary first
-          const base64: any = await convertBase64(file);
+          const base64s = [];
+          const base: any = await convertBase64(file);
+          base64s.push(base);
+          const resp = await uploadMultipleImages(base64s);
 
-          const resp = await APIService.singleImageUpload({
-            image: base64,
-          });
-          console.log('RESPONSE AFTER THE UPLOAD ::: ', resp);
-
-          // Now make a trip to create a new product here
           const payload = {
             title: values.title,
             url: values.url,
-            preview: resp?.data,
+            preview: resp?.data[0],
             type: values.type,
             amount: values.amount,
             status: banner?.status,

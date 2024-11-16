@@ -33,6 +33,8 @@ export const InterestPage = lazy(() => import('src/pages/interests/interest'));
 export const SupportPage = lazy(() => import('src/pages/support'));
 export const UserPage = lazy(() => import('src/pages/users/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
+export const ReasonsPage = lazy(() => import('src/pages/reasons'));
+export const LocationsPage = lazy(() => import('src/pages/locations/location'));
 export const ForgotPasswordPage = lazy(() => import('src/pages/forgot-password'));
 export const VerifyOTPPage = lazy(() => import('src/pages/verify-otp'));
 export const ResetPasswordPage = lazy(() => import('src/pages/reset-password'));
@@ -115,10 +117,11 @@ export function Router() {
         { path: 'cms/contact', element: settings && <SettingsView data={settings[0]}  /> },
         { path: 'activities', element: <ActivitiesView /> },
         { path: 'interests', element: <InterestPage /> },
+        { path: 'locations', element: <LocationsPage /> },
+        { path: 'reasons', element: <ReasonsPage /> },
         { path: 'interests/:id', element: <InterestDetail /> },
         { path: 'product/new', element: <AddNewProduct /> },
         { path: 'product/:id/update', element: <UpdateProduct /> },
-        
       ],
     },
     {

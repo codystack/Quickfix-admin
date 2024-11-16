@@ -51,7 +51,7 @@ class APIService {
 
   static addBanner = (payload: any) => axiosInstance.post("/admins/banners/add", payload).then((res: any) => res);
 
-  static getBanners = (page: number) => axiosInstance.get("/admin/banners/all").then((res: any) => res);
+  static getBanners = (page: number) => axiosInstance.get("/admins/banners/all").then((res: any) => res);
 
   static updateBanner = (payload: any, id: string) => axiosInstance.put(`/admins/banners/${id}/update`, payload).then((res: any) => res);
 
@@ -69,8 +69,20 @@ class APIService {
 
   static deleteAdmin = (id: any) => axiosInstance.post(`/admins/admin/${id}/delete`, {}).then((res: any) => res);
 
-
   static manageContact = (payload: any) => axiosInstance.post("/admins/settings/manage", payload).then((res: any) => res);
+
+  static addLocation = (payload: any) => axiosInstance.post("/admins/locations/add", payload).then((res: any) => res);
+
+  static addReason = (payload: any) => axiosInstance.post("/admins/reasons/add", payload).then((res: any) => res);
+
+  static updateLocation = (payload: any, id: any) => axiosInstance.put(`/admins/locations/${id}/update`, payload).then((res: any) => res);
+
+  static updateReason = (payload: any, id: any) => axiosInstance.put(`/admins/reasons/${id}/update`, payload).then((res: any) => res);
+
+  static deleteLocation = (id: any) => axiosInstance.put(`/admins/locations/${id}/delete`, {}).then((res: any) => res);
+
+  static deleteReason = (id: any) => axiosInstance.put(`/admins/reasons/${id}/delete`, {}).then((res: any) => res);
+
 
 
 }

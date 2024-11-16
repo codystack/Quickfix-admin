@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -8,7 +8,6 @@ import { Card, CardActionArea } from '@mui/material';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
-import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +47,7 @@ export function CMSView() {
 
         <Grid xs={12} sm={7} md={8}>
           <CardItem
-            title="Contact Management"
+            title="Platform Settings"
             bgImage="/assets/images/cover/cover-12.webp"
             description="Manage your contact information at ease"
             routeTo="/dashboard/cms/contact"

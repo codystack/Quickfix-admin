@@ -14,20 +14,23 @@ import useAdmins from 'src/hooks/use-admins';
 import useProfile from 'src/hooks/use-profile';
 import useSocials from 'src/hooks/use-socials';
 import useBanners from 'src/hooks/use-banners';
+import useReasons from 'src/hooks/use-reasons';
 import useBookings from 'src/hooks/use-bookings';
 import useProducts from 'src/hooks/use-products';
+import useSettings from 'src/hooks/use-settings';
 import useInterests from 'src/hooks/use-interests';
+import useLocations from 'src/hooks/use-locations';
+import useActivities from 'src/hooks/use-activities';
 import useBookingsCategory from 'src/hooks/use-bookings-category';
 
 import { layoutClasses } from 'src/layouts/classes';
 import { setProfile } from 'src/redux/reducers/auth';
-import { setUsers, setAdmins, setActivities } from 'src/redux/reducers/users';
+import { setSettings } from 'src/redux/reducers/loader';
+import { setReasons, setLocations } from 'src/redux/reducers/misc';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
 import { setProducts, setInterests } from 'src/redux/reducers/products';
+import { setUsers, setAdmins, setActivities } from 'src/redux/reducers/users';
 import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
-import useSettings from 'src/hooks/use-settings';
-import { setSettings } from 'src/redux/reducers/loader';
-import useActivities from 'src/hooks/use-activities';
 
 // ----------------------------------------------------------------------
 
@@ -73,9 +76,11 @@ export function DashboardContent({
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
+  const { data: reasonsData } = useReasons();
   const { data: settingsData } = useSettings();
   const { data: bookingsData } = useBookings(1);
   const { data: productsData } = useProducts(1);
+  const { data: locationsData } = useLocations();
   const { data: interestsData } = useInterests(1);
   const { data: activitiesData } = useActivities(1);
   const { data: sessionBookingsData } = useBookingsCategory(1, 'book-session');
@@ -113,17 +118,41 @@ export function DashboardContent({
     }
 
     if (bannersData) {
-      dispatch(setBanners(bannersData))
+      dispatch(setBanners(bannersData));
     }
 
     if (settingsData) {
-      dispatch(setSettings(settingsData))
+      dispatch(setSettings(settingsData));
     }
 
     if (activitiesData) {
-      dispatch(setActivities(activitiesData))
+      dispatch(setActivities(activitiesData));
     }
-  }, [activitiesData, adminsData, bannersData, bookingsData, dispatch, fastTrackBookingsData, interestsData, productsData, profileData, sessionBookingsData, settingsData, socialsData, usersData]);
+
+    if (locationsData) {
+      dispatch(setLocations(locationsData));
+    }
+
+    if (reasonsData) {
+      dispatch(setReasons(reasonsData));
+    }
+  }, [
+    activitiesData,
+    adminsData,
+    bannersData,
+    bookingsData,
+    dispatch,
+    fastTrackBookingsData,
+    interestsData,
+    locationsData,
+    productsData,
+    profileData,
+    reasonsData,
+    sessionBookingsData,
+    settingsData,
+    socialsData,
+    usersData,
+  ]);
 
   return (
     <Container
