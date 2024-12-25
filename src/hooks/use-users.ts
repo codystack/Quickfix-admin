@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
-export default function useUsers() {
-  const { data, mutate, error } = useSWR('/users/all');
+export default function useUsers(page: number) {
+  const { data, mutate, error } = useSWR(`/users/all?page=${page}`);
 
   const loading = !data && !error;
   const loggedOut =

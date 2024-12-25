@@ -18,8 +18,8 @@ import { setLoading } from 'src/redux/reducers/loader';
 
 import { Iconify } from 'src/components/iconify';
 import CustomizedDialog from 'src/components/dialog';
+import { RenderConfirmation } from '../orders/order-table-row';
 
-import { RenderConfirmation } from '../booking/booking-table-row';
 
 // ----------------------------------------------------------------------
 

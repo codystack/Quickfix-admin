@@ -11,26 +11,37 @@ import Container from '@mui/material/Container';
 
 import useUsers from 'src/hooks/use-users';
 import useAdmins from 'src/hooks/use-admins';
+import useOrders from 'src/hooks/use-orders';
 import useProfile from 'src/hooks/use-profile';
 import useSocials from 'src/hooks/use-socials';
 import useBanners from 'src/hooks/use-banners';
-import useReasons from 'src/hooks/use-reasons';
-import useBookings from 'src/hooks/use-bookings';
-import useProducts from 'src/hooks/use-products';
 import useSettings from 'src/hooks/use-settings';
-import useInterests from 'src/hooks/use-interests';
-import useLocations from 'src/hooks/use-locations';
+import useServices from 'src/hooks/use-services';
 import useActivities from 'src/hooks/use-activities';
-import useBookingsCategory from 'src/hooks/use-bookings-category';
+import useTransactions from 'src/hooks/use-transactions';
+import useOrderStatus from 'src/hooks/use-orders-status';
+import useOrderCategory from 'src/hooks/use-orders-category';
 
 import { layoutClasses } from 'src/layouts/classes';
 import { setProfile } from 'src/redux/reducers/auth';
 import { setSettings } from 'src/redux/reducers/loader';
-import { setReasons, setLocations } from 'src/redux/reducers/misc';
+import { setServices } from 'src/redux/reducers/services';
+import { setTransactions } from 'src/redux/reducers/transactions';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
-import { setProducts, setInterests } from 'src/redux/reducers/products';
 import { setUsers, setAdmins, setActivities } from 'src/redux/reducers/users';
-import { setBookings, setSessionBooking, setFastTrackBookings } from 'src/redux/reducers/bookings';
+import {
+  setOrders,
+  setCarWashOrders,
+  setLaundryOrders,
+  setPendingOrders,
+  setCleaningOrders,
+  setWashedOrders,
+  setPackagedOrders,
+  setDeliveredOrders,
+  setDeclinedOrders,
+  setDamagedOrders,
+  setIronedOrders,
+} from 'src/redux/reducers/orders';
 
 // ----------------------------------------------------------------------
 
@@ -71,20 +82,27 @@ export function DashboardContent({
   const dispatch = useDispatch();
 
   // Now fetch and store data into state
-  const { data: usersData } = useUsers();
-  const { data: adminsData } = useAdmins();
+  const { data: usersData } = useUsers(1);
+  const { data: adminsData } = useAdmins(1);
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
-  const { data: reasonsData } = useReasons();
+  const { data: servicesData } = useServices(1);
   const { data: settingsData } = useSettings();
-  const { data: bookingsData } = useBookings(1);
-  const { data: productsData } = useProducts(1);
-  const { data: locationsData } = useLocations();
-  const { data: interestsData } = useInterests(1);
+  const { data: ordersData } = useOrders(1);
+  const { data: transactionsData } = useTransactions(1);
   const { data: activitiesData } = useActivities(1);
-  const { data: sessionBookingsData } = useBookingsCategory(1, 'book-session');
-  const { data: fastTrackBookingsData } = useBookingsCategory(1, 'fast-track');
+  const { data: laundryOrdersData } = useOrderCategory(1, 'laundry');
+  const { data: cleaningOrdersData } = useOrderCategory(1, 'cleaning');
+  const { data: carwashOrdersData } = useOrderCategory(1, 'car_wash');
+
+  const { data: pendingOrdersData } = useOrderStatus(1, 'pending');
+  const { data: washedOrdersData } = useOrderStatus(1, 'washed');
+  const { data: ironedOrdersData } = useOrderStatus(1, 'ironed');
+  const { data: packagedOrdersData } = useOrderStatus(1, 'packaged');
+  const { data: deliveredOrdersData } = useOrderStatus(1, 'delivered');
+  const { data: declinedOrdersData } = useOrderStatus(1, 'declined');
+  const { data: damagedOrdersData } = useOrderStatus(1, 'damaged');
 
   React.useEffect(() => {
     if (usersData) {
@@ -99,18 +117,47 @@ export function DashboardContent({
       dispatch(setProfile(profileData));
     }
 
-    if (bookingsData) {
-      dispatch(setBookings(bookingsData));
-      dispatch(setSessionBooking(sessionBookingsData));
-      dispatch(setFastTrackBookings(fastTrackBookingsData));
+    if (ordersData) {
+      dispatch(setOrders(ordersData));
+      dispatch(setLaundryOrders(laundryOrdersData));
+      dispatch(setCleaningOrders(cleaningOrdersData));
+      dispatch(setCarWashOrders(carwashOrdersData));
     }
 
-    if (productsData) {
-      dispatch(setProducts(productsData));
+    if (pendingOrdersData) {
+      dispatch(setPendingOrders(pendingOrdersData));
     }
 
-    if (interestsData) {
-      dispatch(setInterests(interestsData));
+    if (washedOrdersData) {
+      dispatch(setWashedOrders(washedOrdersData));
+    }
+
+    if (ironedOrdersData) {
+      dispatch(setIronedOrders(ironedOrdersData));
+    }
+
+    if (packagedOrdersData) {
+      dispatch(setPackagedOrders(packagedOrdersData));
+    }
+
+    if (deliveredOrdersData) {
+      dispatch(setDeliveredOrders(deliveredOrdersData));
+    }
+
+    if (declinedOrdersData) {
+      dispatch(setDeclinedOrders(declinedOrdersData));
+    }
+
+    if (damagedOrdersData) {
+      dispatch(setDamagedOrders(damagedOrdersData));
+    }
+
+    if (servicesData) {
+      dispatch(setServices(servicesData));
+    }
+
+    if (transactionsData) {
+      dispatch(setTransactions(transactionsData));
     }
 
     if (socialsData) {
@@ -128,30 +175,28 @@ export function DashboardContent({
     if (activitiesData) {
       dispatch(setActivities(activitiesData));
     }
-
-    if (locationsData) {
-      dispatch(setLocations(locationsData));
-    }
-
-    if (reasonsData) {
-      dispatch(setReasons(reasonsData));
-    }
   }, [
     activitiesData,
     adminsData,
     bannersData,
-    bookingsData,
+    carwashOrdersData,
+    cleaningOrdersData,
+    damagedOrdersData,
+    declinedOrdersData,
+    deliveredOrdersData,
     dispatch,
-    fastTrackBookingsData,
-    interestsData,
-    locationsData,
-    productsData,
+    ironedOrdersData,
+    laundryOrdersData,
+    ordersData,
+    packagedOrdersData,
+    pendingOrdersData,
     profileData,
-    reasonsData,
-    sessionBookingsData,
+    servicesData,
     settingsData,
     socialsData,
+    transactionsData,
     usersData,
+    washedOrdersData,
   ]);
 
   return (

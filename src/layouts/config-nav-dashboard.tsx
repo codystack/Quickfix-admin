@@ -13,19 +13,14 @@ export const navData = [
     icon: icon('ic-analytics'),
   },
   {
-    title: 'Bookings',
-    path: '/dashboard/bookings',
-    icon: icon('ic-blog'),
+    title: 'Orders',
+    path: '/dashboard/orders',
+    icon: icon('ic-cart'),
   },
   {
-    title: 'Market Place',
-    path: '/dashboard/market-place',
+    title: 'Orders Status',
+    path: '/dashboard/orders/status',
     icon: icon('ic-cart'),
-    // info: (
-    //   <Label color="error" variant="inverted">
-    //     +3
-    //   </Label>
-    // ),
   },
   {
     title: 'Users',
@@ -33,23 +28,18 @@ export const navData = [
     icon: icon('ic-user'),
   },
   {
-    title: 'Interests',
-    path: '/dashboard/interests',
+    title: 'Transactions',
+    path: '/dashboard/transactions',
+    icon: icon('ic-glass-message'),
+  },
+  {
+    title: 'Services',
+    path: '/dashboard/services',
     icon: icon('ic-glass-bag'),
   },
   {
     title: 'Activities',
     path: '/dashboard/activities',
-    icon: icon('ic-glass-message'),
-  },
-  {
-    title: 'Locations',
-    path: '/dashboard/locations',
-    icon: icon('ic-glass-message'),
-  },
-  {
-    title: 'Reasons',
-    path: '/dashboard/reasons',
     icon: icon('ic-glass-message'),
   },
   {

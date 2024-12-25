@@ -16,9 +16,9 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 
 export function OverviewAnalyticsView() {
   const {users} = useSelector((state: RootState) => state.user);
-  const { products, interests } = useSelector((state: RootState) => state.product);
-  const { bookings, fastTrackBookings, sessionBookings, workingClassBookings } = useSelector((state: RootState) => state.booking);
-  console.log("FASTC ::: ", sessionBookings);
+  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector((state: RootState) => state.order);
+  console.log("FASTC ::: ", orders);
   
   return (
     <DashboardContent maxWidth="xl">
@@ -43,9 +43,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Products"
+            title="Transactions"
             percent={2.8}
-            total={products?.totalItems}
+            total={transactions?.totalItems}
             color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
             chart={{
@@ -57,9 +57,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Interests"
+            title="Orders"
             percent={2.6}
-            total={interests?.totalItems}
+            total={orders?.totalItems}
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
@@ -70,9 +70,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Appointments"
+            title="Pending Orders"
             percent={3.6}
-            total={bookings?.totalItems}
+            total={pendingOrders?.totalItems}
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
             chart={{
@@ -82,28 +82,28 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsCurrentVisits
-            title="Appointment Bookings"
-            chart={{
-              series: [
-                { label: 'Fast Track', value: fastTrackBookings?.totalItems ?? 0 },
-                { label: 'Session Booking', value: sessionBookings?.totalItems ?? 0 },
-                { label: 'Working Class', value: workingClassBookings?.totalItems ?? 0 },
-              ],
-            }}
-          />
-        </Grid>
-
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsWebsiteVisits
-            title="Website visits"
-            subheader="(+43%) than last year"
+            title="Recent Transactions"
+            subheader="Most recent transactions here"
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
               series: [
                 { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
                 { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
+              ],
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={6} lg={4}>
+          <AnalyticsCurrentVisits
+            title="Service Engagements"
+            chart={{
+              series: [
+                { label: 'Laundry', value: laundryOrders?.totalItems ?? 0 },
+                { label: 'Cleaning', value: cleaningOrders?.totalItems ?? 0 },
+                { label: 'Car Wash', value: carWashOrders?.totalItems ?? 0 },
               ],
             }}
           />

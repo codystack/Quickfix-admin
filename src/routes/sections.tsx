@@ -8,37 +8,42 @@ import Box from '@mui/material/Box';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
 import CMS from 'src/pages/cms';
-import Bookings from 'src/pages/bookings';
+import Orders from 'src/pages/orders';
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
-import ProductDetail from 'src/pages/marketplace/product_detail';
+// import ProductDetail from 'src/pages/marketplace/product_detail';
+
+import ProductDetail from 'src/pages/orders/order_detail';
 
 import { AdminsView } from 'src/sections/admins/view';
 import UserDetail from 'src/sections/user/view/user-detail';
 import { ActivitiesView } from 'src/sections/activities/view';
 import { SocialView } from 'src/sections/cms/view/social-view';
 import { BannerView } from 'src/sections/cms/view/banner-view';
+import AddService from 'src/sections/service/view/add-service';
 import AdminDetail from 'src/sections/admins/view/admin-detail';
-import AddNewProduct from 'src/sections/product/view/add_product';
+// import AddNewProduct from 'src/sections/product/view/add_product';
 import { SettingsView } from 'src/sections/cms/view/settings-view';
-import UpdateProduct from 'src/sections/product/view/update_product';
-import InterestDetail from 'src/sections/interest/view/interest-detail';
+import UpdateService from 'src/sections/service/view/update-service';
+// import { TransactionView } from 'src/sections/transaction/view';
+import TransactionDetail from 'src/sections/transaction/view/transaction-detail';
+import { OrderStatusView } from 'src/sections/orders_status';
+// import UpdateProduct from 'src/sections/product/view/update_product';
+// import InterestDetail from 'src/sections/transaction/view/interest-detail';
 
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
-export const InterestPage = lazy(() => import('src/pages/interests/interest'));
 export const SupportPage = lazy(() => import('src/pages/support'));
 export const UserPage = lazy(() => import('src/pages/users/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
-export const ReasonsPage = lazy(() => import('src/pages/reasons'));
-export const LocationsPage = lazy(() => import('src/pages/locations/location'));
+export const ServicePage = lazy(() => import('src/pages/services/services'));
 export const ForgotPasswordPage = lazy(() => import('src/pages/forgot-password'));
 export const VerifyOTPPage = lazy(() => import('src/pages/verify-otp'));
 export const ResetPasswordPage = lazy(() => import('src/pages/reset-password'));
-export const ProductsPage = lazy(() => import('src/pages/marketplace'));
+export const TransactionPage = lazy(() => import('src/pages/transactions'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -104,11 +109,13 @@ export function Router() {
       ) : <Navigate to="/" replace />,
       children: [
         { element: <HomePage />, index: true },
-        { path: 'bookings', element: <Bookings /> },
+        { path: 'orders', element: <Orders /> },
+        { path: 'orders/status', element: <OrderStatusView /> },
+        { path: 'orders/:id', element: <ProductDetail /> },
         { path: 'users', element: <UserPage /> },
         { path: 'users/:id', element: <UserDetail /> },
-        { path: 'market-place', element: <ProductsPage /> },
-        { path: 'market-place/product/:id', element: <ProductDetail /> },
+        { path: 'transactions', element: <TransactionPage /> },
+        { path: 'transactions/:id', element: <TransactionDetail /> },
         { path: 'cms', element: <CMS /> },
         { path: 'cms/social', element: <SocialView /> },
         { path: 'cms/banners', element: <BannerView /> },
@@ -116,12 +123,9 @@ export function Router() {
         { path: 'cms/admins/:id', element: <AdminDetail /> },
         { path: 'cms/contact', element: settings && <SettingsView data={settings[0]}  /> },
         { path: 'activities', element: <ActivitiesView /> },
-        { path: 'interests', element: <InterestPage /> },
-        { path: 'locations', element: <LocationsPage /> },
-        { path: 'reasons', element: <ReasonsPage /> },
-        { path: 'interests/:id', element: <InterestDetail /> },
-        { path: 'product/new', element: <AddNewProduct /> },
-        { path: 'product/:id/update', element: <UpdateProduct /> },
+        { path: 'services', element: <ServicePage /> },
+        { path: 'service/add', element: <AddService /> },
+        { path: 'service/:id/update', element: <UpdateService /> },
       ],
     },
     {

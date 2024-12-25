@@ -24,28 +24,25 @@ class APIService {
 
   static updateUser = (payload: any) => axiosInstance.put("/users/info/update", payload).then((res: any) => res);
 
-  static getBookings = (page: number) => axiosInstance.get(`/admins/bookings/all?page=${page}`).then((res: any) => res);
+  static getTransactions = (page: number) => axiosInstance.get(`/transactions/all?page=${page}`).then((res: any) => res);
+
+  static getOrders = (page: number) => axiosInstance.get(`/orders/all?page=${page}`).then((res: any) => res);
 
   static getActivities = (page: number) => axiosInstance.get(`/admins/activities/all?page=${page}`).then((res: any) => res);
 
-
-  static getProducts = (page: number) => axiosInstance.get("/marketplace/all").then((res: any) => res);
-
-  static getInterests = (page: number) => axiosInstance.get("/admin/auth/verify").then((res: any) => res);
+  static getServices = (page: number) => axiosInstance.get("/services/all").then((res: any) => res);
 
   static multiImagesUpload = (payload: any) => axiosInstance.put("/images/upload", payload).then((res: any) => res);
 
   static singleImageUpload = (payload: any) => axiosInstance.put("/image/upload", payload).then((res: any) => res);
 
-  static addProduct = (payload: any) => axiosInstance.post("/marketplace/add", payload).then((res: any) => res);
+  static updateOrder = (payload: any, id: string) => axiosInstance.put(`/orders/${id}/update`, payload).then((res: any) => res);
 
-  static updateProduct = (payload: any, id: string) => axiosInstance.post(`/marketplace/${id}/update`, payload).then((res: any) => res);
+  // static deleteProduct = (id: string) => axiosInstance.post(`/marketplace/${id}/delete`,{}).then((res: any) => res);
 
-  static deleteProduct = (id: string) => axiosInstance.post(`/marketplace/${id}/delete`,{}).then((res: any) => res);
+  // static approveBooking = (id: any) => axiosInstance.put(`/admins/bookings/${id}/approve`, {}).then((res: any) => res);
 
-  static approveBooking = (id: any) => axiosInstance.put(`/admins/bookings/${id}/approve`, {}).then((res: any) => res);
-
-  static declineBooking = (id: string) => axiosInstance.put(`/admins/bookings/${id}/decline`, {}).then((res: any) => res);
+  // static declineBooking = (id: string) => axiosInstance.put(`/admins/bookings/${id}/decline`, {}).then((res: any) => res);
 
   static addSocial = (payload: any) => axiosInstance.post("/admins/socials/add", payload).then((res: any) => res);
 
@@ -71,18 +68,11 @@ class APIService {
 
   static manageContact = (payload: any) => axiosInstance.post("/admins/settings/manage", payload).then((res: any) => res);
 
-  static addLocation = (payload: any) => axiosInstance.post("/admins/locations/add", payload).then((res: any) => res);
+  static addService = (payload: any) => axiosInstance.post("/services/save", payload).then((res: any) => res);
 
-  static addReason = (payload: any) => axiosInstance.post("/admins/reasons/add", payload).then((res: any) => res);
+  static updateService = (payload: any, id: any) => axiosInstance.post(`/services/${id}/update`, payload).then((res: any) => res);
 
-  static updateLocation = (payload: any, id: any) => axiosInstance.put(`/admins/locations/${id}/update`, payload).then((res: any) => res);
-
-  static updateReason = (payload: any, id: any) => axiosInstance.put(`/admins/reasons/${id}/update`, payload).then((res: any) => res);
-
-  static deleteLocation = (id: any) => axiosInstance.put(`/admins/locations/${id}/delete`, {}).then((res: any) => res);
-
-  static deleteReason = (id: any) => axiosInstance.put(`/admins/reasons/${id}/delete`, {}).then((res: any) => res);
-
+  static deleteService = (id: any) => axiosInstance.post(`/services/${id}/delete`, {}).then((res: any) => res);
 
 
 }

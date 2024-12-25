@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 
 import authReducer from "./reducers/auth"
-import miscReducer from "./reducers/misc"
 import userReducer from "./reducers/users"
+import orderReducer from "./reducers/orders"
 import loaderReducer from "./reducers/loader"
 import bannerReducer from "./reducers/banners"
-import productReducer from "./reducers/products"
-import bookingReducer from "./reducers/bookings"
+import serviceReducer from "./reducers/services"
+import transactionReducer from "./reducers/transactions"
 
 const store = configureStore({
     reducer: {
@@ -14,9 +14,9 @@ const store = configureStore({
         user: userReducer,
         loader: loaderReducer,
         banner: bannerReducer,
-        booking: bookingReducer,
-        product: productReducer,
-        misc: miscReducer,
+        order: orderReducer,
+        service: serviceReducer,
+        transaction: transactionReducer,
     }
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

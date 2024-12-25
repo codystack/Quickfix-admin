@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-export default function useAdmins() {
+export default function useAdmins(page: number) {
   const { data, mutate, error } = useSWR('/admins/all');
 
   const loading = !data && !error;

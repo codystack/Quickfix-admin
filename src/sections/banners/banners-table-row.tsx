@@ -20,8 +20,8 @@ import CustomizedDialog from 'src/components/dialog';
 
 // import { UpdateBanner } from '../cms/view/banner-view';
 // import { UpdateBanner } from '../cms/view/banner-view';
-import { RenderConfirmation } from '../booking/booking-table-row';
 import UpdateBanner from './view/update_banner';
+import { RenderConfirmation } from '../orders/order-table-row';
 
 // ----------------------------------------------------------------------
 
