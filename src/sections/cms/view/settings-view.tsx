@@ -43,6 +43,9 @@ export function SettingsView({ data }: any) {
     email_address: Yup.string().required('Email address is required'),
     office_address: Yup.string().required('Office address is required'),
     get_started_title: Yup.string().required('Get started title is required'),
+    pickup_n_delivery: Yup.number().required('Pickup and Delivery fee is required'),
+    delivery_fee: Yup.number().required('Regular delivery fee is required'),
+    pickup_fee: Yup.number().required('Pickup fee is required'),
   });
 
   const handleFileChange = (event: any) => {
@@ -78,12 +81,14 @@ export function SettingsView({ data }: any) {
       email_address: data?.email_address ?? '',
       office_address: data?.office_address ?? '',
       get_started_title: data?.get_started_title ?? '',
+      pickup_n_delivery: data?.pickup_n_delivery ?? 0,
+      delivery_fee: data?.delivery_fee ?? 0,
+      pickup_fee: data?.pickup_fee ?? 0,
     },
     validationSchema: validate,
     onSubmit: async (values) => {
       dispatch(setLoading(true));
       if (file) {
-
         const base64s = [];
         const base: any = await convertBase64(file);
         base64s.push(base);
@@ -95,7 +100,13 @@ export function SettingsView({ data }: any) {
           office_address: values.office_address,
           get_started_title: values.get_started_title,
           get_started: imgResp?.data[0],
+          pickup_n_delivery: values.pickup_n_delivery,
+          delivery_fee: values.delivery_fee,
+          pickup_fee:values.pickup_fee,
         };
+
+        console.log("REQUEST PAYLOAD :: ", payload);
+        
 
         const response = APIService.manageContact(payload);
         toast.promise(response, {
@@ -127,7 +138,10 @@ export function SettingsView({ data }: any) {
           email_address: values.email_address,
           office_address: values.office_address,
           get_started_title: values.get_started_title,
-          get_started: data?.get_started ?? "",
+          get_started: data?.get_started ?? '',
+          pickup_n_delivery: values.pickup_n_delivery,
+          delivery_fee: values.delivery_fee,
+          pickup_fee:values.pickup_fee,
         };
 
         const response = APIService.manageContact(payload);
@@ -171,7 +185,7 @@ export function SettingsView({ data }: any) {
           <Iconify icon="eva:arrow-back-fill" color="inherit" />
         </IconButton>
         <Typography variant="h4" flexGrow={1}>
-          Contact Information
+          Platform Settings
         </Typography>
       </Box>
       <Toolbar />
@@ -209,6 +223,42 @@ export function SettingsView({ data }: any) {
         {...getFieldProps('office_address')}
         error={Boolean(touched.office_address && errors.office_address)}
         helperText={Boolean(touched.office_address && errors.office_address)}
+      />
+      <Box p={1} />
+      <TextField
+        variant="outlined"
+        fullWidth
+        type="number"
+        placeholder="Enter Pickup & Delivery Fee"
+        label="Pickup & Delivery Fee"
+        required
+        {...getFieldProps('pickup_n_delivery')}
+        error={Boolean(touched.pickup_n_delivery && errors.pickup_n_delivery)}
+        helperText={Boolean(touched.pickup_n_delivery && errors.pickup_n_delivery)}
+      />
+      <Box p={1} />
+      <TextField
+        variant="outlined"
+        fullWidth
+        type="number"
+        placeholder="Enter Pickup Only Fee"
+        label="Pickup Only Fee"
+        required
+        {...getFieldProps('pickup_fee')}
+        error={Boolean(touched.pickup_fee && errors.pickup_fee)}
+        helperText={Boolean(touched.pickup_fee && errors.pickup_fee)}
+      />
+      <Box p={1} />
+      <TextField
+        variant="outlined"
+        fullWidth
+        type="number"
+        placeholder="Enter Delivery only Fee"
+        label="Delivery Only Fee"
+        required
+        {...getFieldProps('delivery_fee')}
+        error={Boolean(touched.delivery_fee && errors.delivery_fee)}
+        helperText={Boolean(touched.delivery_fee && errors.delivery_fee)}
       />
       <Box p={2} />
       <Divider />

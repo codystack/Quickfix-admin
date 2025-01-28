@@ -21,8 +21,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
 import CustomizedDialog from 'src/components/dialog';
-
-import { RenderConfirmation } from 'src/sections/orders/order-table-row';
+import { RenderConfirmation } from 'src/components/confirmation';
 
 import UpdateSocial from './update-social';
 

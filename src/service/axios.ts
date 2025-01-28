@@ -1,17 +1,19 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const baseURL = "https://quick-fix-api.vercel.app" // "http://192.168.232.247:5000"
+export const baseURL = 'https://quick-fix-api.vercel.app';
+
+// "http://192.168.160.247:5050" //
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api/v1`,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 axiosInstance.interceptors.request.use(async (req) => {
   try {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       req.headers.Authorization = `Bearer ${accessToken}`;
     }

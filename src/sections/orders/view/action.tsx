@@ -1,3 +1,6 @@
+import type { RootState } from 'src/redux/store';
+
+import { useSelector } from 'react-redux';
 import React, { useState, useCallback } from 'react';
 
 import IconButton from '@mui/material/IconButton';
@@ -23,7 +26,7 @@ type UserTableRowProps = {
 
 const ActionButton = ({ row }: UserTableRowProps) => {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
-  // const { profile } = useSelector((state: RootState) => state.auth);
+  const { profile } = useSelector((state: RootState) => state.auth);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -69,6 +72,35 @@ const ActionButton = ({ row }: UserTableRowProps) => {
             <Iconify icon="solar:eye-bold" />
             View
           </MenuItem>
+          {profile &&
+            (profile?.type === 'super_admin' ||
+              profile?.role === 'manager' ||
+              profile?.role === 'developer') &&
+            profile?.access === 'read_write' && (
+              <>
+                {row?.status === 'pending' && (
+                  <MenuItem
+                  // onClick={() => {
+                  //   navigate(`/dashboard/activities/${row?.id}`, { state: { data: row } });
+                  // }}
+                  >
+                    <Iconify icon="solar:eye-bold" />
+                    View
+                  </MenuItem>
+                )}
+
+                {row?.status === 'pending' && (
+                  <MenuItem
+                  // onClick={() => {
+                  //   navigate(`/dashboard/activities/${row?.id}`, { state: { data: row } });
+                  // }}
+                  >
+                    <Iconify icon="solar:eye-bold" />
+                    View
+                  </MenuItem>
+                )}
+              </>
+            )}
         </MenuList>
       </Popover>
     </>

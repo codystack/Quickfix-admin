@@ -16,19 +16,22 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import ProductDetail from 'src/pages/orders/order_detail';
 
-import { AdminsView } from 'src/sections/admins/view';
+import { AdminsView } from 'src/sections/admins/';
+import AdminDetail from 'src/sections/admins/admin-detail';
 import UserDetail from 'src/sections/user/view/user-detail';
+import { OrderStatusView } from 'src/sections/orders_status';
 import { ActivitiesView } from 'src/sections/activities/view';
 import { SocialView } from 'src/sections/cms/view/social-view';
 import { BannerView } from 'src/sections/cms/view/banner-view';
 import AddService from 'src/sections/service/view/add-service';
-import AdminDetail from 'src/sections/admins/view/admin-detail';
 // import AddNewProduct from 'src/sections/product/view/add_product';
 import { SettingsView } from 'src/sections/cms/view/settings-view';
 import UpdateService from 'src/sections/service/view/update-service';
 // import { TransactionView } from 'src/sections/transaction/view';
 import TransactionDetail from 'src/sections/transaction/view/transaction-detail';
-import { OrderStatusView } from 'src/sections/orders_status';
+import { LocationsView } from 'src/sections/locations';
+import AddOrderView from 'src/sections/orders/add_order';
+import { ExpressView } from 'src/sections/express';
 // import UpdateProduct from 'src/sections/product/view/update_product';
 // import InterestDetail from 'src/sections/transaction/view/interest-detail';
 
@@ -110,6 +113,7 @@ export function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'orders', element: <Orders /> },
+        { path: 'orders/create', element: <AddOrderView /> },
         { path: 'orders/status', element: <OrderStatusView /> },
         { path: 'orders/:id', element: <ProductDetail /> },
         { path: 'users', element: <UserPage /> },
@@ -120,8 +124,10 @@ export function Router() {
         { path: 'cms/social', element: <SocialView /> },
         { path: 'cms/banners', element: <BannerView /> },
         { path: 'cms/admins', element: <AdminsView /> },
+        { path: 'cms/locations', element: <LocationsView /> },
+        { path: 'cms/express', element: <ExpressView /> },
         { path: 'cms/admins/:id', element: <AdminDetail /> },
-        { path: 'cms/contact', element: settings && <SettingsView data={settings[0]}  /> },
+        { path: 'cms/settings', element: settings && <SettingsView data={settings[0]}  /> },
         { path: 'activities', element: <ActivitiesView /> },
         { path: 'services', element: <ServicePage /> },
         { path: 'service/add', element: <AddService /> },

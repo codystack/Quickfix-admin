@@ -4,7 +4,7 @@
 import * as React from 'react';
 
 // import { Download } from "@mui/icons-material";
-import { Chip, Avatar } from '@mui/material';
+import { Chip, Avatar, Typography, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import useOrderStatus from 'src/hooks/use-orders-status';
@@ -29,39 +29,51 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
   const columns = [
     {
       field: 'user',
-      headerName: 'Photo',
-      width: 80,
+      headerName: 'User',
+      flex: 1,
       renderCell: (params: any) => (
-        <Avatar src={params?.row?.user?.photo_url} variant="rounded"  sx={{width: 48}} >
-          {`${params?.row?.user?.first_name}`.substring(0, 1)}
-          {`${params?.row?.user?.last_name}`.substring(0, 1)}
-        </Avatar>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="start"
+          alignItems="center"
+          sx={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            height: '100%',
+          }}
+        >
+          <Avatar src={params?.row?.user?.photo_url} variant="circular">
+            {`${params?.row?.user?.first_name}`.substring(0, 1)}
+            {`${params?.row?.user?.last_name}`.substring(0, 1)}
+          </Avatar>
+          <Typography
+            pl={0.5}
+            style={{ textTransform: 'capitalize', fontSize: 14 }}
+          >{`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}</Typography>
+        </Box>
       ),
     },
     {
       field: 'name',
-      headerName: 'Full Name',
+      headerName: 'Service',
       flex: 1,
       renderCell: (params: any) => (
         <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}</p>
-      ),
-    },
-    {
-      field: 'email_address',
-      headerName: 'Email Address',
-      flex: 1,
-      renderCell: (params: any) => (
-        <p style={{ textTransform: 'none', fontSize: 14 }}>
-          {params?.row?.user?.email_address ?? ''}
-        </p>
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.service?.title ?? ''}`}</p>
       ),
     },
     {
       field: 'order_id',
       headerName: 'Order Num',
-      width: 90,
+      width: 110,
       renderCell: (params: any) => (
         <p
           style={{ textTransform: 'capitalize', fontSize: 14 }}
@@ -74,7 +86,13 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       flex: 1,
       renderCell: (params: any) => (
         <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
         >{`₦${fNumber(params?.row?.amount)}`}</p>
       ),
     },
@@ -89,13 +107,19 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       ),
     },
     {
-      field: 'pickup_date',
-      headerName: 'Pickup On',
-      width: 100,
+      field: 'location',
+      headerName: 'Location',
+      flex: 1,
       renderCell: (params: any) => (
         <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${new Date(params.row?.pickup_date).toLocaleDateString('en-GB')}`}</p>
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params.row?.location?.region}, ${params.row?.location?.city}`}</p>
       ),
     },
     {
@@ -119,7 +143,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       renderCell: (params: any) => (
         <p
           style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.transaction?.trans_ref}`}</p>
+        >{`${params?.row?.transaction?.trans_ref ?? 'Manual Order'}`}</p>
       ),
     },
     {

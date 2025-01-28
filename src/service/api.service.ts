@@ -58,6 +58,8 @@ class APIService {
 
   static removeSocial = (id: string) => axiosInstance.put(`/admins/socials/${id}/delete`, {}).then((res: any) => res);
   
+  static addUser = (payload: any) => axiosInstance.post("/admins/user/create", payload).then((res: any) => res);
+
   static addAdmin = (payload: any) => axiosInstance.post("/admins/admin/create", payload).then((res: any) => res);
 
   static suspendAdmin = (id: any) => axiosInstance.post(`/admins/admin/${id}/suspend`, {}).then((res: any) => res);
@@ -74,6 +76,19 @@ class APIService {
 
   static deleteService = (id: any) => axiosInstance.post(`/services/${id}/delete`, {}).then((res: any) => res);
 
+  static addLocation = (payload: any) => axiosInstance.post("/locations/save", payload).then((res: any) => res);
+
+  static updateLocation = (id: string, payload: any) => axiosInstance.post(`/locations/${id}/update`, payload).then((res: any) => res);
+
+  static deleteLocation = (id: any) => axiosInstance.put(`/locations/${id}/delete`, {}).then((res: any) => res);
+
+  static addExpress = (payload: any) => axiosInstance.post("/admins/express/add", payload).then((res: any) => res);
+
+  static updateExpress = (id: string, payload: any) => axiosInstance.put(`/admins/express/${id}/update`, payload).then((res: any) => res);
+
+  static deleteExpress = (id: any) => axiosInstance.put(`/admins/express/${id}/delete`, {}).then((res: any) => res);
+
+  static createOrder = (payload: any, tx_ref: string) => axiosInstance.post(`/orders/manual/create/${tx_ref}`, payload).then((res: any) => res);
 
 }
 

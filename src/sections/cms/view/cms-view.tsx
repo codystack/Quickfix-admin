@@ -49,8 +49,26 @@ export function CMSView() {
           <CardItem
             title="Platform Settings"
             bgImage="/assets/images/cover/cover-12.webp"
-            description="Manage your contact information at ease"
-            routeTo="/dashboard/cms/contact"
+            description="Manage your platform settings with ease"
+            routeTo="/dashboard/cms/settings"
+          />
+        </Grid>
+
+        <Grid xs={12} sm={7} md={8}>
+          <CardItem
+            title="Locations"
+            bgImage="/assets/images/cover/cover-15.webp"
+            description="Manage your various locations in one place"
+            routeTo="/dashboard/cms/locations"
+          />
+        </Grid>
+
+        <Grid xs={12} sm={5} md={4}>
+          <CardItem
+            title="Express Fee"
+            bgImage="/assets/images/cover/cover-18.webp"
+            description="Manage your express delivery fee"
+            routeTo="/dashboard/cms/express"
           />
         </Grid>
       </Grid>

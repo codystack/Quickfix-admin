@@ -9,38 +9,42 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
-import useUsers from 'src/hooks/use-users';
 import useAdmins from 'src/hooks/use-admins';
 import useOrders from 'src/hooks/use-orders';
 import useProfile from 'src/hooks/use-profile';
 import useSocials from 'src/hooks/use-socials';
 import useBanners from 'src/hooks/use-banners';
+import useExpress from 'src/hooks/use-express';
 import useSettings from 'src/hooks/use-settings';
 import useServices from 'src/hooks/use-services';
 import useActivities from 'src/hooks/use-activities';
 import useTransactions from 'src/hooks/use-transactions';
 import useOrderStatus from 'src/hooks/use-orders-status';
+import useUsers, { useUsersList } from 'src/hooks/use-users';
 import useOrderCategory from 'src/hooks/use-orders-category';
+import useLocations, { useLocationsList } from 'src/hooks/use-locations';
 
 import { layoutClasses } from 'src/layouts/classes';
 import { setProfile } from 'src/redux/reducers/auth';
 import { setSettings } from 'src/redux/reducers/loader';
 import { setServices } from 'src/redux/reducers/services';
+import { setExpressList } from 'src/redux/reducers/express';
 import { setTransactions } from 'src/redux/reducers/transactions';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
-import { setUsers, setAdmins, setActivities } from 'src/redux/reducers/users';
+import { setLocations, setLocationList } from 'src/redux/reducers/locations';
+import { setUsers, setAdmins, setUsersList, setActivities } from 'src/redux/reducers/users';
 import {
   setOrders,
+  setWashedOrders,
+  setIronedOrders,
   setCarWashOrders,
   setLaundryOrders,
   setPendingOrders,
-  setCleaningOrders,
-  setWashedOrders,
-  setPackagedOrders,
-  setDeliveredOrders,
-  setDeclinedOrders,
   setDamagedOrders,
-  setIronedOrders,
+  setCleaningOrders,
+  setPackagedOrders,
+  setDeclinedOrders,
+  setDeliveredOrders,
 } from 'src/redux/reducers/orders';
 
 // ----------------------------------------------------------------------
@@ -83,6 +87,7 @@ export function DashboardContent({
 
   // Now fetch and store data into state
   const { data: usersData } = useUsers(1);
+  const { data: usersListData } = useUsersList();
   const { data: adminsData } = useAdmins(1);
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
@@ -104,9 +109,17 @@ export function DashboardContent({
   const { data: declinedOrdersData } = useOrderStatus(1, 'declined');
   const { data: damagedOrdersData } = useOrderStatus(1, 'damaged');
 
+  const { data: expressData } = useExpress();
+  const { data: locationsData } = useLocations(1);
+  const { data: locationListData } = useLocationsList();
+
   React.useEffect(() => {
     if (usersData) {
       dispatch(setUsers(usersData));
+    }
+
+    if (usersListData) {
+      dispatch(setUsersList(usersListData));
     }
 
     if (adminsData) {
@@ -175,8 +188,21 @@ export function DashboardContent({
     if (activitiesData) {
       dispatch(setActivities(activitiesData));
     }
+
+    if (locationsData) {
+      dispatch(setLocations(locationsData));
+    }
+
+    if (locationListData) {
+      dispatch(setLocationList(locationListData));
+    }
+
+    if (expressData) {
+      dispatch(setExpressList(expressData));
+    }
   }, [
     activitiesData,
+    expressData,
     adminsData,
     bannersData,
     carwashOrdersData,
@@ -187,6 +213,8 @@ export function DashboardContent({
     dispatch,
     ironedOrdersData,
     laundryOrdersData,
+    locationListData,
+    locationsData,
     ordersData,
     packagedOrdersData,
     pendingOrdersData,
@@ -196,6 +224,7 @@ export function DashboardContent({
     socialsData,
     transactionsData,
     usersData,
+    usersListData,
     washedOrdersData,
   ]);
 
