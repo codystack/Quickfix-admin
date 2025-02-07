@@ -68,7 +68,7 @@ export function NavDesktop({
         ...sx,
       }}
     >
-      <NavContent data={data} slots={slots} workspaces={workspaces} />
+      <NavContent data={data} slots={slots} workspaces={workspaces}/>
     </Box>
   );
 }
@@ -146,12 +146,12 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
                       borderRadius: 0.75,
                       typography: 'body2',
                       fontWeight: 'fontWeightMedium',
-                      color: 'var(--layout-nav-item-color)',
+                      color: 'white',
                       minHeight: 'var(--layout-nav-item-height)',
                       ...(isActived && {
                         fontWeight: 'fontWeightSemiBold',
                         bgcolor: 'var(--layout-nav-item-active-bg)',
-                        color: 'var(--layout-nav-item-active-color)',
+                        color: '#7CE200',
                         '&:hover': {
                           bgcolor: 'var(--layout-nav-item-hover-bg)',
                         },
