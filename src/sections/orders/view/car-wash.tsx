@@ -5,9 +5,9 @@ import type { RootState } from 'src/redux/store';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-// import { Download } from "@mui/icons-material";
-import { Avatar, Chip } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+// import { Download } from "@mui/icons-material";
+import { Box, Chip, Avatar, Typography } from '@mui/material';
 
 import useOrderCategory from 'src/hooks/use-orders-category';
 
@@ -33,33 +33,45 @@ export default function CarWashTable() {
   const columns = [
     {
       field: 'user',
-      headerName: 'Photo',
-      width: 96,
+      headerName: 'User',
+      flex: 1,
       renderCell: (params: any) => (
-        <Avatar src={params?.row?.user?.photo_url} variant="circular">
-          {`${params?.row?.user?.first_name}`.substring(0, 1)}
-          {`${params?.row?.user?.last_name}`.substring(0, 1)}
-        </Avatar>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="start"
+          alignItems="center"
+          sx={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            height: '100%',
+          }}
+        >
+          <Avatar src={params?.row?.user?.photo_url} variant="circular">
+            {`${params?.row?.user?.first_name}`.substring(0, 1)}
+            {`${params?.row?.user?.last_name}`.substring(0, 1)}
+          </Avatar>
+          <Typography
+            pl={0.5}
+            style={{ textTransform: 'capitalize', fontSize: 14 }}
+          >{`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}</Typography>
+        </Box>
       ),
     },
     {
       field: 'name',
-      headerName: 'Full Name',
+      headerName: 'Service',
       flex: 1,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}</p>
-      ),
-    },
-    {
-      field: 'email_address',
-      headerName: 'Email Address',
-      flex: 1,
-      renderCell: (params: any) => (
-        <p style={{ textTransform: 'none', fontSize: 14 }}>
-          {params?.row?.user?.email_address ?? ''}
-        </p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.service?.title ?? ''}`}</Typography>
       ),
     },
     {
@@ -67,9 +79,15 @@ export default function CarWashTable() {
       headerName: 'Order Num',
       width: 110,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.order_id ?? ''}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.order_id ?? ''}`}</Typography>
       ),
     },
     {
@@ -77,9 +95,15 @@ export default function CarWashTable() {
       headerName: 'Amount',
       flex: 1,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`₦${fNumber(params?.row?.amount)}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`₦${fNumber(params?.row?.amount)}`}</Typography>
       ),
     },
     {
@@ -87,19 +111,31 @@ export default function CarWashTable() {
       headerName: 'Items',
       width: 70,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${fNumber(params?.row?.items?.length)}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${fNumber(params?.row?.items?.length)}`}</Typography>
       ),
     },
     {
-      field: 'pickup_date',
-      headerName: 'Pickup On',
-      width: 100,
+      field: 'location',
+      headerName: 'Location',
+      flex: 1,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${new Date(params.row?.pickup_date).toLocaleDateString('en-GB')}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params.row?.location?.region}, ${params.row?.location?.city}`}</Typography>
       ),
     },
     {
@@ -121,19 +157,31 @@ export default function CarWashTable() {
       headerName: 'Trans Ref',
       flex: 1,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.transaction?.trans_ref}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.transaction?.trans_ref ?? 'Manual Order'}`}</Typography>
       ),
     },
     {
       field: 'created_at',
       headerName: 'Created On',
-      flex: 1,
+      width: 110,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${new Date(params.row?.createdAt).toLocaleDateString('en-GB')}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${new Date(params.row?.createdAt).toLocaleDateString('en-GB')}`}</Typography>
       ),
     },
     {

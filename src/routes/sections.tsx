@@ -14,11 +14,15 @@ import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
 // import ProductDetail from 'src/pages/marketplace/product_detail';
 
-import ProductDetail from 'src/pages/orders/order_detail';
+// import ProductDetail from 'src/pages/orders/order_detail';
 
 import { AdminsView } from 'src/sections/admins/';
+import { ExpressView } from 'src/sections/express';
+import { LocationsView } from 'src/sections/locations';
+import AddOrderView from 'src/sections/orders/add_order';
+import OrderDetail from 'src/sections/orders/view_order';
 import AdminDetail from 'src/sections/admins/admin-detail';
-import UserDetail from 'src/sections/user/view/user-detail';
+import UserDetail from 'src/sections/order/view/user-detail';
 import { OrderStatusView } from 'src/sections/orders_status';
 import { ActivitiesView } from 'src/sections/activities/view';
 import { SocialView } from 'src/sections/cms/view/social-view';
@@ -29,9 +33,6 @@ import { SettingsView } from 'src/sections/cms/view/settings-view';
 import UpdateService from 'src/sections/service/view/update-service';
 // import { TransactionView } from 'src/sections/transaction/view';
 import TransactionDetail from 'src/sections/transaction/view/transaction-detail';
-import { LocationsView } from 'src/sections/locations';
-import AddOrderView from 'src/sections/orders/add_order';
-import { ExpressView } from 'src/sections/express';
 // import UpdateProduct from 'src/sections/product/view/update_product';
 // import InterestDetail from 'src/sections/transaction/view/interest-detail';
 
@@ -113,9 +114,9 @@ export function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'orders', element: <Orders /> },
+        { path: 'orders/:id', element: <OrderDetail /> },
         { path: 'orders/create', element: <AddOrderView /> },
         { path: 'orders/status', element: <OrderStatusView /> },
-        { path: 'orders/:id', element: <ProductDetail /> },
         { path: 'users', element: <UserPage /> },
         { path: 'users/:id', element: <UserDetail /> },
         { path: 'transactions', element: <TransactionPage /> },

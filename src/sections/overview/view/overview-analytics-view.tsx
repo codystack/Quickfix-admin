@@ -8,18 +8,20 @@ import Typography from '@mui/material/Typography';
 
 import { DashboardContent } from 'src/layouts/dashboard';
 
+import { RecentOrders } from '../recent_orders';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
-import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
-  const {users} = useSelector((state: RootState) => state.user);
+  const { users } = useSelector((state: RootState) => state.user);
   const { transactions } = useSelector((state: RootState) => state.transaction);
-  const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector((state: RootState) => state.order);
-  console.log("FASTC ::: ", orders);
-  
+  const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector(
+    (state: RootState) => state.order
+  );
+  // console.log("FASTC ::: ", orders);
+
   return (
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
@@ -83,9 +85,9 @@ export function OverviewAnalyticsView() {
         </Grid>
 
         <Grid xs={12} md={6} lg={8}>
-          <AnalyticsWebsiteVisits
-            title="Recent Transactions"
-            subheader="Most recent transactions here"
+          <RecentOrders
+            title="Recent Orders"
+            subheader="Most recent orders here"
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
               series: [

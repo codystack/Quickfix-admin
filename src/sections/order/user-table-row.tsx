@@ -20,6 +20,7 @@ import { setLoading } from 'src/redux/reducers/loader';
 import { Iconify } from 'src/components/iconify';
 import CustomizedDialog from 'src/components/dialog';
 import { RenderConfirmation } from 'src/components/confirmation';
+import { fNumber } from 'src/utils/format-number';
 
 
 
@@ -195,48 +196,28 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
 
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.photoUrl} />
-            {`${row.first_name} ${row.last_name}`}
+            {`${row.user?.first_name} ${row.user?.last_name}`}
           </Box>
         </TableCell>
 
-        <TableCell>{row.email_address}</TableCell>
+        <TableCell>{row.service?.title}</TableCell>
 
-        <TableCell>{row.international_phone_format}</TableCell>
+        <TableCell>{row.order_id}</TableCell>
 
         <TableCell>
-          {row?.dob && new Date(row?.dob).toLocaleDateString('en-US')}
+          {`₦${fNumber(row?.amount)}`}
           {/* <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label> */}
         </TableCell>
 
-        <TableCell align="center">
-          {row.is_email_verified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            '-'
-          )}
+        <TableCell align="center" sx={{textTransform: 'capitalize'}}>
+          {row?.location?.region}
         </TableCell>
 
         <TableCell align="center">
-          {row.is_profile_set ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'warning.main' }} />
-          )}
+          {row?.items?.length}
         </TableCell>
 
-        <TableCell>
-          <Chip
-            label={row.status}
-            sx={{ color: row.status === 'active' ? 'green' : 'red', textTransform: 'capitalize' }}
-          />
-        </TableCell>
-
-        <TableCell align="right">
-          <IconButton onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
+       
       </TableRow>
 
       <Popover

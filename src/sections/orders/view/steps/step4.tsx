@@ -6,22 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Box, Avatar, Divider, Typography } from '@mui/material';
 
-import { fNumber } from 'src/utils/format-number';
-
-const categories = [
-  {
-    label: 'Car Wash',
-    value: 'car_wash',
-  },
-  {
-    label: 'Cleaning',
-    value: 'cleaning',
-  },
-  {
-    label: 'Laundry',
-    value: 'laundry',
-  },
-];
+import { fNumber } from 'src/utils/format-number'
 
 const ReviewStepForm = ({
   service,

@@ -3,9 +3,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
 
-// import { Download } from "@mui/icons-material";
-import { Chip, Avatar, Typography, Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+// import { Download } from "@mui/icons-material";
+import { Box, Chip, Avatar, Typography } from '@mui/material';
 
 import useOrderStatus from 'src/hooks/use-orders-status';
 
@@ -59,7 +59,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'Service',
       flex: 1,
       renderCell: (params: any) => (
-        <p
+        <Typography
           style={{
             textTransform: 'capitalize',
             fontSize: 14,
@@ -67,7 +67,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
             alignItems: 'center',
             height: '100%',
           }}
-        >{`${params?.row?.service?.title ?? ''}`}</p>
+        >{`${params?.row?.service?.title ?? ''}`}</Typography>
       ),
     },
     {
@@ -75,9 +75,15 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'Order Num',
       width: 110,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.order_id ?? ''}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.order_id ?? ''}`}</Typography>
       ),
     },
     {
@@ -85,7 +91,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'Amount',
       flex: 1,
       renderCell: (params: any) => (
-        <p
+        <Typography
           style={{
             textTransform: 'capitalize',
             fontSize: 14,
@@ -93,7 +99,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
             alignItems: 'center',
             height: '100%',
           }}
-        >{`₦${fNumber(params?.row?.amount)}`}</p>
+        >{`₦${fNumber(params?.row?.amount)}`}</Typography>
       ),
     },
     {
@@ -101,17 +107,7 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'Items',
       width: 70,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${fNumber(params?.row?.items?.length)}`}</p>
-      ),
-    },
-    {
-      field: 'location',
-      headerName: 'Location',
-      flex: 1,
-      renderCell: (params: any) => (
-        <p
+        <Typography
           style={{
             textTransform: 'capitalize',
             fontSize: 14,
@@ -119,7 +115,23 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
             alignItems: 'center',
             height: '100%',
           }}
-        >{`${params.row?.location?.region}, ${params.row?.location?.city}`}</p>
+        >{`${fNumber(params?.row?.items?.length)}`}</Typography>
+      ),
+    },
+    {
+      field: 'location',
+      headerName: 'Location',
+      flex: 1,
+      renderCell: (params: any) => (
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params.row?.location?.region}, ${params.row?.location?.city}`}</Typography>
       ),
     },
     {
@@ -141,25 +153,37 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'Trans Ref',
       flex: 1,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.transaction?.trans_ref ?? 'Manual Order'}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${params?.row?.transaction?.trans_ref ?? 'Manual Order'}`}</Typography>
       ),
     },
     {
       field: 'created_at',
       headerName: 'Created On',
-      width: 100,
+      width: 110,
       renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${new Date(params.row?.createdAt).toLocaleDateString('en-GB')}`}</p>
+        <Typography
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >{`${new Date(params.row?.createdAt).toLocaleDateString('en-GB')}`}</Typography>
       ),
     },
     {
       field: 'id',
       headerName: 'Action',
-      width: 80,
+      width: 90,
       renderCell: (params: any) => <ActionButton row={params?.row} />,
     },
   ];
