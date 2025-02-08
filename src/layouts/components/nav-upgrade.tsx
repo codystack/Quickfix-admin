@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import { textGradient } from 'src/theme/styles';
+// import { textGradient } from 'src/theme/styles';
 import { setLoading } from 'src/redux/reducers/loader';
 import { setAuth, setProfile } from 'src/redux/reducers/auth';
 
@@ -24,7 +24,7 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       sx={{ mb: 4, textAlign: 'center', ...sx }}
       {...other}
     >
-      <Typography
+      {/* <Typography
         variant="body1"
         sx={(theme) => ({
           ...textGradient(
@@ -34,7 +34,7 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
         gutterBottom
       >
         Version 1.0.1
-      </Typography>
+      </Typography> */}
       {/* <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
         {`From only `}
         <Box component="strong" sx={{ color: 'text.primary' }}>
@@ -51,6 +51,10 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
 
       <Button
         variant="contained"
+        sx={{
+          backgroundColor: "white",
+          color: "#06413d",
+        }}
         color="inherit"
         onClick={() => {
           dispatch(setLoading(true));
