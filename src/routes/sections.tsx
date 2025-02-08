@@ -9,6 +9,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 
 import CMS from 'src/pages/cms';
 import Orders from 'src/pages/orders';
+import Location from 'src/pages/location';
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
@@ -113,7 +114,11 @@ export function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'orders', element: <Orders /> },
+
         { path: 'orders/create', element: <AddOrderView /> },
+
+        { path: 'location', element: <Location /> },
+
         { path: 'orders/status', element: <OrderStatusView /> },
         { path: 'orders/:id', element: <ProductDetail /> },
         { path: 'users', element: <UserPage /> },

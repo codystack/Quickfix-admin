@@ -1,5 +1,5 @@
 import { SvgColor } from 'src/components/svg-color';
-
+import { GrLocation } from "react-icons/gr";
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
@@ -46,6 +46,11 @@ export const navData = [
     title: 'Content Management',
     path: '/dashboard/cms',
     icon: icon('ic-lock'),
+  },
+  {
+    title: 'Location Management',
+    path: '/dashboard/location',
+    icon: <GrLocation size={20}/>
   },
 
 ];

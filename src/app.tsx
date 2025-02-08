@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import 'src/global.css';
 import 'react-toastify/dist/ReactToastify.css';
 

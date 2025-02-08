@@ -12,12 +12,26 @@
 /** **************************************
 * Plugins
 *************************************** */
+
+/** **************************************
+* tailwindcss
+*************************************** */
+@import 'tailwindcss';
+
 /* scrollbar */
 @import './components/scrollbar/styles.css';
 
 /* chart */
 @import './components/chart/styles.css';
 
+
+:root {
+  --primary-color-1: #0f9e94;
+  --primary-color-2: #06413d;
+  --primary-color-3: #1c252e;
+  --primary-color-4: #0f9e94;
+  --primary-color-5: #7CE200;
+}
 /** **************************************
 * Baseline
 *************************************** */
@@ -26,6 +40,8 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 body,
+
+
 #root,
 #root__layout {
   display: flex;
