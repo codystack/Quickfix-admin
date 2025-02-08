@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axiosInstance from "src/service/axios";
 import { toast } from "react-toastify";

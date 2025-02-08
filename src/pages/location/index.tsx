@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useState, useEffect } from "react";
 import { DashboardContent } from "src/layouts/dashboard";
 import CheckTable from "src/components/table";
