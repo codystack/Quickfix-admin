@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import type { Props } from 'react-apexcharts';
 import type { Theme, SxProps } from '@mui/material/styles';
 

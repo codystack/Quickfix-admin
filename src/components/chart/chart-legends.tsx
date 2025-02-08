@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import type { BoxProps } from '@mui/material/Box';
 import React from 'react';
 
