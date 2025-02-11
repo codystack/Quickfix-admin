@@ -13,7 +13,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
 import { useTableMini, ReusableContentMini } from 'src/components/reuseable';
 
-import { applyFilter, getComparator } from '../order/utils';
+import { applyFilter, getComparator } from '../user/utils';
 
 // ----------------------------------------------------------------------
 

@@ -4,11 +4,11 @@ import { Box , Table, TableBody, TableContainer } from '@mui/material';
 
 import { _users } from 'src/_mock';
 
-import { emptyRows } from 'src/sections/order/utils';
-import { TableNoData } from 'src/sections/order/table-no-data';
-import { UserTableRow } from 'src/sections/order/user-table-row';
-import { UserTableHead } from 'src/sections/order/user-table-head';
-import { TableEmptyRows } from 'src/sections/order/table-empty-rows';
+import { emptyRows } from 'src/sections/user/utils';
+import { TableNoData } from 'src/sections/user/table-no-data';
+import { UserTableRow } from 'src/sections/user/user-table-row';
+import { UserTableHead } from 'src/sections/user/user-table-head';
+import { TableEmptyRows } from 'src/sections/user/table-empty-rows';
 
 import { Scrollbar } from './scrollbar';
 

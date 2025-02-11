@@ -4,7 +4,9 @@ import type { RootState } from 'src/redux/store';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Box , Grid ,
+import {
+  Box,
+  Grid,
   Avatar,
   Divider,
   InputLabel,
@@ -143,7 +145,7 @@ const ServiceStepForm = ({
               />
             }
           >
-            <option disabled>Select admin type</option>
+            <option>Select Location</option>
             {locationList?.map((elem: any) => (
               <option key={elem.id ?? elem?._id} value={elem.id ?? elem?._id}>
                 {`${elem?.region}, ${elem?.city}`}

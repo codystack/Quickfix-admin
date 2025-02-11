@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import type { RootState } from 'src/redux/store';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -61,6 +61,8 @@ const OrderStepForm = ({
   setDeliveryFee,
   setGrandTotal,
   grandTotal,
+  setExpressCharge,
+  expressCharge,
 }: any) => {
   const { expressList } = useSelector((state: RootState) => state.express);
   const { settings } = useSelector((state: RootState) => state.loader);
@@ -91,6 +93,11 @@ const OrderStepForm = ({
     (sum: number, item: { price: number; quantity: number }) => sum + item.price * item.quantity,
     0
   );
+
+  useEffect(() => {
+    setGrandTotal(parseFloat(`${totalAmount}`))
+  }, [totalAmount])
+  
 
   return (
     <Box p={3}>
@@ -206,13 +213,25 @@ const OrderStepForm = ({
                       const subTotal = parseFloat(`${totalAmount}`);
                       if (e.target.value.toLowerCase() === 'pickup') {
                         setDeliveryFee(settings[0]?.pickup_fee);
-                        setGrandTotal(parseFloat(settings[0]?.pickup_fee) + subTotal);
+                        setGrandTotal(
+                          parseFloat(settings[0]?.pickup_fee) +
+                            subTotal +
+                            parseFloat(`${expressCharge}`)
+                        );
                       } else if (e.target.value.toLowerCase() === 'pickup & delivery') {
                         setDeliveryFee(settings[0]?.pickup_n_delivery);
-                        setGrandTotal(parseFloat(settings[0]?.pickup_n_delivery) + subTotal);
+                        setGrandTotal(
+                          parseFloat(settings[0]?.pickup_n_delivery) +
+                            subTotal +
+                            parseFloat(`${expressCharge}`)
+                        );
                       } else if (e.target.value.toLowerCase() === 'delivery') {
                         setDeliveryFee(settings[0]?.delivery_fee);
-                        setGrandTotal(parseFloat(settings[0]?.delivery_fee) + subTotal);
+                        setGrandTotal(
+                          parseFloat(settings[0]?.delivery_fee) +
+                            subTotal +
+                            parseFloat(`${expressCharge}`)
+                        );
                       }
                     } else {
                       const subTotal = parseFloat(`${totalAmount}`);
@@ -223,7 +242,7 @@ const OrderStepForm = ({
                 />
               }
             >
-              <option disabled>Select delivery type</option>
+              <option>Select Delivery</option>
               {deliveries?.map((elem) => (
                 <option key={elem?.value} value={elem.value}>
                   {elem.label}
@@ -266,42 +285,42 @@ const OrderStepForm = ({
       <Box p={1} />
       {service?.category === 'laundry' && (
         <>
-          {`${deliveryType}`.toLowerCase().includes('delivery') && (
-            <>
-              <Typography py={1} fontSize={17} fontWeight={600}>
-                Express Delivery
-              </Typography>
-              <FormControl fullWidth variant="outlined">
-                <NativeSelect
-                  input={
-                    <OutlinedInput
-                      value={expressFee}
-                      onChange={(e) => {
-                        setExpressFee(e.target.value);
-                        console.log('SELECTED :: ', e.target.value);
-                        // Override delivery fee here
-                        // Compute fee here
-                        const subTotal = parseFloat(`${totalAmount}`);
-                        const percentage = parseInt(e.target.value, 10) / 100;
-                        const res = percentage * subTotal;
-                        const result = res + subTotal;
-                        setDeliveryFee(res);
-                        setGrandTotal(result);
-                      }}
-                    />
-                  }
-                >
-                  <option disabled>Select delivery type</option>
-                  {expressList?.map((elem: any, index: number) => (
-                    <option key={index} value={elem?.fee}>
-                      {elem?.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-              </FormControl>
-              <Box p={2} />
-            </>
-          )}
+          <Typography py={1} fontSize={17} fontWeight={600}>
+            Express Timeline
+          </Typography>
+          <FormControl fullWidth variant="outlined">
+            <NativeSelect
+              input={
+                <OutlinedInput
+                  value={expressFee}
+                  onChange={(e) => {
+                    console.log('SELECTED :: ', e.target.value);
+                    // Override delivery fee here
+                    const filtered = expressList.filter(
+                      (elem: any) => (elem?.id ?? elem?._id) === e.target.value
+                    );
+                    const item = filtered[0];
+                    setExpressFee(item);
+                    // Compute fee here
+                    const subTotal = parseFloat(`${totalAmount}`);
+                    const percentage = parseInt(item?.fee, 10) / 100;
+                    const res = percentage * subTotal;
+                    const result = res + subTotal;
+                    setExpressCharge(res);
+                    setGrandTotal(result + parseFloat(`${deliveryFee}`));
+                  }}
+                />
+              }
+            >
+              <option>Select Express (optional)</option>
+              {expressList?.map((elem: any, index: number) => (
+                <option key={index} value={elem?.id ?? elem?._id}>
+                  {elem?.name}
+                </option>
+              ))}
+            </NativeSelect>
+          </FormControl>
+          <Box p={2} />
         </>
       )}
       {(`${deliveryType}`.toLowerCase() === 'delivery' ||
@@ -312,6 +331,12 @@ const OrderStepForm = ({
             {`${deliveryType}`.toLowerCase() === 'pickup' ? 'Pickup Fee' : 'Delivery Fee'}
           </Typography>
           <Typography>{`₦${fNumber(deliveryFee)}`}</Typography>
+        </Box>
+      )}
+      {expressFee && (
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h6">Express Charge</Typography>
+          <Typography>{`₦${fNumber(expressCharge)}`}</Typography>
         </Box>
       )}
 

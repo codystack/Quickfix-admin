@@ -42,15 +42,16 @@ const AddOrderView = ({ setOpen }: any) => {
   const [category, setCategory] = React.useState('');
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const [selectedUser, setSelectedUser] = React.useState(null);
+  const [selectedUser, setSelectedUser] = React.useState<any>(null);
   const [deliveryType, setDeliveryType] = React.useState('delivery');
   const [selectedLocation, setSelectedLocation] = React.useState(null);
   const [deliveryAddress, setDeliveryAddress] = React.useState('');
   const [landmark, setLandmark] = React.useState('');
   const [grandTotal, setGrandTotal] = React.useState(0);
   const [deliveryFee, setDeliveryFee] = React.useState(0);
+  const [expressCharge, setExpressCharge] = React.useState(0);
   const [selectedService, setSelectedService] = React.useState<any>();
-  const [selectedExpress, setSelectedExpress] = React.useState(null);
+  const [selectedExpress, setSelectedExpress] = React.useState<any>(null);
   const [orderItems, setOrderItems] = React.useState<OrderItem[]>([]);
 
 
@@ -58,6 +59,8 @@ const AddOrderView = ({ setOpen }: any) => {
     try {
       dispatch(setLoading(true));
       let payload;
+      console.log("SELECTEDD USER ::: ", selectedUser);
+      
 
       // PICKUP = 'pickup',
       // DELIVERY = 'delivery',
@@ -71,6 +74,8 @@ const AddOrderView = ({ setOpen }: any) => {
           location: selectedLocation,
           delivery_type: 'shop_pickup',
           items: orderItems,
+          express: selectedExpress?.id ?? selectedExpress?._id,
+          userId: selectedUser?.id ?? selectedUser?._id
         };
       } else if (deliveryType === 'delivery') {
         payload = {
@@ -82,7 +87,8 @@ const AddOrderView = ({ setOpen }: any) => {
           address: deliveryAddress,
           landmark,
           items: orderItems,
-          express: selectedExpress,
+          express: selectedExpress?.id ?? selectedExpress?._id,
+          userId: selectedUser?.id ?? selectedUser?._id
         };
       }
       else if (deliveryType === 'pickup & delivery') {
@@ -95,7 +101,8 @@ const AddOrderView = ({ setOpen }: any) => {
           address: deliveryAddress,
           landmark,
           items: orderItems,
-          express: selectedExpress,
+          express: selectedExpress?.id ?? selectedExpress?._id,
+          userId: selectedUser?.id ?? selectedUser?._id,
         };
       }
       else if (deliveryType === 'pickup') {
@@ -108,7 +115,8 @@ const AddOrderView = ({ setOpen }: any) => {
           address: deliveryAddress,
           landmark,
           items: orderItems,
-          express: selectedExpress,
+          express: selectedExpress?.id ?? selectedExpress?._id,
+          userId: selectedUser?.id ?? selectedUser?._id
         };
       }
 
@@ -127,6 +135,7 @@ const AddOrderView = ({ setOpen }: any) => {
           render({ data }) {
             dispatch(setLoading(false));
             mutate('/orders/all')
+            navigate(-1)
             const res = data?.data?.message || 'New order placed successfully';
             return `${res}`;
           },
@@ -258,6 +267,8 @@ const AddOrderView = ({ setOpen }: any) => {
               grandTotal={grandTotal}
               deliveryFee={deliveryFee}
               setDeliveryFee={setDeliveryFee}
+              expressCharge={expressCharge}
+              setExpressCharge={setExpressCharge}
             />
           ) : (
             <ReviewStepForm
@@ -267,6 +278,8 @@ const AddOrderView = ({ setOpen }: any) => {
               grandTotal={grandTotal}
               deliveryFee={deliveryFee}
               deliveryType={deliveryType}
+              expressCharge={expressCharge}
+              expressFee={selectedExpress}
               category={selectedService?.category}
             />
           )}

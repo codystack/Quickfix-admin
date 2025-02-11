@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import { TransactionView } from 'src/sections/transaction/view';
+import { TransactionView } from 'src/sections/transaction';
 
 // ----------------------------------------------------------------------
 

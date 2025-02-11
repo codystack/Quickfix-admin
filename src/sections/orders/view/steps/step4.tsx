@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Box, Avatar, Divider, Typography } from '@mui/material';
 
-import { fNumber } from 'src/utils/format-number'
+import { fNumber } from 'src/utils/format-number';
 
 const ReviewStepForm = ({
   service,
@@ -16,6 +16,8 @@ const ReviewStepForm = ({
   deliveryFee,
   grandTotal,
   deliveryType,
+  expressCharge,
+  expressFee
 }: any) => {
   const { services } = useSelector((state: RootState) => state.service);
 
@@ -47,7 +49,7 @@ const ReviewStepForm = ({
       <Box p={1} />
       <Divider />
       <Box p={1} />
-      <Typography>Selected service</Typography>
+      <Typography>Selected Service</Typography>
       <Box
         p={2}
         mx={1}
@@ -96,6 +98,18 @@ const ReviewStepForm = ({
           </Typography>
           <Typography>{`₦${fNumber(deliveryFee)}`}</Typography>
         </Box>
+      )}
+      {expressCharge && (
+        <>
+          <Box display="flex" justifyContent="space-between">
+            <Typography>Express Timeline</Typography>
+            <Typography>{`${expressFee?.name}`}</Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography>Express Charge</Typography>
+            <Typography>{`₦${fNumber(expressCharge)}`}</Typography>
+          </Box>
+        </>
       )}
       <Box display="flex" justifyContent="space-between">
         <Typography>Grand Total</Typography>

@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-export const baseURL = 'https://quick-fix-api.vercel.app';
-// "http://192.168.119.247:5050" //
+export const baseURL = "http://192.168.2.112:5050" //
+// 'https://quick-fix-api.vercel.app';
+// 
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api/v1`,
