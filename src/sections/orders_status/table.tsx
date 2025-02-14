@@ -1,19 +1,14 @@
-/* eslint-disable react/no-unstable-nested-components */
-
-/* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
-
-// import { Download } from "@mui/icons-material";
-import { Chip, Avatar, Typography, Box } from '@mui/material';
+import { Chip, Avatar, Typography, Box, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import CloseIcon from '@mui/icons-material/Close';
 
 import useOrderStatus from 'src/hooks/use-orders-status';
-
 import { fNumber } from 'src/utils/format-number';
-
 import CustomNoRowsOverlay from 'src/components/custom_no_row';
 
 import ActionButton from './action';
+import OrderDetails from './OrderDetails';
 
 export default function OrderStatusTable({ data, orderStatus }: any) {
   const [paginationModel, setPaginationModel] = React.useState({
@@ -22,9 +17,12 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
   });
   const [loading, setLoading] = React.useState(false);
   const [filteredOrders, setFilteredOrders] = React.useState(data?.data ?? []);
+  const [selectedOrder, setSelectedOrder] = React.useState(null);
 
   const { data: ordersData } = useOrderStatus(paginationModel.page + 1, orderStatus);
   console.log('ORDERS HERE :::: ', data);
+
+  const handleClose = () => setSelectedOrder(null);
 
   const columns = [
     {
@@ -32,25 +30,14 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       headerName: 'User',
       flex: 1,
       renderCell: (params: any) => (
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="start"
-          alignItems="center"
-          sx={{
-            textTransform: 'capitalize',
-            fontSize: 14,
-            height: '100%',
-          }}
-        >
+        <Box display="flex" flexDirection="row" alignItems="center" sx={{ textTransform: 'capitalize', fontSize: 14, height: '100%' }}>
           <Avatar src={params?.row?.user?.photo_url} variant="circular">
-            {`${params?.row?.user?.first_name}`.substring(0, 1)}
-            {`${params?.row?.user?.last_name}`.substring(0, 1)}
+            {params?.row?.user?.first_name?.[0]}
+            {params?.row?.user?.last_name?.[0]}
           </Avatar>
-          <Typography
-            pl={0.5}
-            style={{ textTransform: 'capitalize', fontSize: 14 }}
-          >{`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}</Typography>
+          <Typography pl={0.5} style={{ textTransform: 'capitalize', fontSize: 14 }}>
+            {`${params?.row?.user?.first_name ?? ''} ${params?.row?.user?.last_name ?? ''}`}
+          </Typography>
         </Box>
       ),
     },
@@ -58,69 +45,31 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       field: 'name',
       headerName: 'Service',
       flex: 1,
-      renderCell: (params: any) => (
-        <p
-          style={{
-            textTransform: 'capitalize',
-            fontSize: 14,
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >{`${params?.row?.service?.title ?? ''}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{params?.row?.service?.title ?? ''}</p>,
     },
     {
       field: 'order_id',
       headerName: 'Order Num',
       width: 110,
-      renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.order_id ?? ''}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{params?.row?.order_id ?? ''}</p>,
     },
     {
       field: 'amount',
       headerName: 'Amount',
       flex: 1,
-      renderCell: (params: any) => (
-        <p
-          style={{
-            textTransform: 'capitalize',
-            fontSize: 14,
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >{`₦${fNumber(params?.row?.amount)}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{`₦${fNumber(params?.row?.amount)}`}</p>,
     },
     {
       field: 'items',
       headerName: 'Items',
       width: 70,
-      renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${fNumber(params?.row?.items?.length)}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{fNumber(params?.row?.items?.length)}</p>,
     },
     {
       field: 'location',
       headerName: 'Location',
       flex: 1,
-      renderCell: (params: any) => (
-        <p
-          style={{
-            textTransform: 'capitalize',
-            fontSize: 14,
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >{`${params.row?.location?.region}, ${params.row?.location?.city}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{`${params.row?.location?.region}, ${params.row?.location?.city}`}</p>,
     },
     {
       field: 'status',
@@ -140,27 +89,19 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
       field: 'tx_ref',
       headerName: 'Trans Ref',
       flex: 1,
-      renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${params?.row?.transaction?.trans_ref ?? 'Manual Order'}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{params?.row?.transaction?.trans_ref ?? 'Manual Order'}</p>,
     },
     {
       field: 'created_at',
       headerName: 'Created On',
       width: 100,
-      renderCell: (params: any) => (
-        <p
-          style={{ textTransform: 'capitalize', fontSize: 14 }}
-        >{`${new Date(params.row?.createdAt).toLocaleDateString('en-GB')}`}</p>
-      ),
+      renderCell: (params: any) => <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{new Date(params.row?.createdAt).toLocaleDateString('en-GB')}</p>,
     },
     {
       field: 'id',
       headerName: 'Action',
       width: 80,
-      renderCell: (params: any) => <ActionButton row={params?.row} />,
+      renderCell: (params: any) => <ActionButton row={params?.row} onView={() => setSelectedOrder(params?.row)} />,
     },
   ];
 
@@ -169,7 +110,6 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
 
     (async () => {
       setLoading(true);
-      // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
         console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
@@ -206,6 +146,19 @@ export default function OrderStatusTable({ data, orderStatus }: any) {
           }}
         />
       )}
+
+      {/* Dialog to show OrderDetails */}
+      <Dialog open={Boolean(selectedOrder)} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>
+          Order Details
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          {selectedOrder && <OrderDetails order={selectedOrder} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
