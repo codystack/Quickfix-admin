@@ -47,10 +47,10 @@ export const navData = [
     path: '/dashboard/cms',
     icon: icon('ic-lock'),
   },
-  {
-    title: 'Location Management',
-    path: '/dashboard/location',
-    icon: <GrLocation size={20}/>
-  },
+  // {
+  //   title: 'Location Management',
+  //   path: '/dashboard/location',
+  //   icon: <GrLocation size={20}/>
+  // },
 
 ];
