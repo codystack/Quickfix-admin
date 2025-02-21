@@ -121,8 +121,11 @@ const OrderStepForm = ({
             <Typography component="a">View Price List</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Box>
-              {service?.items?.map((elem: any, index: number) => (
+          <Box>
+            {service?.items
+              ?.slice() // Prevents mutation of the original array
+              .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+              .map((elem: any, index: number) => (
                 <Box
                   key={index}
                   display="flex"
@@ -130,14 +133,13 @@ const OrderStepForm = ({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Typography fontSize={13} key={index}>
-                    {elem?.name}
-                  </Typography>
+                  <Typography fontSize={13}>{elem?.name}</Typography>
                   <Box p={1} />
-                  <Typography fontSize={13} key={index}>{`₦${fNumber(elem?.price)}`}</Typography>
+                  <Typography fontSize={13}>{`₦${fNumber(elem?.price)}`}</Typography>
                 </Box>
               ))}
-            </Box>
+          </Box>
+
           </AccordionDetails>
         </Accordion>
       </Box>
@@ -146,31 +148,35 @@ const OrderStepForm = ({
       <Divider />
       <Box p={2} />
       <Box>
-        {service?.items?.map((elem: any, index: number) => (
-          <Box
-            p={1}
-            key={elem?.name}
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography fontSize={13}>{`${elem?.name} ₦${fNumber(elem?.price)} / unit`}</Typography>
-            <Box p={1} />
-            <Box display="flex" flexDirection="row" justifyContent="end" alignItems="center">
-              <Button variant="contained" size="small" onClick={() => handleDecrease(elem)}>
-                -
-              </Button>
-              <Typography px={1}>
-                {orderItems.find((item: any) => item.name === elem.name)?.quantity || 0}
-              </Typography>
-              <Button variant="contained" size="small" onClick={() => handleIncrease(elem)}>
-                +
-              </Button>
+        {service?.items
+          ?.slice() // Create a shallow copy to avoid mutating the original array
+          .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+          .map((elem: any, index: number) => (
+            <Box
+              p={1}
+              key={elem?.name}
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography fontSize={13}>{`${elem?.name} ₦${fNumber(elem?.price)} / unit`}</Typography>
+              <Box p={1} />
+              <Box display="flex" flexDirection="row" justifyContent="end" alignItems="center">
+                <Button variant="contained" size="small" onClick={() => handleDecrease(elem)}>
+                  -
+                </Button>
+                <Typography px={1}>
+                  {orderItems.find((item: any) => item.name === elem.name)?.quantity || 0}
+                </Typography>
+                <Button variant="contained" size="small" onClick={() => handleIncrease(elem)}>
+                  +
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
       </Box>
+
 
       {/* Render the cart summary */}
       <Box mt={3}>
