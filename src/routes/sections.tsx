@@ -118,7 +118,7 @@ export function Router() {
         { path: 'orders/create', element: <AddOrderView /> },
         { path: 'orders/:id', element: <OrderDetail /> },
 
-        { path: 'location', element: <Location /> },
+        // { path: 'location', element: <LocationsView /> },
 
         { path: 'orders/status', element: <OrderStatusView /> },
         { path: 'users', element: <UserPage /> },
