@@ -146,7 +146,7 @@ export default function CarWashTable() {
         <Chip
           label={params.row.status}
           sx={{
-            color: params.row.status === 'active' ? 'green' : 'red',
+            color: params.row.status === 'delivered' ? 'green' : 'red',
             textTransform: 'capitalize',
           }}
         />

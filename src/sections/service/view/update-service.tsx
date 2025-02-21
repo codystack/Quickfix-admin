@@ -360,25 +360,29 @@ const UpdateService = () => {
           <Typography sx={{ textDecoration: 'underline' }}>Items & Pricing</Typography>
         )}
         <Grid container spacing={1}>
-          {items?.map((elem: any, index: number) => (
-            <Grid item key={index} xs={12} sm={6}>
-              <Box display="flex" flexDirection="row" justifyContent="start" alignItems="center">
-                <Typography px={1}>{index + 1}.</Typography>
-                <Typography>{elem?.name}</Typography>
-                <Typography pl={4}>₦{fNumber(elem?.price)}</Typography>
-                <Box px={2} />
-                <IconButton
-                  onClick={() => {
-                    const filtered = items?.filter((el: any) => el !== elem);
-                    setItems(filtered);
-                  }}
-                >
-                  <Iconify icon="carbon:delete" />
-                </IconButton>
-              </Box>
-            </Grid>
-          ))}
+          {items
+            ?.slice() // Create a shallow copy to avoid mutating the original array
+            .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+            .map((elem: any, index: number) => (
+              <Grid item key={index} xs={12} sm={6}>
+                <Box display="flex" flexDirection="row" justifyContent="start" alignItems="center">
+                  <Typography px={1}>{index + 1}.</Typography>
+                  <Typography>{elem?.name}</Typography>
+                  <Typography pl={4}>₦{fNumber(elem?.price)}</Typography>
+                  <Box px={2} />
+                  <IconButton
+                    onClick={() => {
+                      const filtered = items?.filter((el: any) => el !== elem);
+                      setItems(filtered);
+                    }}
+                  >
+                    <Iconify icon="carbon:delete" />
+                  </IconButton>
+                </Box>
+              </Grid>
+            ))}
         </Grid>
+
         <Box p={0.5} />
         {items?.length > 0 && <Button onClick={() => setShowInputs2(true)}>Add More Items</Button>}
         <Box p={1} />
