@@ -6,6 +6,8 @@ import { Box, Avatar, Toolbar, IconButton, Grid, Typography, Divider } from '@mu
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
+import UserOrdersTable from 'src/sections/orders/view/user-order';
+import { fNumber } from 'src/utils/format-number';
 
 const UserDetail = () => {
   const locaton = useLocation();
@@ -109,6 +111,20 @@ const UserDetail = () => {
             <Typography variant="h6">{data?.id}</Typography>
           </Box>
         </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Box>
+            <Typography variant="body2">PREV WALLET BALANCE</Typography>
+            <Typography variant="h6">{`₦${fNumber(data?.wallet?.prev_balance)}`}</Typography>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Box>
+            <Typography variant="body2">WALLET BALANCE</Typography>
+            <Typography variant="h6">{`₦${fNumber(data?.wallet?.balance)}`}</Typography>
+          </Box>
+        </Grid>
       </Grid>
 
       <Divider sx={{ my: 2 }} />
@@ -123,19 +139,6 @@ const UserDetail = () => {
 
         <Grid item xs={12} sm={6} md={4}>
           <Box>
-            <Typography variant="body2">GENDER</Typography>
-            <Typography variant="h6" textTransform="capitalize">
-              {data?.gender}
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-
-      <Divider sx={{ my: 2 }} />
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
-          <Box>
             <Typography variant="body2">ACCOUNT VERIFIED</Typography>
             <Typography variant="h6">{data?.is_email_verified ? 'True' : 'False'}</Typography>
           </Box>
@@ -147,13 +150,6 @@ const UserDetail = () => {
             <Typography variant="h6" textTransform="capitalize">
               {data?.is_profile_set ? 'True' : 'False'}
             </Typography>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={4}>
-          <Box>
-            <Typography variant="body2">ADDRESS</Typography>
-            <Typography variant="h6">{data?.address ?? ''}</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -188,6 +184,10 @@ const UserDetail = () => {
           </Box>
         </Grid>
       </Grid>
+
+      <Box sx={{ my: 4 }} />
+      <Typography variant="h6" gutterBottom >USER ORDERS</Typography>
+      <UserOrdersTable userEmail={data?.email_address} />
     </DashboardContent>
   );
 };

@@ -102,12 +102,18 @@ const TransactionDetail = () => {
             </Typography>
           </Box>
         </Grid>
-
        
         <Grid item xs={12} sm={6} md={4}>
           <Box>
             <Typography variant="body2">TRANSACTION ID</Typography>
-            <Typography variant="h6">{data?._id}</Typography>
+            <Typography variant="h6">{data?._id ?? data?.id}</Typography>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Box>
+            <Typography variant="body2">TRANSACTION REFERENCE</Typography>
+            <Typography variant="h6">{data?.trans_ref}</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -117,22 +123,22 @@ const TransactionDetail = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={4}>
           <Box>
-            <Typography variant="body2">PRODUCT</Typography>
-            <Typography variant="h6">{data?.marketplace?.title}</Typography>
+            <Typography variant="body2">TRANSACTION TYPE</Typography>
+            <Typography variant="h6">{data?.type}</Typography>
           </Box>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
           <Box>
             <Typography variant="body2">AMOUNT</Typography>
-            <Typography variant="h6">{`₦${fNumber(data?.marketplace?.amount)}`}</Typography>
+            <Typography variant="h6">{`₦${fNumber(data?.amount)}`}</Typography>
           </Box>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
           <Box>
-            <Typography variant="body2">PREVIEW</Typography>
-            <img src={data?.marketplace?.images[0]} alt="capitalize" width={100} />
+            <Typography variant="body2">DESCRIPTION</Typography>
+            <Typography variant="h6">{data?.description}</Typography>
           </Box>
         </Grid>
       </Grid>

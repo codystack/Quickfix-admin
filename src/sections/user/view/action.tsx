@@ -18,6 +18,7 @@ import { setLoading } from 'src/redux/reducers/loader';
 import { Iconify } from 'src/components/iconify';
 import CustomizedDialog from 'src/components/dialog';
 import { RenderConfirmation } from 'src/components/confirmation';
+import { mutate } from 'swr';
 
 
 export type UserProps = {
@@ -125,12 +126,8 @@ const ActionButton = ({ row }: UserTableRowProps) => {
   };
 
   const deleteUser = () => {
-    const payload = {
-      ...row,
-      status: 'deleted',
-    };
-
-    const prom = APIService.updateUser(payload);
+    
+    const prom = APIService.deleteUser(row?.id ?? row?._id);
 
     toast.promise(prom, {
       pending: {
@@ -142,8 +139,9 @@ const ActionButton = ({ row }: UserTableRowProps) => {
       success: {
         render({ data }) {
           dispatch(setLoading(false));
-          // mutate('/admins/bookings/all')
-          const res = data?.data?.message || 'User account suspended successfully';
+          mutate('/users/all')
+          mutate('/users/list')
+          const res = data?.data?.message || 'User account deleted successfully';
           setOpen(false);
           return `${res}`;
         },

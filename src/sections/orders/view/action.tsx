@@ -40,6 +40,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
   const { profile } = useSelector((state: RootState) => state.auth);
   const [title, setTitle] = React.useState('');
+  const [openDelete, setOpenDelete] = React.useState(false);
   const [openWashed, setOpenWashed] = React.useState(false);
   const [openDeclined, setOpenDeclined] = React.useState(false);
   const [openIroned, setOpenIroned] = React.useState(false);
@@ -92,8 +93,55 @@ const ActionButton = ({ row }: UserTableRowProps) => {
     }
   };
 
+  const deleteOrder = async () => {
+    try {
+      const resp = APIService.deleteOrder(row?.id ?? row?._id);
+      toast.promise(resp, {
+        pending: {
+          render() {
+            return 'Loading. Please wait...';
+          },
+          icon: false,
+        },
+        success: {
+          render({ data }) {
+            dispatch(setLoading(false));
+            mutate('/orders/all');
+            const res = data?.data?.message || 'Order deleted successfully';
+            setOpenDelete(false);
+            return `${res}`;
+          },
+        },
+        error: {
+          render({ data }: any) {
+            dispatch(setLoading(false));
+            console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
+            const errorMsg = data?.response?.data?.message || data?.message || '';
+            // When the promise reject, data will contains the error
+            return `${errorMsg ?? 'An error occurred!'}`;
+          },
+        },
+      });
+    } catch (error) {
+      console.log('UPDDATE ORDER ERROR ::: ', error);
+    }
+  };
+
   return (
     <>
+      <CustomizedDialog
+        open={openDelete}
+        setOpen={setOpenDelete}
+        title={`Delete Order`}
+        body={
+          <RenderConfirmation
+            setOpen={setOpenDelete}
+            message={`Are you sure you want to delete this order ${row?.order_id}?`}
+            action={() => deleteOrder()}
+          />
+        }
+      />
+
       <CustomizedDialog
         open={openDeclined}
         setOpen={setOpenDeclined}
@@ -308,6 +356,15 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                     </MenuItem>
                   </>
                 )}
+                <MenuItem
+                  onClick={() => {
+                    handleClosePopover();
+                    setOpenDelete(true);
+                  }}
+                >
+                  <Iconify icon="weui:delete-on-outlined" />
+                  Delete
+                </MenuItem>
               </>
             )}
         </MenuList>
