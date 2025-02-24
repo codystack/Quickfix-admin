@@ -61,7 +61,7 @@ export default function AllUsersTable() {
       headerName: 'Email Address',
       flex: 1,
       renderCell: (params: any) => (
-        <p style={{ textTransform: 'capitalize', fontSize: 14 }}>{params?.row?.email_address}</p>
+        <p style={{ textTransform: 'none', fontSize: 14 }}>{params?.row?.email_address}</p>
       ),
     },
     {

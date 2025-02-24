@@ -6,10 +6,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconButton from '@mui/material/IconButton';
-import {
-    Popover,
-  MenuList,
-} from '@mui/material';
+import { Popover, MenuList } from '@mui/material';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import APIService from 'src/service/api.service';
@@ -20,21 +17,20 @@ import CustomizedDialog from 'src/components/dialog';
 import { RenderConfirmation } from 'src/components/confirmation';
 import { mutate } from 'swr';
 
-
 export type UserProps = {
-    id: string;
-    name: string;
-    role: string;
-    status: string;
-    company: string;
-    avatarUrl: string;
-    isVerified: boolean;
-  };
-  
-  type UserTableRowProps = {
-    row: any;
-    // onSelectRow: () => void;
-  };
+  id: string;
+  name: string;
+  role: string;
+  status: string;
+  company: string;
+  avatarUrl: string;
+  isVerified: boolean;
+};
+
+type UserTableRowProps = {
+  row: any;
+  // onSelectRow: () => void;
+};
 
 const ActionButton = ({ row }: UserTableRowProps) => {
   const dispatch = useDispatch();
@@ -126,7 +122,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
   };
 
   const deleteUser = () => {
-    
     const prom = APIService.deleteUser(row?.id ?? row?._id);
 
     toast.promise(prom, {
@@ -139,8 +134,8 @@ const ActionButton = ({ row }: UserTableRowProps) => {
       success: {
         render({ data }) {
           dispatch(setLoading(false));
-          mutate('/users/all')
-          mutate('/users/list')
+          mutate('/users/all');
+          mutate('/users/list');
           const res = data?.data?.message || 'User account deleted successfully';
           setOpen(false);
           return `${res}`;
@@ -160,7 +155,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
 
   return (
     <>
-    <CustomizedDialog
+      <CustomizedDialog
         open={open}
         setOpen={setOpen}
         title={title}
@@ -216,8 +211,9 @@ const ActionButton = ({ row }: UserTableRowProps) => {
           </MenuItem>
 
           {profile &&
-            profile?.access === 'read/write' &&
-            (profile?.role === 'manager' || profile?.role === 'developer') && row?.status === 'active' ? (
+          profile?.access === 'read/write' &&
+          (profile?.role === 'manager' || profile?.role === 'developer') &&
+          row?.status === 'active' ? (
             <MenuItem
               onClick={() => {
                 setTitle(`Suspend ${row?.first_name}`);
@@ -232,7 +228,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
               <Iconify icon="lsicon:suspend-filled" />
               Suspend
             </MenuItem>
-          ) : (
+          ) : row?.status === 'suspended' ? (
             <MenuItem
               onClick={() => {
                 setTitle(`Pardon ${row?.first_name}`);
@@ -247,26 +243,28 @@ const ActionButton = ({ row }: UserTableRowProps) => {
               <Iconify icon="mage:user-check-fill" />
               Pardon
             </MenuItem>
+          ) : (
+            <></>
           )}
 
           {profile &&
             profile?.access === 'read/write' &&
-            (profile?.role === 'manager' || profile?.role === 'developer') && row?.status !== 'deleted' && (
-            <MenuItem
-              onClick={() => {
-                setTitle(`Delete ${row?.first_name}'s Account`);
-                setMessage(
-                  `Are you sure you want to remove ${row?.first_name} ${row?.last_name} account from the platform? Action is irreversible.`
-                );
-                handleClosePopover();
-                setOpen(true);
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="fluent:person-delete-24-filled" />
-              Delete
-            </MenuItem>
-          )}
+            (profile?.role === 'manager' || profile?.role === 'developer') && (
+              <MenuItem
+                onClick={() => {
+                  setTitle(`Delete ${row?.first_name}'s Account`);
+                  setMessage(
+                    `Are you sure you want to remove ${row?.first_name} ${row?.last_name} account from the platform? Action is irreversible.`
+                  );
+                  handleClosePopover();
+                  setOpen(true);
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="fluent:person-delete-24-filled" />
+                Delete
+              </MenuItem>
+            )}
         </MenuList>
       </Popover>
     </>
