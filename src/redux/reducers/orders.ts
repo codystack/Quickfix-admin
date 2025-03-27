@@ -10,6 +10,7 @@ interface OrderI {
   packagedOrders: any;
   ironedOrders: any;
   damagedOrders: any;
+  completedOrders: any;
   deliveredOrders: any;
   laundryOrders: any;
   cleaningOrders: any;
@@ -28,6 +29,7 @@ const initVal: OrderI = {
   declinedOrders: null,
   deliveredOrders: null,
   packagedOrders: null,
+  completedOrders: null,
 };
 
 const orderSlice = createSlice({
@@ -67,6 +69,9 @@ const orderSlice = createSlice({
     setPackagedOrders(state, action: PayloadAction<any>) {
       state.packagedOrders = action.payload;
     },
+    setCompletedOrders(state, action: PayloadAction<any>) {
+      state.completedOrders = action.payload;
+    },
   },
 });
 
@@ -82,6 +87,7 @@ export const {
   setIronedOrders,
   setPackagedOrders,
   setWashedOrders,
+  setCompletedOrders,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

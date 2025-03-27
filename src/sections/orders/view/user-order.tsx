@@ -145,7 +145,14 @@ export default function UserOrdersTable({ userEmail }: any) {
         <Chip
           label={params.row.status}
           sx={{
-            color: params.row.status === 'active' ? 'green' : 'red',
+            color:
+              params.row.status === 'delivered' || params?.row?.status === 'completed'
+                ? 'green'
+                : params.row.status === 'pending' || params?.row?.status === 'washed'
+                  ? 'orange'
+                  : params.row.status === 'ironed' || params?.row?.status === 'packaged'
+                    ? 'blue'
+                    : 'red',
             textTransform: 'capitalize',
           }}
         />

@@ -47,6 +47,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
   const [openPackaged, setOpenPackaged] = React.useState(false);
   const [openDelivered, setOpenDelivered] = React.useState(false);
   const [openDamaged, setOpenDamaged] = React.useState(false);
+  const [openCompleted, setOpenCompleted] = React.useState(false);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -219,6 +220,20 @@ const ActionButton = ({ row }: UserTableRowProps) => {
           />
         }
       />
+
+      <CustomizedDialog
+        open={openCompleted}
+        setOpen={setOpenCompleted}
+        title={`Mark As '${title}'`}
+        body={
+          <RenderConfirmation
+            setOpen={setOpenCompleted}
+            message={`Are you sure you want to mark this order ${row?.order_id} as 'Completed'?`}
+            action={() => updateOrderStatus(setOpenCompleted, 'completed')}
+          />
+        }
+      />
+
       <IconButton onClick={handleOpenPopover}>
         <Iconify icon="eva:more-vertical-fill" />
       </IconButton>
@@ -351,6 +366,21 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                     >
                       <Iconify icon="ic:round-delivery-dining" />
                       Delivered
+                    </MenuItem>
+                  </>
+                )}
+
+                {row?.status === 'delivered' && (
+                  <>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenCompleted(true);
+                        setTitle('completed');
+                      }}
+                    >
+                      <Iconify icon="famicons:checkmark-done-circle-outline" />
+                      Completed
                     </MenuItem>
                   </>
                 )}

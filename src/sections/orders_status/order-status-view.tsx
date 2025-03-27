@@ -66,6 +66,7 @@ export function OrderStatusView() {
     packagedOrders,
     pendingOrders,
     washedOrders,
+    completedOrders,
   } = useSelector((state: RootState) => state.order);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -103,6 +104,7 @@ export function OrderStatusView() {
                 <StyledTab label="Packaged" />
                 <StyledTab label="Delivered" />
                 <StyledTab label="Damaged" />
+                <StyledTab label="Completed" />
               </StyledTabs>
               <Box sx={{ p: 0.5 }} />
             </Box>
@@ -128,6 +130,9 @@ export function OrderStatusView() {
             </TabPanel>
             <TabPanel value="6">
               <OrderStatusTable data={damagedOrders} orderStatus="damaged" />
+            </TabPanel>
+            <TabPanel value="7">
+              <OrderStatusTable data={completedOrders} orderStatus="completed" />
             </TabPanel>
           </Box>
         </TabContext>

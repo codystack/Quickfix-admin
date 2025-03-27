@@ -45,6 +45,7 @@ import {
   setPackagedOrders,
   setDeclinedOrders,
   setDeliveredOrders,
+  setCompletedOrders,
 } from 'src/redux/reducers/orders';
 
 // ----------------------------------------------------------------------
@@ -108,6 +109,7 @@ export function DashboardContent({
   const { data: deliveredOrdersData } = useOrderStatus(1, 'delivered');
   const { data: declinedOrdersData } = useOrderStatus(1, 'declined');
   const { data: damagedOrdersData } = useOrderStatus(1, 'damaged');
+  const { data: completedOrdersData } = useOrderStatus(1, 'completed');
 
   const { data: expressData } = useExpress();
   const { data: locationsData } = useLocations(1);
@@ -165,6 +167,10 @@ export function DashboardContent({
       dispatch(setDamagedOrders(damagedOrdersData));
     }
 
+    if (completedOrdersData) {
+      dispatch(setCompletedOrders(completedOrdersData))
+    }
+
     if (servicesData) {
       dispatch(setServices(servicesData));
     }
@@ -210,6 +216,7 @@ export function DashboardContent({
     damagedOrdersData,
     declinedOrdersData,
     deliveredOrdersData,
+    completedOrdersData,
     dispatch,
     ironedOrdersData,
     laundryOrdersData,

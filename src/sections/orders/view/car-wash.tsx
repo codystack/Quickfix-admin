@@ -28,7 +28,6 @@ export default function CarWashTable() {
 
   const { data: ordersData } = useOrderCategory(paginationModel.page + 1, 'car_wash');
   console.log('ORDERS HERE :::: ', carWashOrders);
-  
 
   const columns = [
     {
@@ -146,7 +145,14 @@ export default function CarWashTable() {
         <Chip
           label={params.row.status}
           sx={{
-            color: params.row.status === 'delivered' ? 'green' : 'red',
+            color:
+              params.row.status === 'delivered' || params?.row?.status === 'completed'
+                ? 'green'
+                : params.row.status === 'pending' || params?.row?.status === 'washed'
+                  ? 'orange'
+                  : params.row.status === 'ironed' || params?.row?.status === 'packaged'
+                    ? 'blue'
+                    : 'red',
             textTransform: 'capitalize',
           }}
         />
