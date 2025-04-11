@@ -11,10 +11,12 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { RecentOrders } from '../recent_orders';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
+import { AdminRoles, AdminType } from 'src/utils/enums';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
+  const { profile, wallet } = useSelector((state: RootState) => state.auth);
   const { users } = useSelector((state: RootState) => state.user);
   const { transactions } = useSelector((state: RootState) => state.transaction);
   const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector(
@@ -29,6 +31,21 @@ export function OverviewAnalyticsView() {
       </Typography>
 
       <Grid container spacing={3}>
+        {profile && profile?.role === AdminRoles.MANAGER && profile?.type === AdminType.SUPER_ADMIN && (
+          <Grid xs={12} sm={6} md={3}>
+            <AnalyticsWidgetSummary
+              title="Wallet Balance"
+              percent={-parseFloat(`${wallet?.prev_balance}`)}
+              total={parseFloat(`${wallet?.balance}`)}
+              color="secondary"
+              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />}
+              chart={{
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                series: [56, 47, 40, 62, 73, 30, 23, 54],
+              }}
+            />
+          </Grid>
+        )}
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Users"

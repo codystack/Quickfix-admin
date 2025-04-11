@@ -40,10 +40,9 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
   const [preview, setPreview] = useState<any>(banner.preview);
   const { isLoading } = useSelector((state: RootState) => state.loader);
   const validate = Yup.object().shape({
-    amount: Yup.number().required('Amount is required'),
     title: Yup.string().nullable(),
     type: Yup.string().required('Banner type is required'),
-    url: Yup.string().url('Enter a valid URL').required('Url is required'),
+    url: Yup.string().url('Enter a valid URL').nullable(),
   });
 
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -77,7 +76,6 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
 
   const formik = useFormik({
     initialValues: {
-      amount: banner?.amount ?? 0,
       title: banner?.title ?? '',
       type: banner?.type ?? '',
       url: banner?.url ?? '',
@@ -98,7 +96,7 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
             url: values.url,
             preview: resp?.data[0],
             type: values.type,
-            amount: values.amount,
+            amount: 0,
             status: banner?.status,
           };
 
@@ -137,7 +135,7 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
             preview: banner?.preview ?? '',
             type: values.type,
             status: banner?.status,
-            amount: values.amount,
+            amount: 0,
           };
 
           const response = APIService.updateBanner(payload, banner?._id);
@@ -186,6 +184,7 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
         variant="outlined"
         fullWidth
         type="text"
+        required
         placeholder="Banner title"
         label="Banner Title"
         {...getFieldProps('title')}
@@ -196,21 +195,9 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
       <TextField
         variant="outlined"
         fullWidth
-        type="number"
-        placeholder="Amount paid"
-        label="Amount"
-        {...getFieldProps('amount')}
-        error={Boolean(touched.amount && errors.amount)}
-        helperText={Boolean(touched.amount && errors.amount)}
-      />
-      <Box p={1} />
-      <TextField
-        variant="outlined"
-        fullWidth
         type="url"
         placeholder="Link to page/profile"
         label="URL Link"
-        required
         {...getFieldProps('url')}
         error={Boolean(touched.url && errors.url)}
         helperText={Boolean(touched.url && errors.url)}

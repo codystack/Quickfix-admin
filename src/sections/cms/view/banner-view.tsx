@@ -84,10 +84,9 @@ const AddBanner = ({ setOpen }: any) => {
   const [preview, setPreview] = useState<any>(null);
   const { isLoading } = useSelector((state: RootState) => state.loader);
   const validate = Yup.object().shape({
-    amount: Yup.number().required('Amount is required'),
     title: Yup.string().nullable(),
     type: Yup.string().required('Banner type is required'),
-    url: Yup.string().url('Enter a valid URL').required('Url is required'),
+    url: Yup.string().url('Enter a valid URL').nullable(),
   });
 
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -110,7 +109,6 @@ const AddBanner = ({ setOpen }: any) => {
 
   const formik = useFormik({
     initialValues: {
-      amount: 0,
       title: '',
       type: '',
       url: '',
@@ -135,7 +133,7 @@ const AddBanner = ({ setOpen }: any) => {
             url: values.url,
             preview: resp?.data,
             type: values.type,
-            amount: values.amount,
+            amount: 0,
           };
 
           const response = APIService.addBanner(payload);
@@ -184,6 +182,7 @@ const AddBanner = ({ setOpen }: any) => {
         variant="outlined"
         fullWidth
         type="text"
+        required
         placeholder="Banner title"
         label="Banner Title"
         {...getFieldProps('title')}
@@ -194,21 +193,9 @@ const AddBanner = ({ setOpen }: any) => {
       <TextField
         variant="outlined"
         fullWidth
-        type="number"
-        placeholder="Amount paid"
-        label="Amount"
-        {...getFieldProps('amount')}
-        error={Boolean(touched.amount && errors.amount)}
-        helperText={touched.amount && errors.amount}
-      />
-      <Box p={1} />
-      <TextField
-        variant="outlined"
-        fullWidth
         type="url"
         placeholder="Link to page/profile"
         label="URL Link"
-        required
         {...getFieldProps('url')}
         error={Boolean(touched.url && errors.url)}
         helperText={touched.url && errors.url}
@@ -223,7 +210,7 @@ const AddBanner = ({ setOpen }: any) => {
           id: 'ids',
         }}  
         input={<OutlinedInput label="Banner Type" {...getFieldProps('type')} />}>
-          <option disabled >Select banner type</option>
+          <option >Banner Type</option>
           {
             bannerTypes?.map((elem) => <option key={elem.value} value={elem.value} >  
               {elem.label}

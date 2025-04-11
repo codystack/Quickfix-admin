@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
-import useAdmins from 'src/hooks/use-admins';
+import useAdmins, { useAdminWallet } from 'src/hooks/use-admins';
 import useOrders from 'src/hooks/use-orders';
 import useProfile from 'src/hooks/use-profile';
 import useSocials from 'src/hooks/use-socials';
@@ -25,7 +25,7 @@ import useOrderCategory from 'src/hooks/use-orders-category';
 import useLocations, { useLocationsList } from 'src/hooks/use-locations';
 
 import { layoutClasses } from 'src/layouts/classes';
-import { setProfile } from 'src/redux/reducers/auth';
+import { setProfile, setWallet } from 'src/redux/reducers/auth';
 import { setSettings } from 'src/redux/reducers/loader';
 import { setServices } from 'src/redux/reducers/services';
 import { setExpressList } from 'src/redux/reducers/express';
@@ -90,6 +90,7 @@ export function DashboardContent({
   const { data: usersData } = useUsers(1);
   const { data: usersListData } = useUsersList();
   const { data: adminsData } = useAdmins(1);
+  const { data: adminWalletData } = useAdminWallet();
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
@@ -206,11 +207,16 @@ export function DashboardContent({
     if (expressData) {
       dispatch(setExpressList(expressData));
     }
+
+    if (adminWalletData) {
+      dispatch(setWallet(adminWalletData[0]))
+    }
   }, [
     activitiesData,
     expressData,
     adminsData,
     bannersData,
+    adminWalletData,
     carwashOrdersData,
     cleaningOrdersData,
     damagedOrdersData,

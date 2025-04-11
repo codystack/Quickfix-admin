@@ -70,9 +70,9 @@ export function BannerCardView() {
                 headLabel={[
                   { id: 'title', label: 'Title' },
                   { id: 'preview', label: 'Preview' },
-                  { id: 'amount', label: 'Amount' },
+                  // { id: 'amount', label: 'Amount' },
                   { id: 'type', label: 'Type' },
-                  { id: 'url', label: 'Route To' },
+                  // { id: 'url', label: 'Route To' },
                   { id: 'status', label: 'Status' },
                   { id: 'createdAt', label: 'Created On' },
                   { id: '' },
