@@ -29,7 +29,7 @@ import { setProfile, setWallet } from 'src/redux/reducers/auth';
 import { setSettings } from 'src/redux/reducers/loader';
 import { setServices } from 'src/redux/reducers/services';
 import { setExpressList } from 'src/redux/reducers/express';
-import { setTransactions } from 'src/redux/reducers/transactions';
+import { setRevenue, setTransactions } from 'src/redux/reducers/transactions';
 import { setBanners, setSocials } from 'src/redux/reducers/banners';
 import { setLocations, setLocationList } from 'src/redux/reducers/locations';
 import { setUsers, setAdmins, setUsersList, setActivities } from 'src/redux/reducers/users';
@@ -47,6 +47,7 @@ import {
   setDeliveredOrders,
   setCompletedOrders,
 } from 'src/redux/reducers/orders';
+import useRevenue from 'src/hooks/use-revenues';
 
 // ----------------------------------------------------------------------
 
@@ -91,6 +92,7 @@ export function DashboardContent({
   const { data: usersListData } = useUsersList();
   const { data: adminsData } = useAdmins(1);
   const { data: adminWalletData } = useAdminWallet();
+  const { data: revenueData } = useRevenue();
   const { data: profileData } = useProfile();
   const { data: bannersData } = useBanners();
   const { data: socialsData } = useSocials();
@@ -115,6 +117,9 @@ export function DashboardContent({
   const { data: expressData } = useExpress();
   const { data: locationsData } = useLocations(1);
   const { data: locationListData } = useLocationsList();
+
+  console.log("WALLET :: ", adminWalletData);
+  
 
   React.useEffect(() => {
     if (usersData) {
@@ -211,6 +216,11 @@ export function DashboardContent({
     if (adminWalletData) {
       dispatch(setWallet(adminWalletData[0]))
     }
+
+    if (revenueData) {
+
+      dispatch(setRevenue(revenueData));
+    }
   }, [
     activitiesData,
     expressData,
@@ -224,6 +234,7 @@ export function DashboardContent({
     deliveredOrdersData,
     completedOrdersData,
     dispatch,
+    revenueData,
     ironedOrdersData,
     laundryOrdersData,
     locationListData,

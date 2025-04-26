@@ -18,11 +18,11 @@ import { AdminRoles, AdminType } from 'src/utils/enums';
 export function OverviewAnalyticsView() {
   const { profile, wallet } = useSelector((state: RootState) => state.auth);
   const { users } = useSelector((state: RootState) => state.user);
-  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const { revenue } = useSelector((state: RootState) => state.transaction);
   const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector(
     (state: RootState) => state.order
   );
-  // console.log("FASTC ::: ", orders);
+  console.log("FASTC ::: ", revenue);
 
   return (
     <DashboardContent maxWidth="xl">
@@ -34,11 +34,11 @@ export function OverviewAnalyticsView() {
         {profile && profile?.role === AdminRoles.MANAGER && profile?.type === AdminType.SUPER_ADMIN && (
           <Grid xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="Wallet Balance"
-              percent={-parseFloat(`${wallet?.prev_balance}`)}
-              total={parseFloat(`${wallet?.balance}`)}
-              color="secondary"
-              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />}
+              title="Revenue Amount"
+              percent={-parseFloat(`${wallet?.prev_balance ?? 0.0}`)}
+              total={parseFloat(`${revenue?.charges ?? 0.0}`)}
+              color="error"
+              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
               chart={{
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                 series: [56, 47, 40, 62, 73, 30, 23, 54],
@@ -62,20 +62,6 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Transactions"
-            percent={2.8}
-            total={transactions?.totalItems}
-            color="warning"
-            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [40, 70, 50, 28, 70, 75, 7, 64],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary
             title="Orders"
             percent={2.6}
             total={orders?.totalItems}
@@ -92,8 +78,8 @@ export function OverviewAnalyticsView() {
             title="Pending Orders"
             percent={3.6}
             total={pendingOrders?.totalItems}
-            color="error"
-            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
+            color="warning"
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],

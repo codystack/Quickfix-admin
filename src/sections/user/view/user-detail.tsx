@@ -8,6 +8,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import UserOrdersTable from 'src/sections/orders/view/user-order';
 import { fNumber } from 'src/utils/format-number';
+import UserTransactionsTable from 'src/sections/transaction/user-transactions';
 
 const UserDetail = () => {
   const locaton = useLocation();
@@ -188,6 +189,9 @@ const UserDetail = () => {
       <Box sx={{ my: 4 }} />
       <Typography variant="h6" gutterBottom >USER ORDERS</Typography>
       <UserOrdersTable userEmail={data?.email_address} />
+      <Box sx={{ my: 4 }} />
+      <Typography variant="h6" gutterBottom >USER TRANSACTIONS</Typography>
+      <UserTransactionsTable userEmail={data?.email_address} />
     </DashboardContent>
   );
 };

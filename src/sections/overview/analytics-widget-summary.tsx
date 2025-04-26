@@ -21,6 +21,8 @@ import { Chart, useChart } from 'src/components/chart';
 type Props = CardProps & {
   title: string;
   total: number;
+  topup?: number;
+  charge?: number;
   percent: number;
   color?: ColorType;
   icon: React.ReactNode;
@@ -37,6 +39,8 @@ export function AnalyticsWidgetSummary({
   total,
   chart,
   percent,
+  topup, 
+  charge,
   color = 'primary',
   sx,
   ...other
@@ -73,12 +77,15 @@ export function AnalyticsWidgetSummary({
         position: 'absolute',
         alignItems: 'center',
       }}
-    >
-      <Iconify width={20} icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'} />
-      <Box component="span" sx={{ typography: 'subtitle2' }}>
-        {percent > 0 && '+'}
-        {fPercent(percent)}
-      </Box>
+    >{
+    <Box component="span" sx={{ typography: 'subtitle2' }}>
+
+      {/* {percent > 0 && '+'} */}
+      {/* {fPercent(percent)} */}
+    </Box>
+    }
+      {/* <Iconify width={20} icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'} /> */}
+     
     </Box>
   );
 
@@ -111,7 +118,8 @@ export function AnalyticsWidgetSummary({
       >
         <Box sx={{ flexGrow: 1, minWidth: 112 }}>
           <Box sx={{ mb: 1, typography: 'subtitle2' }}>{title}</Box>
-          <Box sx={{ typography: 'h4' }}>{fShortenNumber(total)}</Box>
+          {/*  */}
+          <Box sx={{ typography: 'h4' }}>{`${title.startsWith("Revenu") ? "₦"+fNumber(total) : fShortenNumber(total)}`}</Box>
         </Box>
 
         <Chart
