@@ -49,7 +49,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
   const [openDamaged, setOpenDamaged] = React.useState(false);
   const [openCompleted, setOpenCompleted] = React.useState(false);
 
-
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
   }, []);
@@ -297,11 +296,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                       <Iconify icon="solar:washing-machine-minimalistic-line-duotone" />
                       Washed
                     </MenuItem>
-                  </>
-                )}
-
-                {row?.status === 'washed' && (
-                  <>
                     <MenuItem
                       onClick={() => {
                         handleClosePopover();
@@ -309,7 +303,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                         setTitle('ironed');
                       }}
                     >
-                      <Iconify icon="lucide-lab--iron" />
+                      <Iconify icon="lucide-lab:iron" />
                       Ironed
                     </MenuItem>
                     <MenuItem
@@ -329,8 +323,83 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                         setTitle('damaged');
                       }}
                     >
-                      <Iconify icon="icon-park-outline--damage-map" />
+                      <Iconify icon="icon-park-outline:damage-map" />
                       Damaged
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenDelivered(true);
+                        setTitle('delivered');
+                      }}
+                    >
+                      <Iconify icon="ic:round-delivery-dining" />
+                      Delivered
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenCompleted(true);
+                        setTitle('completed');
+                      }}
+                    >
+                      <Iconify icon="famicons:checkmark-done-circle-outline" />
+                      Completed
+                    </MenuItem>
+                  </>
+                )}
+
+                {row?.status === 'washed' && (
+                  <>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenIroned(true);
+                        setTitle('ironed');
+                      }}
+                    >
+                      <Iconify icon="lucide-lab:iron" />
+                      Ironed
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenPackaged(true);
+                        setTitle('packaged');
+                      }}
+                    >
+                      <Iconify icon="oui:package" />
+                      Packaged
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenDamaged(true);
+                        setTitle('damaged');
+                      }}
+                    >
+                      <Iconify icon="icon-park-outline:damage-map" />
+                      Damaged
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenDelivered(true);
+                        setTitle('delivered');
+                      }}
+                    >
+                      <Iconify icon="ic:round-delivery-dining" />
+                      Delivered
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenCompleted(true);
+                        setTitle('completed');
+                      }}
+                    >
+                      <Iconify icon="famicons:checkmark-done-circle-outline" />
+                      Completed
                     </MenuItem>
                   </>
                 )}
@@ -369,6 +438,16 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                     >
                       <Iconify icon="ic:round-delivery-dining" />
                       Delivered
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClosePopover();
+                        setOpenCompleted(true);
+                        setTitle('completed');
+                      }}
+                    >
+                      <Iconify icon="famicons:checkmark-done-circle-outline" />
+                      Completed
                     </MenuItem>
                   </>
                 )}

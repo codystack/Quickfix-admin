@@ -155,11 +155,7 @@ export function BannerTableRow({ row, selected, onSelectRow }: BannerTableRowPro
           <img alt="" src={row?.preview} width={50} />
         </TableCell>
 
-        <TableCell>{`₦${fNumber(row?.amount) ?? 0}`}</TableCell>
-
         <TableCell>{row?.type}</TableCell>
-
-        <TableCell>{row?.url}</TableCell>
 
         <TableCell>{row?.status}</TableCell>
 
