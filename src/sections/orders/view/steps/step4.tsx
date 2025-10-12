@@ -17,7 +17,9 @@ const ReviewStepForm = ({
   grandTotal,
   deliveryType,
   expressCharge,
-  expressFee
+  expressFee,
+  discount,
+  onDiscountChange
 }: any) => {
   const { services } = useSelector((state: RootState) => state.service);
 
@@ -69,7 +71,28 @@ const ReviewStepForm = ({
       <Box p={1} />
       <Divider />
       <Box p={1} />
-      <Typography variant="h6">Order Summary</Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="h6">Order Summary</Typography>
+        <Box>
+          <select 
+            value={discount} 
+            onChange={(e) => onDiscountChange(Number(e.target.value))}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              backgroundColor: 'white',
+              cursor: 'pointer',
+              fontSize: '14px',
+              outline: 'none'
+            }}
+          >
+            <option value={0}>No Discount</option>
+            <option value={30}>Apply 30% Discount</option>
+            <option value={50}>Apply 50% Discount</option>
+          </select>
+        </Box>
+      </Box>
       {orderItems.map((item: any, index: number) => (
         <Box key={index} p={1} display="flex" justifyContent="space-between">
           <Typography>{item.name}</Typography>
@@ -111,9 +134,17 @@ const ReviewStepForm = ({
           </Box>
         </>
       )}
-      <Box display="flex" justifyContent="space-between">
+      {discount > 0 && (
+        <Box display="flex" justifyContent="space-between" color="error.main">
+          <Typography>Discount ({discount}%)</Typography>
+          <Typography>-₦{fNumber((grandTotal * discount) / 100)}</Typography>
+        </Box>
+      )}
+      <Box display="flex" justifyContent="space-between" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
         <Typography>Grand Total</Typography>
-        <Typography>{`₦${fNumber(grandTotal)}`}</Typography>
+        <Typography>
+          ₦{fNumber(discount > 0 ? grandTotal * (1 - discount / 100) : grandTotal)}
+        </Typography>
       </Box>
     </Box>
   );

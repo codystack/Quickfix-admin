@@ -48,6 +48,7 @@ const AddOrderView = ({ setOpen }: any) => {
   const [deliveryAddress, setDeliveryAddress] = React.useState('');
   const [landmark, setLandmark] = React.useState('');
   const [grandTotal, setGrandTotal] = React.useState(0);
+  const [discount, setDiscount] = React.useState(0);
   const [deliveryFee, setDeliveryFee] = React.useState(0);
   const [expressCharge, setExpressCharge] = React.useState(0);
   const [selectedService, setSelectedService] = React.useState<any>();
@@ -281,6 +282,8 @@ const AddOrderView = ({ setOpen }: any) => {
               expressCharge={expressCharge}
               expressFee={selectedExpress}
               category={selectedService?.category}
+              discount={discount}
+              onDiscountChange={setDiscount}
             />
           )}
         </Box>
