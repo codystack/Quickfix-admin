@@ -16,6 +16,8 @@ const OrderDetail = () => {
   const { data } = locaton.state;
 
   console.log('USER DATA JERE :::: ', data);
+  console.log('DISCOUNT VALUE :::: ', data?.discount);
+  console.log('ORIGINAL AMOUNT :::: ', data?.originalAmount);
 
   useEffect(() => {
     if (data) {
@@ -202,6 +204,16 @@ const OrderDetail = () => {
             } = ₦${fNumber(item.price * item.quantity)}`}</Typography>
           </Box>
         ))}
+        {(data?.discount > 0 || data?.originalAmount > data?.amount) && (
+          <Box p={1} display="flex" justifyContent="space-between">
+            <Typography sx={{ color: 'error.main', fontWeight: 'bold' }}>
+              Discount ({data?.discount || Math.round(((data?.originalAmount - data?.amount) / data?.originalAmount) * 100)}%)
+            </Typography>
+            <Typography sx={{ color: 'error.main', fontWeight: 'bold' }}>
+              -₦{fNumber(data?.originalAmount ? (data?.originalAmount - data?.amount) : (data?.discount ? data.amount * (data.discount / (100 - data.discount)) : 0))}
+            </Typography>
+          </Box>
+        )}
       </Box>
 
       <Divider sx={{ my: 4 }} />

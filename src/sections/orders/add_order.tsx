@@ -34,6 +34,7 @@ export type OrderItem = {
   name: string;
   price: number;
   quantity: number;
+  description?: string;  // Make description optional with ?
 };
 
 const AddOrderView = ({ setOpen }: any) => {
@@ -59,65 +60,62 @@ const AddOrderView = ({ setOpen }: any) => {
   const submitForm = async () => {
     try {
       dispatch(setLoading(true));
-      let payload;
       console.log("SELECTEDD USER ::: ", selectedUser);
       
+      // Calculate the final amount after applying discount
+      const finalAmount = discount > 0 ? grandTotal * (1 - discount / 100) : grandTotal;
+      
+      // Base payload that's common to all delivery types
+      const basePayload = {
+        amount: finalAmount,
+        originalAmount: grandTotal,
+        discount: discount,
+        service: selectedService?._id ?? selectedService?.id,
+        location: selectedLocation,
+        items: orderItems.map(({ name, price, quantity, description = '' }) => ({
+          name,
+          price,
+          quantity,
+          description,  // Will be empty string if undefined
+        })),
+        userId: selectedUser?.id ?? selectedUser?._id,
+        express: selectedExpress?.id ?? selectedExpress?._id,
+      };
 
-      // PICKUP = 'pickup',
-      // DELIVERY = 'delivery',
-      // PICKUP_DELIVERY = 'pickup_delivery',
-      // SHOP_PICKUP = 'shop_pickup',
-      // Now make a trip to create a new product here
+      let payload;
+
+      // Handle different delivery types
       if (deliveryType === 'shop_pickup') {
         payload = {
-          amount: grandTotal,
-          service: selectedService?._id ?? selectedService?.id,
-          location: selectedLocation,
+          ...basePayload,
           delivery_type: 'shop_pickup',
-          items: orderItems,
-          express: selectedExpress?.id ?? selectedExpress?._id,
-          userId: selectedUser?.id ?? selectedUser?._id
+          delivery_fee: 0,
+          address: '',
+          landmark: '',
         };
       } else if (deliveryType === 'delivery') {
         payload = {
-          amount: grandTotal,
-          service: selectedService?._id ?? selectedService?.id,
-          location: selectedLocation,
+          ...basePayload,
           delivery_type: 'delivery',
           delivery_fee: deliveryFee,
           address: deliveryAddress,
-          landmark,
-          items: orderItems,
-          express: selectedExpress?.id ?? selectedExpress?._id,
-          userId: selectedUser?.id ?? selectedUser?._id
+          landmark: landmark || '',
         };
-      }
-      else if (deliveryType === 'pickup & delivery') {
+      } else if (deliveryType === 'pickup & delivery') {
         payload = {
-          amount: grandTotal,
-          service: selectedService?._id ?? selectedService?.id,
-          location: selectedLocation,
+          ...basePayload,
           delivery_type: 'pickup_delivery',
           delivery_fee: deliveryFee,
           address: deliveryAddress,
-          landmark,
-          items: orderItems,
-          express: selectedExpress?.id ?? selectedExpress?._id,
-          userId: selectedUser?.id ?? selectedUser?._id,
+          landmark: landmark || '',
         };
-      }
-      else if (deliveryType === 'pickup') {
+      } else if (deliveryType === 'pickup') {
         payload = {
-          amount: grandTotal,
-          service: selectedService?._id ?? selectedService?.id,
-          location: selectedLocation,
+          ...basePayload,
           delivery_type: 'pickup',
-          delivery_fee: deliveryFee,
-          address: deliveryAddress,
-          landmark,
-          items: orderItems,
-          express: selectedExpress?.id ?? selectedExpress?._id,
-          userId: selectedUser?.id ?? selectedUser?._id
+          delivery_fee: 0,
+          address: deliveryAddress || '',
+          landmark: landmark || '',
         };
       }
 
