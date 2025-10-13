@@ -4,7 +4,7 @@ import type { RootState } from 'src/redux/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Box, Avatar, Divider, Typography } from '@mui/material';
+import { Box, Avatar, Divider, Typography, FormControl, NativeSelect, OutlinedInput } from '@mui/material';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -73,25 +73,17 @@ const ReviewStepForm = ({
       <Box p={1} />
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6">Order Summary</Typography>
-        <Box>
-          <select 
-            value={discount} 
+        <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+          <NativeSelect
+            value={discount}
             onChange={(e) => onDiscountChange(Number(e.target.value))}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-              backgroundColor: 'white',
-              cursor: 'pointer',
-              fontSize: '14px',
-              outline: 'none'
-            }}
+            input={<OutlinedInput />}
           >
             <option value={0}>No Discount</option>
             <option value={30}>Apply 30% Discount</option>
             <option value={50}>Apply 50% Discount</option>
-          </select>
-        </Box>
+          </NativeSelect>
+        </FormControl>
       </Box>
       {orderItems.map((item: any, index: number) => (
         <Box key={index} p={1} display="flex" justifyContent="space-between">

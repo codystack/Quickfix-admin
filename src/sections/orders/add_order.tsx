@@ -252,6 +252,7 @@ const AddOrderView = ({ setOpen }: any) => {
           ) : activeStep === 2 ? (
             <OrderStepForm
               service={selectedService}
+              location={selectedLocation}
               orderItems={orderItems}
               setOrderItems={setOrderItems}
               deliveryType={deliveryType}

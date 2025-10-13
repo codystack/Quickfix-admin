@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import type { RootState } from 'src/redux/store';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -25,6 +25,7 @@ import { fNumber } from 'src/utils/format-number';
 import { Iconify } from 'src/components/iconify';
 
 import type { OrderItem } from '../../add_order';
+import calabarPricing from 'src/data/calabar-pricing.json';
 
 const deliveries = [
   {
@@ -47,6 +48,7 @@ const deliveries = [
 
 const OrderStepForm = ({
   service,
+  location,
   orderItems,
   setOrderItems,
   deliveryType,
@@ -66,6 +68,33 @@ const OrderStepForm = ({
 }: any) => {
   const { expressList } = useSelector((state: RootState) => state.express);
   const { settings } = useSelector((state: RootState) => state.loader);
+  const { locationList } = useSelector((state: RootState) => state.location);
+
+  // Determine if the selected location is Calabar
+  const selectedLocationData = useMemo(() => {
+    return locationList?.find((loc: any) => (loc.id ?? loc._id) === location);
+  }, [location, locationList]);
+
+  const isCalabar = useMemo(() => {
+    // Check if location is "Cross River, Calabar South"
+    const region = selectedLocationData?.region?.toLowerCase() || '';
+    const city = selectedLocationData?.city?.toLowerCase() || '';
+    
+    return (region.includes('cross river') && city.includes('calabar')) ||
+           city.includes('calabar south');
+  }, [selectedLocationData]);
+
+  // Get items to display - Calabar pricing or service items
+  const itemsToDisplay = useMemo(() => {
+    if (isCalabar) {
+      // Convert Calabar pricing JSON to the same format as service items
+      return calabarPricing.map((item: any) => ({
+        name: item.Item,
+        price: item['Price (₦)']
+      }));
+    }
+    return service?.items || [];
+  }, [isCalabar, service]);
 
   // Handle increasing the quantity
   const handleIncrease = (item: OrderItem) => {
@@ -107,7 +136,23 @@ const OrderStepForm = ({
           <Avatar variant="rounded" src={service?.icon_url} />
           <Box p={1} />
           <Box display="flex" flexDirection="column" justifyContent="start" alignItems="start">
-            <Typography>{service?.title}</Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography>{service?.title}</Typography>
+              {isCalabar && (
+                <Typography 
+                  fontSize={10} 
+                  sx={{ 
+                    bgcolor: 'success.main', 
+                    color: 'white', 
+                    px: 1, 
+                    py: 0.5, 
+                    borderRadius: 1 
+                  }}
+                >
+                  Calabar Pricing
+                </Typography>
+              )}
+            </Box>
             <Typography fontSize={12}>{service?.description}</Typography>
           </Box>
         </Box>
@@ -122,7 +167,7 @@ const OrderStepForm = ({
           </AccordionSummary>
           <AccordionDetails>
           <Box>
-            {service?.items
+            {itemsToDisplay
               ?.slice() // Prevents mutation of the original array
               .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
               .map((elem: any, index: number) => (
@@ -148,7 +193,7 @@ const OrderStepForm = ({
       <Divider />
       <Box p={2} />
       <Box>
-        {service?.items
+        {itemsToDisplay
           ?.slice() // Create a shallow copy to avoid mutating the original array
           .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
           .map((elem: any, index: number) => (
@@ -232,9 +277,11 @@ const OrderStepForm = ({
                             parseFloat(`${expressCharge}`)
                         );
                       } else if (e.target.value.toLowerCase() === 'delivery') {
-                        setDeliveryFee(settings[0]?.delivery_fee);
+                        // Set default delivery fee to 1000
+                        const defaultDeliveryFee = 1000;
+                        setDeliveryFee(defaultDeliveryFee);
                         setGrandTotal(
-                          parseFloat(settings[0]?.delivery_fee) +
+                          defaultDeliveryFee +
                             subTotal +
                             parseFloat(`${expressCharge}`)
                         );
@@ -329,8 +376,29 @@ const OrderStepForm = ({
           <Box p={2} />
         </>
       )}
-      {(`${deliveryType}`.toLowerCase() === 'delivery' ||
-        `${deliveryType}`.toLowerCase() === 'pickup & delivery' ||
+      {`${deliveryType}`.toLowerCase() === 'delivery' && (
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="h6">Delivery Fee</Typography>
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+            <NativeSelect
+              value={deliveryFee}
+              onChange={(e) => {
+                const newDeliveryFee = parseFloat(e.target.value);
+                setDeliveryFee(newDeliveryFee);
+                // Recalculate grand total
+                const subTotal = parseFloat(`${totalAmount}`);
+                const expressAmount = parseFloat(`${expressCharge}`) || 0;
+                setGrandTotal(subTotal + expressAmount + newDeliveryFee);
+              }}
+              input={<OutlinedInput />}
+            >
+              <option value={1000}>₦1,000</option>
+              <option value={2000}>₦2,000</option>
+            </NativeSelect>
+          </FormControl>
+        </Box>
+      )}
+      {(`${deliveryType}`.toLowerCase() === 'pickup & delivery' ||
         `${deliveryType}`.toLowerCase() === 'pickup') && (
         <Box display="flex" justifyContent="space-between">
           <Typography variant="h6">
