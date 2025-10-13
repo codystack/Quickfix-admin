@@ -27,7 +27,6 @@ export default function CarWashTable() {
   const [filteredOrders, setFilteredOrders] = React.useState(carWashOrders?.data ?? []);
 
   const { data: ordersData } = useOrderCategory(paginationModel.page + 1, 'car_wash');
-  console.log('ORDERS HERE :::: ', carWashOrders);
 
   const columns = [
     {
@@ -205,7 +204,6 @@ export default function CarWashTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
       }
 

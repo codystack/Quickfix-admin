@@ -24,14 +24,11 @@ const TransactionDetail = () => {
 
   const { data } = locaton.state;
 
-  console.log('TRANSACTION DATA JERE :::: ', data);
 
   useEffect(() => {
     if (data) {
       const initFN = data?.user?.first_name?.slice(0, 1);
       const initLN = data?.user?.last_name?.slice(0, 1);
-      console.log('INFI FNAME :: ', initFN);
-      console.log('INFI FNAME :: ', initLN);
       setInitials(`${initFN}${initLN ?? ''}`);
     }
   }, [data]);

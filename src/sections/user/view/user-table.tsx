@@ -103,7 +103,6 @@ export default function AllUsersTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (usersData) {
-        console.log('SECOND PAGE DATA', usersData);
         setFilteredUsers(usersData?.data);
       }
 

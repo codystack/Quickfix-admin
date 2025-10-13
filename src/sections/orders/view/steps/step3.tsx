@@ -254,7 +254,6 @@ const OrderStepForm = ({
                   value={deliveryType}
                   onChange={(e) => {
                     setDeliveryType(e.target.value);
-                    console.log('SELECTED :: ', e.target.value);
                     if (
                       e.target.value === 'pickup' ||
                       e.target.value === 'delivery' ||
@@ -347,7 +346,6 @@ const OrderStepForm = ({
                 <OutlinedInput
                   value={expressFee}
                   onChange={(e) => {
-                    console.log('SELECTED :: ', e.target.value);
                     // Override delivery fee here
                     const filtered = expressList.filter(
                       (elem: any) => (elem?.id ?? elem?._id) === e.target.value

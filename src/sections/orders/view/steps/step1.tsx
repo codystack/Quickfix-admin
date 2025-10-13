@@ -43,11 +43,9 @@ const UserStepForm = ({ setUser, user }: any) => {
             fullWidth
             onChange={(event: any, newValue: any | null) => {
               // setValue(newValue);
-              console.log('AUTO ONCHANGE :: ', newValue);
               setUser(newValue);
             }}
             onInputChange={(event, newInputValue) => {
-              console.log('AUTO ONINPUTCHANGE :: ', newInputValue);
               // setInputValue(newInputValue);
             }}
             getOptionLabel={(option: any) => `${option?.first_name} ${option?.last_name}`}

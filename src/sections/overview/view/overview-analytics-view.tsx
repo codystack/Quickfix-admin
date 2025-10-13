@@ -22,7 +22,6 @@ export function OverviewAnalyticsView() {
   const { orders, carWashOrders, cleaningOrders, laundryOrders, pendingOrders } = useSelector(
     (state: RootState) => state.order
   );
-  console.log("FASTC ::: ", revenue);
 
   return (
     <DashboardContent maxWidth="xl">

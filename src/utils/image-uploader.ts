@@ -6,7 +6,6 @@
 //         alert("Image uploaded Succesfully");
 //       })
 //       .then(() => setLoading(false))
-//       .catch(console.log);
 //   }
 
 //   function uploadMultipleImages(images) {
@@ -18,5 +17,4 @@
 //         alert("Image uploaded Succesfully");
 //       })
 //       .then(() => setLoading(false))
-//       .catch(console.log);
 //   }

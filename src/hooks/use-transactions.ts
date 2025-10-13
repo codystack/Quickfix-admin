@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useTransactions(page: number) {
   const { data, mutate, error } = useSWR(`/transactions/all?page=${page}`);
 
-  console.log('TRANSACTIONS ::-::', data);
   const loading = !data && !error;
   const loggedOut =
     (error && error?.message === 'No token provided.') ||

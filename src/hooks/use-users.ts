@@ -22,7 +22,6 @@ export default function useUsers(page: number) {
 export function useUsersList() {
   const { data, mutate, error } = useSWR(`/users/list`);
 
-  console.log('USERS LISTS OF ALL USERS::: ', data);
 
   const loading = !data && !error;
   const loggedOut =

@@ -82,7 +82,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
         error: {
           render({ data }: any) {
             dispatch(setLoading(false));
-            console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
             const errorMsg = data?.response?.data?.message || data?.message || '';
             // When the promise reject, data will contains the error
             return `${errorMsg ?? 'An error occurred!'}`;
@@ -90,7 +89,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
         },
       });
     } catch (error) {
-      console.log('UPDDATE ORDER ERROR ::: ', error);
     }
   };
 
@@ -116,7 +114,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
         error: {
           render({ data }: any) {
             dispatch(setLoading(false));
-            console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
             const errorMsg = data?.response?.data?.message || data?.message || '';
             // When the promise reject, data will contains the error
             return `${errorMsg ?? 'An error occurred!'}`;
@@ -124,7 +121,6 @@ const ActionButton = ({ row }: UserTableRowProps) => {
         },
       });
     } catch (error) {
-      console.log('UPDDATE ORDER ERROR ::: ', error);
     }
   };
 

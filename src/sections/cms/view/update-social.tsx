@@ -27,7 +27,6 @@ const UpdateSocial = ({ setOpen, social }: any) => {
     url: Yup.string().url('Enter a valid URL').required('Url is required'),
   });
 
-  // console.log('SOCIALITY ::: ', social);
 
   const handleFileChange = (event: any) => {
     const selectedFile = event.target.files[0];
@@ -46,7 +45,6 @@ const UpdateSocial = ({ setOpen, social }: any) => {
       return response;
     } catch (error) {
       dispatch(setLoading(false));
-      console.log(error);
     }
   }
 
@@ -92,7 +90,6 @@ const UpdateSocial = ({ setOpen, social }: any) => {
           error: {
             render({ data }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
               const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -136,7 +133,6 @@ const UpdateSocial = ({ setOpen, social }: any) => {
       }
       //   } catch (error) {
       //     dispatch(setLoading(false));
-      //     console.log('SOCIAL ERR :: ', error);
       //   }
     },
   });

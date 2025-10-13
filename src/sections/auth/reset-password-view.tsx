@@ -58,7 +58,6 @@ export function ResetPasswordView() {
         };
 
         const respo = APIService.resetPassword(payload);
-        console.log('RESPONSE ON RESET PASSWORD :: ', respo);
 
         toast.promise(respo, {
           pending: {
@@ -69,7 +68,6 @@ export function ResetPasswordView() {
           },
           success: {
             render({ data }) {
-              console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
               const resp = data?.data?.message || 'Password updated successfully';
               router.push('/');
@@ -79,7 +77,6 @@ export function ResetPasswordView() {
           error: {
             render({ data }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
               const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -87,7 +84,6 @@ export function ResetPasswordView() {
           },
         });
       } catch (error) {
-        console.log('ERROR :: ', error);
         dispatch(setLoading(false));
       }
     },

@@ -61,7 +61,6 @@ export function SignInView() {
         };
 
         const respo = APIService.login(payload);
-        console.log('RESPONSE ON LOGIN :: ', respo);
 
         toast.promise(respo, {
           pending: {
@@ -72,7 +71,6 @@ export function SignInView() {
           },
           success: {
             render({ data }) {
-              console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
               localStorage.setItem('accessToken', data?.data?.accessToken);
               dispatch(setAuth(true));
@@ -85,7 +83,6 @@ export function SignInView() {
           error: {
             render({ data }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
               const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -93,7 +90,6 @@ export function SignInView() {
           },
         });
       } catch (error) {
-        console.log('ERROR :: ', error);
         dispatch(setLoading(false));
       }
     },

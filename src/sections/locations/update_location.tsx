@@ -71,7 +71,6 @@ const UpdateLocation = ({ setOpen, data }: any) => {
           error: {
             render({ resp }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', resp?.response?.data?.message);
               const errorMsg = resp?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -80,7 +79,6 @@ const UpdateLocation = ({ setOpen, data }: any) => {
         });
       } catch (error) {
         dispatch(setLoading(false));
-        console.log('SOCIAL ERR :: ', error);
       }
     },
   });

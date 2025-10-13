@@ -49,14 +49,12 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
 
   const handleFileChange = (event: any) => {
     const selectedFile: any = event.target.files[0];
-    console.log('FILE INFO  ::: ', selectedFile);
 
     if (selectedFile) {
       try {
         setFile(selectedFile);
         setPreview(URL.createObjectURL(selectedFile));
       } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -70,7 +68,6 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
       return response;
     } catch (error) {
       dispatch(setLoading(false));
-      console.log(error);
     }
   }
 
@@ -120,7 +117,6 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
             error: {
               render({ data }: any) {
                 dispatch(setLoading(false));
-                console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
                 const errorMsg = data?.response?.data?.message || data?.message || '';
                 // When the promise reject, data will contains the error
                 return `${errorMsg ?? 'An error occurred!'}`;
@@ -158,7 +154,6 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
             error: {
               render({ data }: any) {
                 dispatch(setLoading(false));
-                console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
                 const errorMsg = data?.response?.data?.message || data?.message || '';
                 // When the promise reject, data will contains the error
                 return `${errorMsg ?? 'An error occurred!'}`;
@@ -168,7 +163,6 @@ const UpdateBanner = ({ banner, setOpen }: any) => {
         }
       } catch (error) {
         dispatch(setLoading(false));
-        console.log('SOCIAL ERR :: ', error);
       }
     },
   });

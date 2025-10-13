@@ -18,7 +18,6 @@ export function Pending() {
 
   const { data: cleaningOrdersData } = useOrderCategory(1, 'cleaning');
 
-  console.log('STATE PENDING ORDERS HERE ::: ', cleaningOrdersData);
 
   return (
     <Box>

@@ -24,7 +24,6 @@ export default function CleaningTable({ cleaningOrders }: any) {
   const [filteredOrders, setFilteredOrders] = React.useState(cleaningOrders?.data ?? []);
 
   const { data: ordersData } = useOrderCategory(paginationModel.page + 1, 'cleaning');
-  console.log('ORDERS HERE :::: ', cleaningOrders);
 
   const columns = [
     {
@@ -202,7 +201,6 @@ export default function CleaningTable({ cleaningOrders }: any) {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
       }
 

@@ -30,7 +30,6 @@ export function BannerCardView() {
   const [filterName, setFilterName] = useState('');
   const { banners } = useSelector((state: RootState) => state.banner)
 
-  console.log('BANNERS ::: ', banners);
   
 
   const dataFiltered: any[] = applyFilter({

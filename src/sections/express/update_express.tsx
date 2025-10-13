@@ -66,7 +66,6 @@ const UpdateExpress = ({ setOpen, data }: any) => {
         });
       } catch (error) {
         dispatch(setLoading(false));
-        console.log('SOCIAL ERR :: ', error);
       }
     },
   });

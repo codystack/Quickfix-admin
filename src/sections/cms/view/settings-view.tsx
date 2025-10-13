@@ -50,14 +50,12 @@ export function SettingsView({ data }: any) {
 
   const handleFileChange = (event: any) => {
     const selectedFile: any = event.target.files[0];
-    console.log('FILE INFO  ::: ', selectedFile);
 
     if (selectedFile) {
       try {
         setFile(selectedFile);
         setPreview(URL.createObjectURL(selectedFile));
       } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -71,7 +69,6 @@ export function SettingsView({ data }: any) {
       return response;
     } catch (error) {
       dispatch(setLoading(false));
-      console.log(error);
     }
   }
 
@@ -105,7 +102,6 @@ export function SettingsView({ data }: any) {
           pickup_fee:values.pickup_fee,
         };
 
-        console.log("REQUEST PAYLOAD :: ", payload);
         
 
         const response = APIService.manageContact(payload);

@@ -27,7 +27,6 @@ export default function UserOrdersTable({ userEmail }: any) {
   const [filteredOrders, setFilteredOrders] = React.useState([]);
 
   const { data: ordersData } = useUserOrder(paginationModel.page + 1, userEmail);
-  // console.log('ORDERS HERE :::: ', carWashOrders);
 
   const columns = [
     {
@@ -205,7 +204,6 @@ export default function UserOrdersTable({ userEmail }: any) {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
       }
 

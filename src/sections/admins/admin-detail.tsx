@@ -22,14 +22,11 @@ const AdminDetail = () => {
 
   const { data } = locaton.state;
 
-  console.log('USER DATA JERE :::: ', data);
 
   useEffect(() => {
     if (data) {
       const initFN = data?.first_name?.slice(0, 1);
       const initLN = data?.last_name?.slice(0, 1);
-      console.log('INFI FNAME :: ', initFN);
-      console.log('INFI FNAME :: ', initLN);
       setInitials(`${initFN}${initLN ?? ''}`);
     }
   }, [data]);

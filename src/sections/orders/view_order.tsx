@@ -15,16 +15,10 @@ const OrderDetail = () => {
 
   const { data } = locaton.state;
 
-  console.log('USER DATA JERE :::: ', data);
-  console.log('DISCOUNT VALUE :::: ', data?.discount);
-  console.log('ORIGINAL AMOUNT :::: ', data?.originalAmount);
-
   useEffect(() => {
     if (data) {
       const initFN = data?.user?.first_name?.slice(0, 1);
       const initLN = data?.user?.last_name?.slice(0, 1);
-      console.log('INFI FNAME :: ', initFN);
-      console.log('INFI FNAME :: ', initLN);
       setInitials(`${initFN}${initLN ?? ''}`);
     }
   }, [data]);

@@ -28,7 +28,6 @@ export default function ActivitiesTable() {
   const [filteredActivities, setFilteredActivities] = React.useState(activities?.data ?? []);
 
   const { data: activitiesData } = useActivities(paginationModel.page + 1);
-  console.log("ACTIVITIES HERE :::: ", activities);
   
 
   const columns = [
@@ -93,7 +92,6 @@ export default function ActivitiesTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (activitiesData) {
-        console.log('SECOND PAGE DATA', activitiesData);
         setFilteredActivities(activitiesData?.data);
       }
 

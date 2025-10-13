@@ -41,7 +41,6 @@ export function ForgotPasswordView() {
         };
 
         const respo = APIService.forgotPassword(payload);
-        // console.log("RESPONSE ON Forgot Password :: ", respo);
 
         toast.promise(respo, {
           pending: {
@@ -52,7 +51,6 @@ export function ForgotPasswordView() {
           },
           success: {
             render({ data }) {
-              console.log('SUCCESS :: ', data);
               dispatch(setLoading(false));
               const resp =
                 data?.data?.message || `OTP code successfully sent to ${values.email_address}`;
@@ -63,7 +61,6 @@ export function ForgotPasswordView() {
           error: {
             render({ data }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
               const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -71,7 +68,6 @@ export function ForgotPasswordView() {
           },
         });
       } catch (error) {
-        console.log('ERROR :: ', error);
         dispatch(setLoading(false));
       }
     },

@@ -6,7 +6,6 @@ import { CONFIG } from 'src/config-global';
 import { CMSView } from 'src/sections/cms/view';
 
 const CMS = () => {
-    console.log("hi");
     return (
       <>
         <Helmet>

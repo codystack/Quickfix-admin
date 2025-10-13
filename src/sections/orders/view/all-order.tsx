@@ -27,7 +27,6 @@ export default function AllOrdersTable() {
   const [filteredOrders, setFilteredOrders] = React.useState(orders?.data ?? []);
 
   const { data: ordersData } = useOrders(paginationModel.page + 1);
-  console.log('ORDERS HERE :::: ', orders);
 
   const columns = [
     {
@@ -205,7 +204,6 @@ export default function AllOrdersTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
       }
 

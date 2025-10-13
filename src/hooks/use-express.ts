@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useExpress() {
   const { data, mutate, error } = useSWR(`/admins/express/all`);
 
-  console.log('EXPRESS HERE ::: ', data);
 
   const loading = !data && !error;
   const loggedOut =

@@ -39,12 +39,10 @@ export default function App() {
       try {
         APIService.getProfile().then((resp) => {
           const obj = resp.data;
-          dispatch(setProfile(obj))
-        }).catch((err) => console.log("PROFILE ERR:: ", err)
-        )
+          dispatch(setProfile(obj));
+        });
       } catch (error) {
-        console.log();
-        
+        // Error handling
       }
     }
   }, [accessToken, dispatch])

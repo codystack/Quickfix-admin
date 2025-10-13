@@ -43,7 +43,6 @@ export function VerifyOTPView() {
       },
       success: {
         render({ data }) {
-          console.log('SUCCESS :: ', data);
           dispatch(setLoading(false));
           const resp = data?.data?.message || 'OTP verified successfully';
           navigate('/reset-password', { state: { emailAddress } });
@@ -53,7 +52,6 @@ export function VerifyOTPView() {
       error: {
         render({ data }: any) {
           dispatch(setLoading(false));
-          console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
           const errorMsg = data?.response?.data?.message || data?.message || '';
           // When the promise reject, data will contains the error
           return `${errorMsg ?? 'An error occurred!'}`;
@@ -78,7 +76,6 @@ export function VerifyOTPView() {
       },
       success: {
         render({ data }) {
-          console.log('SUCCESS :: ', data);
           dispatch(setLoading(false));
           const resp = data?.data?.message || 'OTP sent successfully';
           return `${resp}`;
@@ -87,7 +84,6 @@ export function VerifyOTPView() {
       error: {
         render({ data }: any) {
           dispatch(setLoading(false));
-          console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
           const errorMsg = data?.response?.data?.message || data?.message || '';
           // When the promise reject, data will contains the error
           return `${errorMsg ?? 'An error occurred!'}`;

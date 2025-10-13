@@ -22,4 +22,3 @@ export default function generateRandomCode(letters: string, length = 8) {
 
 // // Example usage
 // const randomCoupon = generateRandomCoupon();
-// console.log(randomCoupon);

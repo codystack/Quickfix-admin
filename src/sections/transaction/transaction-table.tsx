@@ -85,7 +85,6 @@ export default function AllTransactionsTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (transactionsData) {
-        console.log('SECOND PAGE DATA', transactionsData);
         setFiltereTransactions(transactionsData?.data);
       }
 

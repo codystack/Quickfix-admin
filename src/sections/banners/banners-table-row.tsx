@@ -72,12 +72,9 @@ export function BannerTableRow({ row, selected, onSelectRow }: BannerTableRowPro
         url: row?.url,
       };
 
-      console.log('PAYLOAD ::: ', payload);
 
       const resp = await APIService.updateBanner(payload, row?._id);
-      console.log('UPDATE STATUS RESP ::: ', resp);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -102,7 +99,6 @@ export function BannerTableRow({ row, selected, onSelectRow }: BannerTableRowPro
       error: {
         render({ data }: any) {
           dispatch(setLoading(false));
-          console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
           const errorMsg = data?.response?.data?.message || data?.message || '';
           // When the promise reject, data will contains the error
           return `${errorMsg ?? 'An error occurred!'}`;

@@ -28,7 +28,6 @@ export default function UserTransactionsTable({ userEmail }: any) {
   const [filteredTransactions, setFilteredTransactions] = React.useState([]);
 
   const { data: transactionsData } = useUserTransactions(paginationModel.page + 1, userEmail);
-  // console.log('TRANSACTIONS HERE :::: ', carWashTransactions);
 
   const columns = [
     {
@@ -88,7 +87,6 @@ export default function UserTransactionsTable({ userEmail }: any) {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (transactionsData) {
-        console.log('SECOND PAGE DATA', transactionsData);
         setFilteredTransactions(transactionsData?.data);
       }
 

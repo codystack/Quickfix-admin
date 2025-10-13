@@ -27,7 +27,6 @@ export default function LaundryTable() {
   const [filteredOrders, setFilteredOrders] = React.useState(laundryOrders?.data ?? []);
 
   const { data: ordersData } = useOrderCategory(paginationModel.page + 1, 'laundry');
-  console.log('ORDERS HERE :::: ', laundryOrders);
   
 
   const columns = [
@@ -206,7 +205,6 @@ export default function LaundryTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        console.log('SECOND PAGE DATA', ordersData);
         setFilteredOrders(ordersData?.data);
       }
 

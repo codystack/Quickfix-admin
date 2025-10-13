@@ -118,7 +118,6 @@ export function DashboardContent({
   const { data: locationsData } = useLocations(1);
   const { data: locationListData } = useLocationsList();
 
-  console.log("WALLET :: ", adminWalletData);
   
 
   React.useEffect(() => {

@@ -103,7 +103,6 @@ export default function AllAdminsTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (adminsData) {
-        console.log('SECOND PAGE DATA', adminsData);
         setFilteredAdmins(adminsData?.data);
       }
 

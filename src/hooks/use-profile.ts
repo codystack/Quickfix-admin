@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useProfile() {
   const { data, mutate, error } = useSWR('/admins/current/profile');
 
-  // console.log("ADMIN CURR ::: ", data);
   
 
   const loading = !data && !error;

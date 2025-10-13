@@ -60,7 +60,6 @@ const AddOrderView = ({ setOpen }: any) => {
   const submitForm = async () => {
     try {
       dispatch(setLoading(true));
-      console.log("SELECTEDD USER ::: ", selectedUser);
       
       // Calculate the final amount after applying discount
       const finalAmount = discount > 0 ? grandTotal * (1 - discount / 100) : grandTotal;
@@ -119,7 +118,6 @@ const AddOrderView = ({ setOpen }: any) => {
         };
       }
 
-      console.log("GRAND TOTAL ;; ", grandTotal);
       
 
       const response = APIService.createOrder(payload, `MO-${generateRandomCode('QUICKFIX', 10)}`);
@@ -142,7 +140,6 @@ const AddOrderView = ({ setOpen }: any) => {
         error: {
           render({ data }: any) {
             dispatch(setLoading(false));
-            console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
             const errorMsg = data?.response?.data?.message || data?.message || '';
             // When the promise reject, data will contains the error
             return `${errorMsg ?? 'An error occurred!'}`;
@@ -151,7 +148,6 @@ const AddOrderView = ({ setOpen }: any) => {
       });
     } catch (error) {
       dispatch(setLoading(false));
-      console.log('SOCIAL ERR :: ', error);
     }
   };
 

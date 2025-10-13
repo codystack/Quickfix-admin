@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useLocations(page: number) {
   const { data, mutate, error } = useSWR(`/locations/all?page=${page}`);
 
-  console.log('LOCATIONS HERE ::: ', data);
 
   const loading = !data && !error;
   const loggedOut =

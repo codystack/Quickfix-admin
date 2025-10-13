@@ -88,7 +88,6 @@ const AddUser = ({ setOpen, setUser }: any) => {
             render({ data }) {
               dispatch(setLoading(false));
               const userObj = data?.data?.data;
-              console.log('USER:: ', userObj);
               setUser(userObj)
               mutate('/users/list');
               mutate('/users/all');
@@ -100,7 +99,6 @@ const AddUser = ({ setOpen, setUser }: any) => {
           error: {
             render({ data }: any) {
               dispatch(setLoading(false));
-              console.log('ERRO ON TOAST HERE :: ', data?.response?.data?.message);
               const errorMsg = data?.response?.data?.message || data?.message || '';
               // When the promise reject, data will contains the error
               return `${errorMsg ?? 'An error occurred!'}`;
@@ -109,7 +107,6 @@ const AddUser = ({ setOpen, setUser }: any) => {
         });
       } catch (error) {
         dispatch(setLoading(false));
-        console.log('SOCIAL ERR :: ', error);
       }
     },
   });

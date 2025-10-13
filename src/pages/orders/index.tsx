@@ -6,7 +6,6 @@ import { CONFIG } from 'src/config-global';
 import { OrderView } from 'src/sections/orders/view';
 
 const Orders = () => {
-    console.log("hi");
     return (
         <>
           <Helmet>

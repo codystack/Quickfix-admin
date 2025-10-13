@@ -16,7 +16,6 @@ import AllTransactionsTable from './transaction-table';
 export function TransactionView() {
   const { transactions } = useSelector((state: RootState) => state.transaction);
 
-  console.log('TRANSACTIONS ::: ', transactions);
 
   return (
     <DashboardContent>

@@ -75,14 +75,12 @@ const UpdateService = () => {
 
   const handleFileChange = (event: any) => {
     const selectedFile: any = event.target.files[0];
-    console.log('FILE INFO  ::: ', selectedFile);
 
     if (selectedFile) {
       try {
         setFile(selectedFile);
         setPreview(URL.createObjectURL(selectedFile));
       } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -105,7 +103,6 @@ const UpdateService = () => {
           const resp = await APIService.singleImageUpload({
             image: base64,
           });
-          console.log('RESPONSE AFTER THE UPLOAD ::: ', resp);
 
           // Now make a trip to create a new product here
           const payload = {
@@ -136,7 +133,6 @@ const UpdateService = () => {
             error: {
               render({ data: errDt }: any) {
                 dispatch(setLoading(false));
-                console.log('ERRO ON TOAST HERE :: ', errDt?.response?.data?.message);
                 const errorMsg = errDt?.response?.data?.message || errDt?.message || '';
                 // When the promise reject, data will contains the error
                 return `${errorMsg ?? 'An error occurred!'}`;
@@ -173,7 +169,6 @@ const UpdateService = () => {
             error: {
               render({ data: errDt }: any) {
                 dispatch(setLoading(false));
-                console.log('ERRO ON TOAST HERE :: ', errDt?.response?.data?.message);
                 const errorMsg = errDt?.response?.data?.message || errDt?.message || '';
                 // When the promise reject, data will contains the error
                 return `${errorMsg ?? 'An error occurred!'}`;
@@ -183,7 +178,6 @@ const UpdateService = () => {
         }
       } catch (error) {
         dispatch(setLoading(false));
-        console.log('SOCIAL ERR :: ', error);
       }
     },
   });

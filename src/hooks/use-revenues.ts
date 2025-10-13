@@ -3,7 +3,6 @@ import useSWR from 'swr';
 export default function useRevenue() {
   const { data, mutate, error } = useSWR(`/transactions/revenue`);
 
-  console.log("REVENUE DATA ::: ", data);
   
 
   const loading = !data && !error;

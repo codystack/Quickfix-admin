@@ -95,7 +95,6 @@ export default function AlLocationsTable() {
       setLoading(true);
       // const newData = await loadServerRows(paginationModel.page, data);
       if (locationsData) {
-        console.log('SECOND PAGE DATA', locationsData);
         setFilteredLocations(locationsData?.data);
       }
 
