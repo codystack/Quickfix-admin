@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseURL = 'https://quickfix-rest-api.vercel.app'; // Production
+export const baseURL = 'https://quick-fix-api.vercel.app'; // Production
 // export const baseURL = 'http://localhost:5050'; // Local testing
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/api/v1`,
