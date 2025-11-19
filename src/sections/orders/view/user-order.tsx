@@ -39,10 +39,8 @@ export default function UserOrdersTable({ userEmail }: any) {
 
     (async () => {
       setLoading(true);
-      // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
         setAllOrders(ordersData?.data);
-        setFilteredOrders(ordersData?.data);
       }
 
       if (!active) {
@@ -55,7 +53,7 @@ export default function UserOrdersTable({ userEmail }: any) {
     return () => {
       active = false;
     };
-  }, [paginationModel.page, ordersData]);
+  }, [ordersData]);
 
   const columns: GridColDef[] = [
     {
