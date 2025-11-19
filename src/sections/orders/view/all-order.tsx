@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 // import { Download } from "@mui/icons-material";
 import { Box, Chip, Avatar, Typography } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 
 import useOrders from 'src/hooks/use-orders';
 
@@ -19,16 +19,24 @@ import ActionButton from './action';
 
 export default function AllOrdersTable() {
   const { orders } = useSelector((state: RootState) => state.order);
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
-    pageSize: 25,
-  });
   const [loading, setLoading] = React.useState(false);
-  const [filteredOrders, setFilteredOrders] = React.useState(orders?.data ?? []);
+  const [allOrders, setAllOrders] = React.useState(orders?.data ?? []);
+  const [selectedLocation, setSelectedLocation] = React.useState('');
 
-  const { data: ordersData } = useOrders(paginationModel.page + 1);
+  const { data: ordersData } = useOrders(1);
 
-  const columns = [
+  // Filter orders by selected location
+  const filteredOrdersByLocation = React.useMemo(() => {
+    if (!selectedLocation) return allOrders;
+    const filtered = allOrders.filter((order: any) => {
+      const locationString = `${order?.location?.region}, ${order?.location?.city}`.toLowerCase();
+      const selectedLower = selectedLocation.toLowerCase();
+      return locationString.includes(selectedLower) || selectedLower.includes(locationString);
+    });
+    return filtered;
+  }, [allOrders, selectedLocation]);
+
+  const columns: GridColDef[] = [
     {
       field: 'user',
       headerName: 'User',
@@ -124,6 +132,7 @@ export default function AllOrdersTable() {
       field: 'location',
       headerName: 'Location',
       flex: 1,
+      filterable: false,
       renderCell: (params: any) => (
         <Typography
           style={{
@@ -202,9 +211,8 @@ export default function AllOrdersTable() {
 
     (async () => {
       setLoading(true);
-      // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        setFilteredOrders(ordersData?.data);
+        setAllOrders(ordersData?.data);
       }
 
       if (!active) {
@@ -217,27 +225,52 @@ export default function AllOrdersTable() {
     return () => {
       active = false;
     };
-  }, [paginationModel.page, ordersData]);
+  }, [ordersData]);
 
   return (
-    <div style={{ height: '75vh', width: '100%' }}>
-      {orders && orders?.data && filteredOrders && (
-        <DataGrid
-          sx={{ padding: 1 }}
-          rows={filteredOrders}
-          columns={columns}
-          paginationMode="server"
-          pageSizeOptions={[25]}
-          rowCount={orders?.totalItems}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          loading={loading}
-          slots={{
-            noRowsOverlay: CustomNoRowsOverlay,
-            toolbar: GridToolbar,
+    <Box>
+      {/* Location Filter Dropdown */}
+      <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Typography variant="subtitle2">Filter by Location:</Typography>
+        <select
+          value={selectedLocation}
+          onChange={(e) => setSelectedLocation(e.target.value)}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '4px',
+            border: '1px solid #ddd',
+            fontSize: '14px',
+            cursor: 'pointer',
           }}
-        />
-      )}
-    </div>
+        >
+          <option value="">All Locations</option>
+          <option value="lagos, mainland">Mainland, Lagos</option>
+          <option value="lagos, island">Island, Lagos</option>
+          <option value="calabar">Cross River, Calabar</option>
+        </select>
+      </Box>
+
+      {/* DataGrid */}
+      <div style={{ height: '75vh', width: '100%' }}>
+        {orders && orders?.data && filteredOrdersByLocation && (
+          <DataGrid
+            sx={{ padding: 1 }}
+            rows={filteredOrdersByLocation}
+            columns={columns}
+            pageSizeOptions={[25, 50, 100]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 25 },
+              },
+            }}
+            loading={loading}
+            slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+              toolbar: GridToolbar,
+            }}
+          />
+        )}
+      </div>
+    </Box>
   );
 }

@@ -55,21 +55,19 @@ export default function CustomizedDialog(props: CustomDialogProps) {
   };
 
   return (
-    <div>
-      <Dialog
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+      keepMounted
+    >
+      <BootstrapDialogTitle
+        id="customized-dialog-title"
         onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-        keepMounted
       >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={handleClose}
-        >
-          {title}
-        </BootstrapDialogTitle>
-        {body}
-      </Dialog>
-    </div>
+        {title}
+      </BootstrapDialogTitle>
+      {body}
+    </Dialog>
   );
 }

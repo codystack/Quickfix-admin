@@ -3,7 +3,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
 
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 // import { Download } from "@mui/icons-material";
 import { Box, Chip, Avatar, Typography } from '@mui/material';
 
@@ -16,16 +16,23 @@ import CustomNoRowsOverlay from 'src/components/custom_no_row';
 import ActionButton from './action';
 
 export default function CleaningTable({ cleaningOrders }: any) {
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
-    pageSize: 25,
-  });
   const [loading, setLoading] = React.useState(false);
-  const [filteredOrders, setFilteredOrders] = React.useState(cleaningOrders?.data ?? []);
+  const [allOrders, setAllOrders] = React.useState(cleaningOrders?.data ?? []);
+  const [selectedLocation, setSelectedLocation] = React.useState('');
 
-  const { data: ordersData } = useOrderCategory(paginationModel.page + 1, 'cleaning');
+  const { data: ordersData } = useOrderCategory(1, 'cleaning');
 
-  const columns = [
+  // Filter orders by selected location
+  const filteredOrdersByLocation = React.useMemo(() => {
+    if (!selectedLocation) return allOrders;
+    return allOrders.filter((order: any) => {
+      const locationString = `${order?.location?.region}, ${order?.location?.city}`.toLowerCase();
+      const selectedLower = selectedLocation.toLowerCase();
+      return locationString.includes(selectedLower) || selectedLower.includes(locationString);
+    });
+  }, [allOrders, selectedLocation]);
+
+  const columns: GridColDef[] = [
     {
       field: 'user',
       headerName: 'User',
@@ -121,6 +128,7 @@ export default function CleaningTable({ cleaningOrders }: any) {
       field: 'location',
       headerName: 'Location',
       flex: 1,
+      filterable: false,
       renderCell: (params: any) => (
         <Typography
           style={{
@@ -199,9 +207,8 @@ export default function CleaningTable({ cleaningOrders }: any) {
 
     (async () => {
       setLoading(true);
-      // const newData = await loadServerRows(paginationModel.page, data);
       if (ordersData) {
-        setFilteredOrders(ordersData?.data);
+        setAllOrders(ordersData?.data);
       }
 
       if (!active) {
@@ -214,27 +221,52 @@ export default function CleaningTable({ cleaningOrders }: any) {
     return () => {
       active = false;
     };
-  }, [paginationModel.page, ordersData]);
+  }, [ordersData]);
 
   return (
-    <div style={{ height: '75vh', width: '100%' }}>
-      {cleaningOrders && cleaningOrders?.data && filteredOrders && (
-        <DataGrid
-          sx={{ padding: 1 }}
-          rows={filteredOrders}
-          columns={columns}
-          paginationMode="server"
-          pageSizeOptions={[25]}
-          rowCount={cleaningOrders?.totalItems}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          loading={loading}
-          slots={{
-            noRowsOverlay: CustomNoRowsOverlay,
-            toolbar: GridToolbar,
+    <Box>
+      {/* Location Filter Dropdown */}
+      <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Typography variant="subtitle2">Filter by Location:</Typography>
+        <select
+          value={selectedLocation}
+          onChange={(e) => setSelectedLocation(e.target.value)}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '4px',
+            border: '1px solid #ddd',
+            fontSize: '14px',
+            cursor: 'pointer',
           }}
-        />
-      )}
-    </div>
+        >
+          <option value="">All Locations</option>
+          <option value="lagos, mainland">Mainland, Lagos</option>
+          <option value="lagos, island">Island, Lagos</option>
+          <option value="calabar">Cross River, Calabar</option>
+        </select>
+      </Box>
+
+      {/* DataGrid */}
+      <div style={{ height: '75vh', width: '100%' }}>
+        {cleaningOrders && cleaningOrders?.data && filteredOrdersByLocation && (
+          <DataGrid
+            sx={{ padding: 1 }}
+            rows={filteredOrdersByLocation}
+            columns={columns}
+            pageSizeOptions={[25, 50, 100]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 25 },
+              },
+            }}
+            loading={loading}
+            slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+              toolbar: GridToolbar,
+            }}
+          />
+        )}
+      </div>
+    </Box>
   );
 }

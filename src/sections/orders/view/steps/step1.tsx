@@ -53,7 +53,7 @@ const UserStepForm = ({ setUser, user }: any) => {
               const { key, ...optionProps } = props;
               return (
                 <Box
-                  key={key}
+                  key={option?.id || option?._id || key}
                   component="li"
                   sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                   {...optionProps}
