@@ -7,7 +7,7 @@ import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 // import { Download } from "@mui/icons-material";
 import { Box, Chip, Avatar, Typography } from '@mui/material';
 
-import useOrderCategory from 'src/hooks/use-orders-category';
+import APIService from 'src/service/api.service';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -15,12 +15,27 @@ import CustomNoRowsOverlay from 'src/components/custom_no_row';
 
 import ActionButton from './action';
 
+const DEFAULT_PAGE_SIZE = 25;
+
+const getTotalItems = (payload: any) =>
+  payload?.totalItems ??
+  payload?.pagination?.total ??
+  payload?.total ??
+  payload?.meta?.total ??
+  payload?.data?.length ??
+  0;
+
+const getPerPage = (payload: any) =>
+  payload?.pagination?.pageSize ??
+  payload?.meta?.per_page ??
+  payload?.perPage ??
+  payload?.data?.length ??
+  DEFAULT_PAGE_SIZE;
+
 export default function CleaningTable({ cleaningOrders }: any) {
   const [loading, setLoading] = React.useState(false);
   const [allOrders, setAllOrders] = React.useState(cleaningOrders?.data ?? []);
   const [selectedLocation, setSelectedLocation] = React.useState('');
-
-  const { data: ordersData } = useOrderCategory(1, 'cleaning');
 
   // Filter orders by selected location
   const filteredOrdersByLocation = React.useMemo(() => {
@@ -205,23 +220,63 @@ export default function CleaningTable({ cleaningOrders }: any) {
   React.useEffect(() => {
     let active = true;
 
-    (async () => {
-      setLoading(true);
-      if (ordersData) {
-        setAllOrders(ordersData?.data);
-      }
-
-      if (!active) {
+    const hydrateOrders = async () => {
+      if (!cleaningOrders?.data) {
+        setAllOrders([]);
         return;
       }
 
-      setLoading(false);
-    })();
+      setAllOrders(cleaningOrders.data);
+
+      const totalItems = getTotalItems(cleaningOrders);
+      const perPage = getPerPage(cleaningOrders);
+      const totalPages = perPage ? Math.ceil(totalItems / perPage) : 1;
+
+      if (totalPages <= 1) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const remainingRequests: Promise<any>[] = [];
+
+        for (let page = 2; page <= totalPages; page += 1) {
+          remainingRequests.push(
+            APIService.fetcher(`/orders/all?category=cleaning&page=${page}&limit=${perPage}`)
+          );
+        }
+
+        const responses = await Promise.all(remainingRequests);
+
+        if (!active) {
+          return;
+        }
+
+        const aggregatedOrders = [
+          ...cleaningOrders.data,
+          ...responses.flatMap((response) => response?.data ?? []),
+        ];
+
+        setAllOrders(aggregatedOrders);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.error('Failed to preload cleaning orders:', error);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    hydrateOrders();
 
     return () => {
       active = false;
     };
-  }, [ordersData]);
+  }, [cleaningOrders]);
 
   return (
     <Box>
@@ -248,24 +303,23 @@ export default function CleaningTable({ cleaningOrders }: any) {
 
       {/* DataGrid */}
       <div style={{ height: '75vh', width: '100%' }}>
-        {cleaningOrders && cleaningOrders?.data && filteredOrdersByLocation && (
-          <DataGrid
-            sx={{ padding: 1 }}
-            rows={filteredOrdersByLocation}
-            columns={columns}
-            pageSizeOptions={[25, 50, 100]}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 25 },
-              },
-            }}
-            loading={loading}
-            slots={{
-              noRowsOverlay: CustomNoRowsOverlay,
-              toolbar: GridToolbar,
-            }}
-          />
-        )}
+        <DataGrid
+          sx={{ padding: 1 }}
+          rows={filteredOrdersByLocation}
+          columns={columns}
+          pageSizeOptions={[25, 50, 100]}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 25 },
+            },
+          }}
+          loading={loading}
+          disableRowSelectionOnClick
+          slots={{
+            noRowsOverlay: CustomNoRowsOverlay,
+            toolbar: GridToolbar,
+          }}
+        />
       </div>
     </Box>
   );

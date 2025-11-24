@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { Box, Chip, Avatar, Typography } from '@mui/material';
 import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 
-import useOrders from 'src/hooks/use-orders';
+import APIService from 'src/service/api.service';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -17,13 +17,28 @@ import CustomNoRowsOverlay from 'src/components/custom_no_row';
 
 import ActionButton from './action';
 
+const DEFAULT_PAGE_SIZE = 25;
+
+const getTotalItems = (payload: any) =>
+  payload?.totalItems ??
+  payload?.pagination?.total ??
+  payload?.total ??
+  payload?.meta?.total ??
+  payload?.data?.length ??
+  0;
+
+const getPerPage = (payload: any) =>
+  payload?.pagination?.pageSize ??
+  payload?.meta?.per_page ??
+  payload?.perPage ??
+  payload?.data?.length ??
+  DEFAULT_PAGE_SIZE;
+
 export default function AllOrdersTable() {
   const { orders } = useSelector((state: RootState) => state.order);
   const [loading, setLoading] = React.useState(false);
   const [allOrders, setAllOrders] = React.useState(orders?.data ?? []);
   const [selectedLocation, setSelectedLocation] = React.useState('');
-
-  const { data: ordersData } = useOrders(1);
 
   // Filter orders by selected location
   const filteredOrdersByLocation = React.useMemo(() => {
@@ -209,23 +224,61 @@ export default function AllOrdersTable() {
   React.useEffect(() => {
     let active = true;
 
-    (async () => {
-      setLoading(true);
-      if (ordersData) {
-        setAllOrders(ordersData?.data);
-      }
-
-      if (!active) {
+    const hydrateOrders = async () => {
+      if (!orders?.data) {
+        setAllOrders([]);
         return;
       }
 
-      setLoading(false);
-    })();
+      setAllOrders(orders.data);
+
+      const totalItems = getTotalItems(orders);
+      const perPage = getPerPage(orders);
+      const totalPages = perPage ? Math.ceil(totalItems / perPage) : 1;
+
+      if (totalPages <= 1) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const remainingRequests: Promise<any>[] = [];
+
+        for (let page = 2; page <= totalPages; page += 1) {
+          remainingRequests.push(APIService.fetcher(`/orders/all?page=${page}&limit=${perPage}`));
+        }
+
+        const responses = await Promise.all(remainingRequests);
+
+        if (!active) {
+          return;
+        }
+
+        const aggregatedOrders = [
+          ...orders.data,
+          ...responses.flatMap((response) => response?.data ?? []),
+        ];
+
+        setAllOrders(aggregatedOrders);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.error('Failed to preload all orders:', error);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    hydrateOrders();
 
     return () => {
       active = false;
     };
-  }, [ordersData]);
+  }, [orders]);
 
   return (
     <Box>
@@ -252,7 +305,7 @@ export default function AllOrdersTable() {
 
       {/* DataGrid */}
       <div style={{ height: '75vh', width: '100%' }}>
-        {orders && orders?.data && filteredOrdersByLocation && (
+        {filteredOrdersByLocation && (
           <DataGrid
             sx={{ padding: 1 }}
             rows={filteredOrdersByLocation}
@@ -264,6 +317,7 @@ export default function AllOrdersTable() {
               },
             }}
             loading={loading}
+            disableRowSelectionOnClick
             slots={{
               noRowsOverlay: CustomNoRowsOverlay,
               toolbar: GridToolbar,

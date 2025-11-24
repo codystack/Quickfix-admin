@@ -8,7 +8,7 @@ import { Box, Chip, Avatar, Typography } from '@mui/material';
 import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 // import { Download } from "@mui/icons-material";
 
-import useOrderCategory from 'src/hooks/use-orders-category';
+import APIService from 'src/service/api.service';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -16,13 +16,28 @@ import CustomNoRowsOverlay from 'src/components/custom_no_row';
 
 import ActionButton from './action';
 
+const DEFAULT_PAGE_SIZE = 25;
+
+const getTotalItems = (payload: any) =>
+  payload?.totalItems ??
+  payload?.pagination?.total ??
+  payload?.total ??
+  payload?.meta?.total ??
+  payload?.data?.length ??
+  0;
+
+const getPerPage = (payload: any) =>
+  payload?.pagination?.pageSize ??
+  payload?.meta?.per_page ??
+  payload?.perPage ??
+  payload?.data?.length ??
+  DEFAULT_PAGE_SIZE;
+
 export default function LaundryTable() {
   const { laundryOrders } = useSelector((state: RootState) => state.order);
   const [loading, setLoading] = React.useState(false);
   const [allOrders, setAllOrders] = React.useState(laundryOrders?.data ?? []);
   const [selectedLocation, setSelectedLocation] = React.useState('');
-
-  const { data: ordersData } = useOrderCategory(1, 'laundry');
 
   // Filter orders by selected location
   const filteredOrdersByLocation = React.useMemo(() => {
@@ -207,23 +222,63 @@ export default function LaundryTable() {
   React.useEffect(() => {
     let active = true;
 
-    (async () => {
-      setLoading(true);
-      if (ordersData) {
-        setAllOrders(ordersData?.data);
-      }
-
-      if (!active) {
+    const hydrateOrders = async () => {
+      if (!laundryOrders?.data) {
+        setAllOrders([]);
         return;
       }
 
-      setLoading(false);
-    })();
+      setAllOrders(laundryOrders.data);
+
+      const totalItems = getTotalItems(laundryOrders);
+      const perPage = getPerPage(laundryOrders);
+      const totalPages = perPage ? Math.ceil(totalItems / perPage) : 1;
+
+      if (totalPages <= 1) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const remainingRequests: Promise<any>[] = [];
+
+        for (let page = 2; page <= totalPages; page += 1) {
+          remainingRequests.push(
+            APIService.fetcher(`/orders/all?category=laundry&page=${page}&limit=${perPage}`)
+          );
+        }
+
+        const responses = await Promise.all(remainingRequests);
+
+        if (!active) {
+          return;
+        }
+
+        const aggregatedOrders = [
+          ...laundryOrders.data,
+          ...responses.flatMap((response) => response?.data ?? []),
+        ];
+
+        setAllOrders(aggregatedOrders);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.error('Failed to preload laundry orders:', error);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    hydrateOrders();
 
     return () => {
       active = false;
     };
-  }, [ordersData]);
+  }, [laundryOrders]);
 
   return (
     <Box>
@@ -250,24 +305,23 @@ export default function LaundryTable() {
 
       {/* DataGrid */}
       <div style={{ height: '75vh', width: '100%' }}>
-        {laundryOrders && laundryOrders?.data && filteredOrdersByLocation && (
-          <DataGrid
-            sx={{ padding: 1 }}
-            rows={filteredOrdersByLocation}
-            columns={columns}
-            pageSizeOptions={[25, 50, 100]}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 25 },
-              },
-            }}
-            loading={loading}
-            slots={{
-              noRowsOverlay: CustomNoRowsOverlay,
-              toolbar: GridToolbar,
-            }}
-          />
-        )}
+        <DataGrid
+          sx={{ padding: 1 }}
+          rows={filteredOrdersByLocation}
+          columns={columns}
+          pageSizeOptions={[25, 50, 100]}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 25 },
+            },
+          }}
+          loading={loading}
+          disableRowSelectionOnClick
+          slots={{
+            noRowsOverlay: CustomNoRowsOverlay,
+            toolbar: GridToolbar,
+          }}
+        />
       </div>
     </Box>
   );

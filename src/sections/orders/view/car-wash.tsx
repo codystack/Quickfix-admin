@@ -8,7 +8,7 @@ import { Box, Chip, Avatar, Typography } from '@mui/material';
 import { DataGrid, GridToolbar, GridColDef } from '@mui/x-data-grid';
 // import { Download } from "@mui/icons-material";
 
-import useOrderCategory from 'src/hooks/use-orders-category';
+import APIService from 'src/service/api.service';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -16,13 +16,28 @@ import CustomNoRowsOverlay from 'src/components/custom_no_row';
 
 import ActionButton from './action';
 
+const DEFAULT_PAGE_SIZE = 25;
+
+const getTotalItems = (payload: any) =>
+  payload?.totalItems ??
+  payload?.pagination?.total ??
+  payload?.total ??
+  payload?.meta?.total ??
+  payload?.data?.length ??
+  0;
+
+const getPerPage = (payload: any) =>
+  payload?.pagination?.pageSize ??
+  payload?.meta?.per_page ??
+  payload?.perPage ??
+  payload?.data?.length ??
+  DEFAULT_PAGE_SIZE;
+
 export default function CarWashTable() {
   const { carWashOrders } = useSelector((state: RootState) => state.order);
   const [loading, setLoading] = React.useState(false);
   const [allOrders, setAllOrders] = React.useState(carWashOrders?.data ?? []);
   const [selectedLocation, setSelectedLocation] = React.useState('');
-
-  const { data: ordersData } = useOrderCategory(1, 'car_wash');
 
   // Filter orders by selected location
   const filteredOrdersByLocation = React.useMemo(() => {
@@ -207,23 +222,63 @@ export default function CarWashTable() {
   React.useEffect(() => {
     let active = true;
 
-    (async () => {
-      setLoading(true);
-      if (ordersData) {
-        setAllOrders(ordersData?.data);
-      }
-
-      if (!active) {
+    const hydrateOrders = async () => {
+      if (!carWashOrders?.data) {
+        setAllOrders([]);
         return;
       }
 
-      setLoading(false);
-    })();
+      setAllOrders(carWashOrders.data);
+
+      const totalItems = getTotalItems(carWashOrders);
+      const perPage = getPerPage(carWashOrders);
+      const totalPages = perPage ? Math.ceil(totalItems / perPage) : 1;
+
+      if (totalPages <= 1) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const remainingRequests: Promise<any>[] = [];
+
+        for (let page = 2; page <= totalPages; page += 1) {
+          remainingRequests.push(
+            APIService.fetcher(`/orders/all?category=car_wash&page=${page}&limit=${perPage}`)
+          );
+        }
+
+        const responses = await Promise.all(remainingRequests);
+
+        if (!active) {
+          return;
+        }
+
+        const aggregatedOrders = [
+          ...carWashOrders.data,
+          ...responses.flatMap((response) => response?.data ?? []),
+        ];
+
+        setAllOrders(aggregatedOrders);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.error('Failed to preload car wash orders:', error);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    hydrateOrders();
 
     return () => {
       active = false;
     };
-  }, [ordersData]);
+  }, [carWashOrders]);
 
   return (
     <Box>
@@ -250,24 +305,23 @@ export default function CarWashTable() {
 
       {/* DataGrid */}
       <div style={{ height: '75vh', width: '100%' }}>
-        {carWashOrders && carWashOrders?.data && filteredOrdersByLocation && (
-          <DataGrid
-            sx={{ padding: 1 }}
-            rows={filteredOrdersByLocation}
-            columns={columns}
-            pageSizeOptions={[25, 50, 100]}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 25 },
-              },
-            }}
-            loading={loading}
-            slots={{
-              noRowsOverlay: CustomNoRowsOverlay,
-              toolbar: GridToolbar,
-            }}
-          />
-        )}
+        <DataGrid
+          sx={{ padding: 1 }}
+          rows={filteredOrdersByLocation}
+          columns={columns}
+          pageSizeOptions={[25, 50, 100]}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 25 },
+            },
+          }}
+          loading={loading}
+          disableRowSelectionOnClick
+          slots={{
+            noRowsOverlay: CustomNoRowsOverlay,
+            toolbar: GridToolbar,
+          }}
+        />
       </div>
     </Box>
   );

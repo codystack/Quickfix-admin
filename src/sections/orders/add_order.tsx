@@ -121,6 +121,14 @@ const AddOrderView = ({ setOpen }: any) => {
       
 
       const response = APIService.createOrder(payload, `MO-${generateRandomCode('QUICKFIX', 10)}`);
+      
+      response.then((data) => {
+        console.log('Backend response after order creation:', data);
+        console.log('Response data.data:', data?.data);
+        console.log('Discount in response:', data?.data?.discount);
+        console.log('OriginalAmount in response:', data?.data?.originalAmount);
+      });
+
       toast.promise(response, {
         pending: {
           render() {
@@ -129,7 +137,7 @@ const AddOrderView = ({ setOpen }: any) => {
           icon: false,
         },
         success: {
-          render({ data }) {
+          render({ data }: any) {
             dispatch(setLoading(false));
             mutate('/orders/all')
             navigate(-1)
