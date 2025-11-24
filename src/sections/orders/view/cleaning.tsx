@@ -40,11 +40,12 @@ export default function CleaningTable({ cleaningOrders }: any) {
   // Filter orders by selected location
   const filteredOrdersByLocation = React.useMemo(() => {
     if (!selectedLocation) return allOrders;
-    return allOrders.filter((order: any) => {
+    const filtered = allOrders.filter((order: any) => {
       const locationString = `${order?.location?.region}, ${order?.location?.city}`.toLowerCase();
       const selectedLower = selectedLocation.toLowerCase();
       return locationString.includes(selectedLower) || selectedLower.includes(locationString);
     });
+    return filtered;
   }, [allOrders, selectedLocation]);
 
   const columns: GridColDef[] = [
