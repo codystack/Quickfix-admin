@@ -88,8 +88,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
           },
         },
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const deleteOrder = async () => {
@@ -120,8 +119,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
           },
         },
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
@@ -463,7 +461,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                   </>
                 )}
 
-                 <MenuItem
+                {/* <MenuItem
                   onClick={() => {
                     handleClosePopover();
                     setOpenDelete(true);
@@ -471,7 +469,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                 >
                   <Iconify icon="weui:delete-on-outlined" />
                   Delete
-                </MenuItem> 
+                </MenuItem> */}
               </>
             )}
         </MenuList>
