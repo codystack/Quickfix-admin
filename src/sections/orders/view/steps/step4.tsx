@@ -4,7 +4,15 @@ import type { RootState } from 'src/redux/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Box, Avatar, Divider, Typography, FormControl, NativeSelect, OutlinedInput } from '@mui/material';
+import {
+  Box,
+  Avatar,
+  Divider,
+  Typography,
+  FormControl,
+  NativeSelect,
+  OutlinedInput,
+} from '@mui/material';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -19,7 +27,7 @@ const ReviewStepForm = ({
   expressCharge,
   expressFee,
   discount,
-  onDiscountChange
+  onDiscountChange,
 }: any) => {
   const { services } = useSelector((state: RootState) => state.service);
 
@@ -80,6 +88,9 @@ const ReviewStepForm = ({
             input={<OutlinedInput />}
           >
             <option value={0}>No Discount</option>
+            <option value={10}>Apply 10% Discount</option>
+            <option value={15}>Apply 15% Discount</option>
+            <option value={20}>Apply 20% Discount</option>
             <option value={30}>Apply 30% Discount</option>
             <option value={50}>Apply 50% Discount</option>
           </NativeSelect>
@@ -132,7 +143,11 @@ const ReviewStepForm = ({
           <Typography>-₦{fNumber((grandTotal * discount) / 100)}</Typography>
         </Box>
       )}
-      <Box display="flex" justifyContent="space-between" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}
+      >
         <Typography>Grand Total</Typography>
         <Typography>
           ₦{fNumber(discount > 0 ? grandTotal * (1 - discount / 100) : grandTotal)}

@@ -79,9 +79,10 @@ const OrderStepForm = ({
     // Check if location is "Cross River, Calabar South"
     const region = selectedLocationData?.region?.toLowerCase() || '';
     const city = selectedLocationData?.city?.toLowerCase() || '';
-    
-    return (region.includes('cross river') && city.includes('calabar')) ||
-           city.includes('calabar south');
+
+    return (
+      (region.includes('cross river') && city.includes('calabar')) || city.includes('calabar south')
+    );
   }, [selectedLocationData]);
 
   // Get items to display - Calabar pricing or service items
@@ -90,7 +91,7 @@ const OrderStepForm = ({
       // Convert Calabar pricing JSON to the same format as service items
       return calabarPricing.map((item: any) => ({
         name: item.Item,
-        price: item['Price (₦)']
+        price: item['Price (₦)'],
       }));
     }
     return service?.items || [];
@@ -124,8 +125,8 @@ const OrderStepForm = ({
   );
 
   useEffect(() => {
-    setGrandTotal(parseFloat(`${totalAmount}`))
-  }, [totalAmount])
+    setGrandTotal(parseFloat(`${totalAmount}`));
+  }, [totalAmount]);
 
   // Initialize delivery fee for "Delivery Only" type
   useEffect(() => {
@@ -140,8 +141,7 @@ const OrderStepForm = ({
       const currentDeliveryFee = deliveryFee || 1000;
       setGrandTotal(subTotal + expressAmount + currentDeliveryFee);
     }
-  }, [deliveryType, totalAmount, expressCharge, deliveryFee])
-  
+  }, [deliveryType, totalAmount, expressCharge, deliveryFee]);
 
   return (
     <Box p={3}>
@@ -154,14 +154,14 @@ const OrderStepForm = ({
             <Box display="flex" alignItems="center" gap={1}>
               <Typography>{service?.title}</Typography>
               {isCalabar && (
-                <Typography 
-                  fontSize={10} 
-                  sx={{ 
-                    bgcolor: 'success.main', 
-                    color: 'white', 
-                    px: 1, 
-                    py: 0.5, 
-                    borderRadius: 1 
+                <Typography
+                  fontSize={10}
+                  sx={{
+                    bgcolor: 'success.main',
+                    color: 'white',
+                    px: 1,
+                    py: 0.5,
+                    borderRadius: 1,
                   }}
                 >
                   Calabar Pricing
@@ -181,25 +181,24 @@ const OrderStepForm = ({
             <Typography component="a">View Price List</Typography>
           </AccordionSummary>
           <AccordionDetails>
-          <Box>
-            {itemsToDisplay
-              ?.slice() // Prevents mutation of the original array
-              .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
-              .map((elem: any, index: number) => (
-                <Box
-                  key={index}
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography fontSize={13}>{elem?.name}</Typography>
-                  <Box p={1} />
-                  <Typography fontSize={13}>{`₦${fNumber(elem?.price)}`}</Typography>
-                </Box>
-              ))}
-          </Box>
-
+            <Box>
+              {itemsToDisplay
+                ?.slice() // Prevents mutation of the original array
+                .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+                .map((elem: any, index: number) => (
+                  <Box
+                    key={index}
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography fontSize={13}>{elem?.name}</Typography>
+                    <Box p={1} />
+                    <Typography fontSize={13}>{`₦${fNumber(elem?.price)}`}</Typography>
+                  </Box>
+                ))}
+            </Box>
           </AccordionDetails>
         </Accordion>
       </Box>
@@ -220,7 +219,9 @@ const OrderStepForm = ({
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography fontSize={13}>{`${elem?.name} ₦${fNumber(elem?.price)} / unit`}</Typography>
+              <Typography
+                fontSize={13}
+              >{`${elem?.name} ₦${fNumber(elem?.price)} / unit`}</Typography>
               <Box p={1} />
               <Box display="flex" flexDirection="row" justifyContent="end" alignItems="center">
                 <Button variant="contained" size="small" onClick={() => handleDecrease(elem)}>
@@ -236,7 +237,6 @@ const OrderStepForm = ({
             </Box>
           ))}
       </Box>
-
 
       {/* Render the cart summary */}
       <Box mt={3}>
@@ -295,9 +295,7 @@ const OrderStepForm = ({
                         const defaultDeliveryFee = 1000;
                         setDeliveryFee(defaultDeliveryFee);
                         setGrandTotal(
-                          defaultDeliveryFee +
-                            subTotal +
-                            parseFloat(`${expressCharge}`)
+                          defaultDeliveryFee + subTotal + parseFloat(`${expressCharge}`)
                         );
                       }
                     } else {
@@ -405,8 +403,8 @@ const OrderStepForm = ({
               }}
               input={<OutlinedInput />}
             >
-              <option value={1000}>₦1,000</option>
-              <option value={2000}>₦2,000</option>
+              <option value={1500}>₦1,500</option>
+              <option value={2500}>₦2,500</option>
             </NativeSelect>
           </FormControl>
         </Box>
