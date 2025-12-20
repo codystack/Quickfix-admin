@@ -505,7 +505,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                   </MenuItem>
                 )}
 
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => {
                     handleClosePopover();
                     setOpenDelete(true);
@@ -513,7 +513,7 @@ const ActionButton = ({ row }: UserTableRowProps) => {
                 >
                   <Iconify icon="weui:delete-on-outlined" />
                   Delete
-                </MenuItem>
+                </MenuItem> */}
               </>
             )}
         </MenuList>
