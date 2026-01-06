@@ -131,14 +131,14 @@ const OrderStepForm = ({
   // Initialize delivery fee for "Delivery Only" type
   useEffect(() => {
     if (`${deliveryType}`.toLowerCase() === 'delivery') {
-      // Set default delivery fee to 1000 if not already set
+      // Set default delivery fee to 1500 if not already set
       if (deliveryFee === 0 || deliveryFee === undefined) {
-        setDeliveryFee(1000);
+        setDeliveryFee(1500);
       }
       // Update grand total with delivery fee
       const subTotal = parseFloat(`${totalAmount}`);
       const expressAmount = parseFloat(`${expressCharge}`) || 0;
-      const currentDeliveryFee = deliveryFee || 1000;
+      const currentDeliveryFee = deliveryFee || 1500;
       setGrandTotal(subTotal + expressAmount + currentDeliveryFee);
     }
   }, [deliveryType, totalAmount, expressCharge, deliveryFee]);
